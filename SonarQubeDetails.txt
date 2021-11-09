@@ -1,0 +1,5 @@
+
+billions-frontend : d3727fd20afcc247534e0aa67eecf90937d2a19f
+
+for windows : 
+sonar-scanner.bat -D"sonar.projectKey=billions-frontend" -D"sonar.sources=." -D"sonar.host.url=http://110.227.255.58:9000" -D"sonar.login=d3727fd20afcc247534e0aa67eecf90937d2a19f"
