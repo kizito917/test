@@ -1,0 +1,135 @@
+<div class="e-menu-right">
+  <div class="e-header">
+    <div class="block_left">
+      <img *ngIf="fanspaceData && fanspaceData.logo" [src]="fanspaceData.logo" alt="fanspace logo" class="fanspace-logo">
+      <div class="block_round" *ngIf="!(fanspaceData && fanspaceData.logo)">
+        <span>{{fanspaceData.fanspaceName | firstLetter}}</span>
+      </div>
+      <h4>{{fanspaceData.fanspaceName}}</h4>
+    </div>
+    <div class="dropdown" *ngIf=isEventModerator>
+      <a class="link_cusor" data-toggle="dropdown">
+          <img src="/assets/image/ic_dot_menu.svg" alt="Menu Icon">
+      </a>
+      <div class="dropdown-menu dropdown-menu-right custom_dropdownbg">
+        <div class="block_topbar">
+          <div class="block_im">
+            <img *ngIf="fanspaceData && fanspaceData.logo" [src]="fanspaceData.logo" alt="fanspace logo">
+            <div class="block_round" *ngIf="!(fanspaceData && fanspaceData.logo)">
+              <span>{{fanspaceData.fanspaceName | firstLetter}}</span>
+            </div>
+          </div>
+          <span class="u_name">{{fanspaceData.fanspaceName}}</span>
+          <p class="u_code">{{fanspaceData.userCount? fanspaceData.userCount : 0}} Members</p>
+        </div>
+        <div class="block_midbar">
+          <ul>
+            <li (click)="createNewEvent(modalCreateEvent)"><a class="link_cusor">Create an event</a></li>
+            <li (click)="editFanSpace()"><a class="link_cusor">Edit fanspace</a></li>
+            <li (click)="createNewFanSpace()"><a class="link_cusor">Create another fanspace</a></li>
+            <li><a class="link_cusor link_inactive ">Manage users</a></li>
+          </ul>
+        </div>
+        <div class="block_btnbar">
+          <!-- <a class="link_cusor" (click)="onLoggedoutFromFanspace()">Sign out of {{fanspaceData.fanspaceName}}</a> -->
+          <a class="link_cusor" (click)="openlogoutModal(modelLogoutconformation)">Sign out of {{fanspaceData.fanspaceName}}</a>
+        </div>
+      </div>
+    </div>
+    <!-- <span class="menu-icon"><i class="fas fa-ellipsis-v"></i></span> -->
+  </div>
+  <div class="e-menu">
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Events
+            </a>
+          </h5>
+        </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            <ul>
+              <li class="nav-item" *ngFor="let event of events" routerLinkActive="active">
+                  <a *ngIf="event" [class.publish]="event?.isPublished" 
+                    routerLinkActiveOptions="{exact:false}"
+                    [routerLink]="['/event-detail',event?.eventId]"
+                    >{{ event?.eventName }}
+                  </a>
+              </li>
+            </ul>
+            <p class="pt-2" *ngIf=isEventModerator>
+              <a (click)="createNewEvent(modalCreateEvent)" class="link_cusor add_link"> 
+              <img src="/assets/image/bx-small-plus-white.png" alt="Add event"> Add event
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card"  *ngIf="isEventModerator">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Past Events
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <ul>
+              <li class="nav-item" *ngFor="let event of events_history" routerLinkActive="active">
+                <a *ngIf="event" [class.publish]="event?.isPublished"
+                   routerLinkActiveOptions="{exact:false}"
+                   [routerLink]="['/event-detail',event?.eventId]">
+                  {{ event?.eventName }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<ng-template #modalCreateEvent let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" class="modal-dialog-centered">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Create Event</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="eventFG" (ngSubmit)="submitEventForm(eventFG.valid, eventFG.value)" novalidate>
+      <app-control-container label="Event Name" isRequired="true">
+        <input type="text" formControlName="event_name" id="event_name" class="input-field" placeholder="Enter Event Name" maxlength="255">
+      </app-control-container>
+      <button type="submit" class="btn btn-prime w-100 mt-2" [disabled]="loading">
+        Create
+        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+      </button>
+    </form>
+  </div>
+</ng-template>
+
+
+<ng-template #modelLogoutconformation let-modal let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Sign out from fanspace?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+     <div class="block_btn">
+      <button type="button" class="btn btn_unpublish" (click)="onLoggedoutFromFanspace()">
+        Yes
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">No</button>
+    </div>
+  </div>
+</ng-template>

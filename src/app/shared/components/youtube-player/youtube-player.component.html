@@ -1,0 +1,39 @@
+<div class="youtube_player_container" *ngIf="youtubePlayerConfig.videoId">
+  <!-- <div class="disable-click" *ngIf="handlerRole === 4"></div> -->
+
+  <youtube-player
+    [videoId]="youtubePlayerConfig?.videoId.split('#')[0]"
+    suggestedQuality="highres"
+    [playerVars]="{
+      autoplay: youtubePlayerConfig.playerVars.autoplay,
+      mute: true,
+      controls: youtubePlayerConfig.playerVars.controls,
+      disablekb: youtubePlayerConfig.playerVars.disablekb
+    }"
+    (stateChange)="handleStateChange($event)"
+    height="100%"
+    width="100%"
+    (ready)="handlePlayerReady($event)"
+    *ngIf="youtubeMedia"
+  >
+  </youtube-player>
+
+  <app-html5-player
+    [videoID]="videoID"
+    [htmlMedia]="!youtubeMedia"
+    [viewState]="viewState"
+    [renderPos]="renderPos"
+    [type] = "upcomingType"
+    [handlerRole]="handlerRole"
+    (htmlPlayerReady)="htmlPlayerReady($event)"
+    (htmlPlayerStateChange)="htmlPlayerStateChange($event)"
+    (htmlPlayerSeeked)="htmlPlayerSeeked($event)"
+    *ngIf="!youtubeMedia"
+  >
+  </app-html5-player>
+
+  <div class="loader" *ngIf="showLoader">
+    <img src="/assets/image/BillionsIntro.gif" alt="loading" />
+  </div>
+  <div id="overlay" class="youtube-overlay" *ngIf="handlerRole === 4"></div>
+</div>

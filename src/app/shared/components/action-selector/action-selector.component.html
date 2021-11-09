@@ -1,0 +1,4 @@
+<select (change)="selectChanged($event)" class="form-control">
+  <option value="0" >Select Action</option>
+  <option *ngFor="let action of actions" [selected]="action['id'] == selectedValue" [value]="action['id']">{{ action['title'] }}</option>
+</select>

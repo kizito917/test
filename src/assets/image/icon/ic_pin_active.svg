@@ -1,0 +1,10 @@
+<svg id="pinned" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <circle id="Ellipse_75" data-name="Ellipse 75" cx="16" cy="16" r="16" fill="#5b55ff"/>
+  <g id="Group_866" data-name="Group 866" transform="translate(-241 -489)">
+    <g id="Rectangle_836" data-name="Rectangle 836" transform="translate(249 497)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="16" height="16" stroke="none"/>
+      <rect x="0.5" y="0.5" width="15" height="15" fill="none"/>
+    </g>
+    <path id="bxs-pin" d="M12,8.231V4.6h1.333V3.3A1.317,1.317,0,0,0,12,2H8A1.317,1.317,0,0,0,6.667,3.3V4.6H8V8.231L6.2,9.34A.639.639,0,0,0,6,9.8v1.3a.658.658,0,0,0,.667.65H9.333V14.7L10,16l.667-1.3V11.75h2.667A.658.658,0,0,0,14,11.1V9.8a.639.639,0,0,0-.2-.46Z" transform="translate(247 496)" fill="#fff"/>
+  </g>
+</svg>

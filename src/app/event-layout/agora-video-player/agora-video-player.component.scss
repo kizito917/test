@@ -1,0 +1,46 @@
+.video-player-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  .stream-container {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    ::ng-deep {
+      div[id^="agora-video-player-track-"] {
+        border-radius: 8px;
+      }
+    }
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .profile_img {
+    height: 10vh;
+    width: 10vh;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+    position: fixed;
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  .user_block_name_block {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    backdrop-filter: blur(20px);
+    border-radius: 6px;
+    text-align: center;
+    padding: 2px 4px;
+    color: white;
+  }
+}

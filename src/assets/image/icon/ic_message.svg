@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="message" transform="translate(-245 -516)">
+    <circle id="Ellipse_75" data-name="Ellipse 75" cx="16" cy="16" r="16" transform="translate(245 516)" fill="#3c4066"/>
+    <g id="Group_1069" data-name="Group 1069" transform="translate(2961 -4803)">
+      <g id="Rectangle_949" data-name="Rectangle 949" transform="translate(-2708 5327)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+        <rect width="16" height="16" stroke="none"/>
+        <rect x="0.5" y="0.5" width="15" height="15" fill="none"/>
+      </g>
+      <path id="Chat" d="M1,6.172c0-1.731,0-2.6.544-3.134S2.963,2.5,4.714,2.5h5.571c1.751,0,2.626,0,3.17.538S14,4.441,14,6.172V8.008c0,1.731,0,2.6-.544,3.134s-1.419.538-3.17.538H5.875a3.957,3.957,0,0,0-1.058.072q-.072.021-.142.047a3.919,3.919,0,0,0-.89.57c-1.127.836-1.691,1.254-2.154,1.1a.936.936,0,0,1-.229-.113c-.4-.274-.4-.97-.4-2.363Zm2.554-.459a.693.693,0,0,1,.7-.689h6.5a.689.689,0,1,1,0,1.377H4.25A.693.693,0,0,1,3.554,5.713Zm.7,2.066a.689.689,0,1,0,0,1.377H7.964a.689.689,0,1,0,0-1.377Z" transform="translate(-2707.5 5327)" fill="#fff" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

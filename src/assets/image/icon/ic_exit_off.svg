@@ -1,0 +1,12 @@
+<svg id="Exit" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_594" data-name="Group 594" transform="translate(-1768 -9297)">
+    <g id="Rectangle_328" data-name="Rectangle 328" transform="translate(1768 9297)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="Logout" transform="translate(1768 9297.174)">
+      <path id="Path_797" data-name="Path 797" d="M9,19.653h3c.943,0,1.414,0,1.707-.287S14,18.619,14,17.7V14.76M9,4h3c.943,0,1.414,0,1.707.287S14,5.036,14,5.958V8.891m1,2.937L18.5,8.4M15,11.828l3.5,3.424M15,11.828h7" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_798" data-name="Path 798" d="M2,5.775v12.1c0,1.106,0,1.659.318,2.059s.864.534,1.955.8l3.242.8c1.144.281,1.716.421,2.1.126S10,20.788,10,19.629V4.024c0-1.159,0-1.739-.385-2.034s-.957-.154-2.1.127l-3.243.8c-1.091.268-1.637.4-1.954.8S2,4.67,2,5.775ZM7,13.3a1.376,1.376,0,0,0,1.25-1.474A1.376,1.376,0,0,0,7,10.354a1.376,1.376,0,0,0-1.25,1.474A1.376,1.376,0,0,0,7,13.3Z" fill="#fff" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

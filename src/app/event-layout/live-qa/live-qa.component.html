@@ -1,0 +1,222 @@
+<div class="qa_section">
+  <div class="block_row">
+    <div class="selected_user_wrapper" *ngIf="selectedParticipants.length" [ngClass]="{resize_user_block: selectedParticipants.length>2}">
+      <ng-container *ngFor="let item of selectedParticipants">
+        <div
+          class="selected_user_block user-block"
+          [ngClass]="{
+            onHold: item.liveQandAState === 3,
+            onAir: item.liveQandAState === 2,
+            active: selectedParticipants.length>2
+          }"
+          (click)="removeAttendeeFromSceneQueue(item)"
+          title= "{{item.user.displayName}}"
+          id = {{item.user.userId}}
+        >
+        <div
+        loadinga
+        loader_img="/assets/image/button_loader.svg"
+        loaderClass="block_loader_image"
+        *ngIf="selectedParticipantLoader === item.user.userId + 'remove'"
+        ></div>
+          <img
+            class="user_img"
+            [ngClass]="{
+              onHold: item.liveQandAState === 3,
+              onAir: item.liveQandAState === 2
+            }"
+            [src]="item.user.profilePicture"
+            *ngIf="item.user.profilePicture"
+            alt="Attendee"
+          />
+          <img
+            class="user_img"
+            [ngClass]="{
+              onHold: item.liveQandAState === 3,
+              onAir: item.liveQandAState === 2
+            }"
+            *ngIf="!item.user.profilePicture"
+            src="/assets/image/user.svg"
+            alt="Attendee"
+          />
+          <div class="selected_user_block_name_block">
+            <span class="name"> {{item.user.displayName.length>5 ? item.user.displayName.substring(0,5)+".." : item.user.displayName}}</span>
+          </div>
+          <a class="selected_user_hover_block link_cusor">
+            <span
+              class="hover_icon_block"
+            >
+              <i class="fas fa-chevron-down fa-xs" style="color: #fff"></i>
+            </span>
+          </a>
+        </div>
+      </ng-container>
+      <ng-continer *ngIf="selectedParticipants.length == 7">
+        <div class="selected_user_block active">
+          <div class="disabled_block">
+            <i class="fas fa-ban icon"></i>
+            <span>more than 7</span>
+          </div>
+        </div>
+      </ng-continer>
+    </div>
+    <div class="qa_tabs">
+      <ul>
+        <li>
+          <a
+            class="link_cusor"
+            [ngClass]="{ active: activeTab == tabs.random_users }"
+            (click)="activateQATab(tabs.random_users)"
+          >
+            <span>Random</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="link_cusor"
+            [ngClass]="{ active: activeTab == tabs.all_users }"
+            (click)="activateQATab(tabs.all_users)"
+          >
+            <span>All</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="link_cusor"
+            [ngClass]="{ active: activeTab == tabs.active_users }"
+            (click)="activateQATab(tabs.active_users)"
+          >
+            <img
+              class="shuffle_icon"
+              *ngIf="activeTab !== tabs.active_users"
+              src="../../../assets//image/icon/shuffle_icon.svg"
+              alt=""
+              srcset=""
+            />
+            <img
+              class="shuffle_icon_active"
+              *ngIf="activeTab == tabs.active_users"
+              src="../../../assets//image/icon/suffle_icon_active.svg"
+              alt=""
+              srcset=""
+            />
+            <img
+              class="shuffle_icon_hover"
+              *ngIf="activeTab !== tabs.active_users"
+              src="../../../assets//image/icon/shuffle_icon_hover.svg"
+              alt=""
+              srcset=""
+            />
+          </a>
+        </li>
+        <li>
+          <a
+            class="link_cusor"
+            [ngClass]="{ active: activeTab == tabs.fav_users }"
+            (click)="activateQATab(tabs.fav_users)"
+          >
+            <i class="far fa-star icon"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="input-group"  *ngIf="this.activeTab !== tabs.random_users && this.activeTab !==tabs.active_users">
+      <div class="block_icon">
+        <img src="/assets/image/icon/ic_search.svg" alt="Search" />
+      </div>
+        <input #searchInput type="text" maxlength="100" (input)="onSearchChange($event.target.value)"/>
+    </div>
+    <div class="user_wrapper"
+     [ngClass]="{user_wrap:selectedParticipants.length>0,
+      user_wrap_at_3user:selectedParticipants.length===3,
+      user_wrap_at_4_user:selectedParticipants.length>3
+    }">
+      <div
+        *ngIf="this.activeTab === tabs.random_users"
+        (click)="filterUsers()"
+        class="shuffle_section"
+      >
+        <i class="fas fa-sync-alt"></i>
+        <span>Shuffle</span>
+      </div>
+      <ng-container *ngFor="let item of users">
+        <div class="user_block link_cusor">
+          <div
+            (click)="addAttendeeToSceneQueue(item)"
+            class="img_wrapper"
+            [ngClass]="{
+              disabled: disabled,
+              onHold: item.liveQandAState === 3,
+              onAir: item.liveQandAState === 2,
+              allUserDisable:selectedParticipants.length>=7
+            }"
+            id = item.user.userId
+          >
+            <img
+              class="user_img"
+              [ngClass]="{
+                onHold: item.liveQandAState === 3,
+                onAir: item.liveQandAState === 2
+              }"
+              src="{{ item.user.profilePicture }}"
+              *ngIf="item.user.profilePicture"
+              [src]="item.user.profilePicture"
+              alt="Attendee"
+            />
+          <div
+            loadinga
+            loader_img="/assets/image/button_loader.svg"
+            loaderClass="block_loader_image"
+            *ngIf="selectedParticipantLoader === item.user.userId + 'add'"
+          ></div>
+            <img
+              class="user_img"
+              [ngClass]="{
+                onHold: item.liveQandAState === 3,
+                onAir: item.liveQandAState === 2
+              }"
+              *ngIf="!item.user.profilePicture"
+              src="/assets/image/user.svg"
+              alt="Attendee"
+            />
+            <div class="selected_user_block_name_block">
+              <i class="fas fa-chevron-up text-white fa-xs"></i>
+            </div>
+          </div>
+          <div class="user_info">
+            <span class="name">{{ item.user.displayName }}</span>
+            <span class="desc">
+              {{ item.user.title }}
+            </span>
+            <span class="location">
+              {{ item.user.city }}
+            </span>
+            <div class="user_info_button_block">
+              <a (click)="showUserProfile(item.user.userId)" class="link_cusor">
+                <img src="/assets/image/icon/ic_tooltip_active.svg" alt="Info">
+              </a>
+              <a 
+                (click)="toggleFavUser(item.eventParticipantId)"
+                class="link_cusor" 
+                [ngClass]="{
+                  disabled: favDisabled
+                }"
+              >
+                <i
+                  class="fas fa-star"
+                  style="color: #5852f2"
+                  *ngIf="item.isFavourite"
+                ></i>
+                <i
+                  class="far fa-star"
+                  style="color: #5e6287"
+                  *ngIf="!item.isFavourite"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

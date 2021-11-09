@@ -1,0 +1,37 @@
+<div class="block_progress">
+  <div class="alignment"> Media
+    <div class="clickable" (click)="setVolumeToMute()">
+      <img src="../../../assets/image/icon/volume_mute_white_18dp.svg" alt="" srcset="" class="icon"/>
+    </div>
+  </div>
+  <div>
+
+    <input
+      type="range"
+      name=""
+      min="0"
+      max="100"
+      (input)="audioChangeHandler($event)"
+      (change)="audioChangeReleaseHandler($event)"
+      [value]="mediaVolume"
+      class="progress_bar"
+    />
+    <output class="bubble">
+      {{ mediaVolume }}%
+    </output>
+  </div>
+  <!-- <div class="progress_bar">
+  <div class="block_dot"></div>
+</div> -->
+  <div class="clickable" (click)="setVolumeToMax()">
+    <img src="../../../assets/image/icon/volume_up_white_18dp.svg" alt="" srcset=""/>
+  </div>
+  <!-- <app-tooltip
+    class="tooltip_container"
+    pos="left"
+    type="alert"
+    *ngIf="showAlertTooltip"
+    heading="Moderator volume muted or low"
+    subHeading="Heads up: Your participants may not be able to hear you with the current settings."
+  ></app-tooltip> -->
+</div>

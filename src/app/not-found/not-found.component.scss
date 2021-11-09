@@ -1,0 +1,47 @@
+@import "../../styles/scss/_variable.scss";
+
+.not-found-section {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+
+  .not_found_im {
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .not-found-content {
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+
+    @include mobile-view {
+      width: 100%;
+    }
+
+    h4 {
+      color: color(white-text);
+      font-size: 24px;
+      font-family: $font-Medium;
+    }
+
+    p {
+      font-size: 12px;
+      color: color(icon-color);
+      font-family: $font-Medium;
+    }
+
+    .block_btn {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        width: 48%;
+      }
+    }
+  }
+}

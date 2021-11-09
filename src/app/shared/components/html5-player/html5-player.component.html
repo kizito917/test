@@ -1,0 +1,23 @@
+
+<!-- <video
+  id="htmlVideo{{ renderPos }}"
+  class="video-js vjs-default-skin htmlVideoPlayer"
+  controls
+  preload="none"
+  data-setup="{}"
+  *ngIf="type === 'm3u8'"
+  #videoPlayer
+>
+  <source [src]="videoID" type="application/x-mpegURL" />
+</video> -->
+
+<video id="htmlVideo{{ renderPos }}" class="video-js vjs-default-skin vjs-big-play-centered htmlVideoPlayer" controls preload="auto" width="400" position = 'relative' z-index = "1"
+  data-setup="{}" *ngIf="type === 'm3u8'" #videoPlayer poster="placeholder.png">
+  <source
+    [src]="videoID"
+    type="application/x-mpegURL">
+</video>
+
+<video id="htmlVideo{{ renderPos }}" controls class="video-js vjs-default-skin vjs-big-play-centered htmlVideoPlayer" #videoPlayer *ngIf="type !== 'm3u8'" data-setup="{}">
+  <source [src]="videoID" type="video/mp4" />
+</video>

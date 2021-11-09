@@ -1,0 +1,348 @@
+@import "../../../styles/scss/_variable.scss";
+.progress_container {
+  margin-top: 2vh;
+  width: 10px;
+  margin-left: 20px;
+}
+input[type="range"] {
+  transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  margin-top: 4vh;
+  background-color: transparent;
+  -webkit-appearance: none;
+  width: 12vh;
+
+  &.for_plus_user {
+    margin-top: 13vh;
+    width: 30vh;
+  }
+
+  &:focus {
+    outline: none;
+  }
+  // For Chrome
+  &::-webkit-slider-runnable-track {
+    background: color(input-color);
+    border: 0;
+    height: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &::-webkit-slider-thumb {
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+    margin-top: -0.4rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: color(input-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    -webkit-appearance: none;
+  }
+  &:focus::-webkit-slider-runnable-track {
+    outline: none;
+  }
+
+  &::-webkit-progress-value {
+    background: color(bg_unpublish);
+    height: 5px;
+  }
+  // For FireFox
+
+  &::-moz-range-track {
+    background: color(secondary-color);
+    border: 0;
+    width: 100%;
+    height: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: color(input-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  &::-moz-range-progress {
+    background: color(input-color);
+    height: 5px;
+  }
+}
+.image{
+  margin-top: 5.5vh;
+  margin-left: -15px;
+  cursor:pointer;
+}
+.img{
+  width: 30px;
+  height: 30px;
+}
+@media only screen and (max-height: 800px) {
+  .image{
+    margin-top: 5vh;
+    margin-left: -12px;
+  }
+  .img{
+    width: 25px;
+    height: 25px;
+  }
+  input[type="range"] {
+    &.for_plus_user {
+      margin-top: 12vh;
+      width: 29vh;
+    }
+  }
+}
+
+.imgFourUser{
+  margin-top: 14vh;
+}
+.side_call_section {
+  height: 100%;
+  background-color: color(primary-bg);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  .readyForLiveScene {
+    display: block;
+    height: 4px;
+    border-radius: 20px;
+    margin-bottom: 4px;
+    &.active {
+      background-color: color(primary-btn);
+    }
+  }
+
+  .block_row {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    .side_call_users_wrapper {
+      flex-grow: 1;
+      padding: 0px 10px;
+      height: 100%;
+      border-radius: 10px;
+      &.moderator {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1%;
+        .user_block {
+          flex-grow: 1;
+          max-width: 49.5%;
+          min-width: 24.25%;
+          height: auto;
+        }
+        .userBlock1{
+          min-width: 24.5%;
+          max-width: 49.5%;
+          height: 50%;
+        }
+        .userBlock2{
+          min-width: 18%;
+          max-width: 49.5%;
+          height:auto;
+        }
+        .userBlock3{
+          min-width: 24.25%;
+          height:50%;
+        }
+        .userblock{
+          flex-grow: inherit;
+          max-width:49.5%;
+          min-width: 24.25%;
+        }
+        .userblock2{
+          min-width: 18%;
+          max-width: 18%;
+        }
+        .userblock1{
+          min-width: 24.3%;
+          max-width: 32.5%;
+          height: 50%;
+        }
+        .userblock3{
+          max-width: 24.25%;
+          height:50%;
+        }
+        .userblock4{
+          min-width: 24.3%;
+          max-width: 32.5%;
+        }
+      }
+      &.attendee {
+        display: flex;
+        .user_block {
+          max-width: 25%;
+          width:100%;
+          margin-right: 10px;
+          height:100%;
+        }
+      }
+      .user_block {
+        border-radius: 8px;
+        background: color(input-color);
+        .user_block_stream {
+          position: relative;
+          height: 100%;
+          width: 100%;
+          border-radius: inherit;
+          .user_block_name_block {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            backdrop-filter: blur(20px);
+            border-radius: 6px;
+            text-align: center;
+            padding: 2px 4px;
+            color: white;
+          }
+          .block_cls {
+            position: absolute;
+            right: 5%;
+            top: 5%;
+            .link_cursor {
+              cursor: pointer;
+              width: 20px;
+              height: 20px;
+              border-radius: 100%;
+              display: grid;
+              place-items: center;
+              background-color: color(bg_unpublish);
+            }
+          }
+        }
+        .user_block_invite {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          text-align: center;
+          .circular {
+            height: 34px;
+            width: 34px;
+            position: relative;
+            transform: scale(2);
+            top: -10%;
+            // left: 10%;
+            .user_block_invite_image_block {
+              width: 30x;
+              height: 30px;
+              top: 7%;
+              left: 7%;
+              position: absolute;
+              z-index: 6;
+              padding: 2px;
+              border-radius: 100%;
+              margin-bottom: 10px;
+              .user_block_invite_image {
+                width: 25px;
+                border-radius: 100%;
+                height: 25px;
+                img {
+                  position: relative;
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                  border-radius: inherit;
+                }
+                &::after {
+                  content: "";
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 100%;
+                  top: 0;
+                  left: 0;
+                  background-color: rgba($color: #474747, $alpha: 0.5);
+                }
+              }
+            }
+            .bar {
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              background: transparent;
+              -webkit-border-radius: 100%;
+              clip: rect(0px, 36px, 36px, 17px);
+              .progress {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                -webkit-border-radius: 100%;
+                clip: rect(0px, 17px, 36px, 0px);
+                background: color(primary-btn);
+              }
+            }
+            .circle {
+              .left {
+                .progress {
+                  z-index: 1;
+                  animation: left 5s linear both;
+                }
+              }
+            }
+            @keyframes left {
+              100% {
+                transform: rotate(180deg);
+              }
+            }
+            .circle {
+              .right {
+                transform: rotate(180deg);
+                z-index: 3;
+                .progress {
+                  animation: right 5s linear both;
+                  animation-delay: 5s;
+                }
+              }
+            }
+            @keyframes right {
+              100% {
+                transform: rotate(180deg);
+              }
+            }
+          }
+          @media only screen and (max-width: 1400px) {
+            .circular {
+              transform: scale(1);
+            }
+          }
+          .user_block_invite_calling {
+            color: color(placeholder-text);
+            span {
+              color: color(white-light-text);
+            }
+          }
+        }
+      }
+    }
+    .side_call_control_wrapper {
+      justify-self: flex-end;
+      display: flex;
+      padding: 20px;
+      height: 100%;
+
+      .buttons_block {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        a {
+          background: color(input-color);
+          display: grid;
+          place-items: center;
+          width: 30px;
+          height: 30px;
+          border-radius: 100%;
+        }
+        // .lock_button {
+        //   pointer-events: none;
+        // }
+      }
+    }
+  }
+}

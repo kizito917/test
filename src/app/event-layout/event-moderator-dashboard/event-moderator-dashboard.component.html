@@ -1,0 +1,4234 @@
+<div
+  class="event_dashboard_main"
+  [ngClass]="{
+    said_bar_off_withourt_bnr: view_state == views.NONE,
+    chat_media_on: view_state == views.ALL,
+    said_bar_off_withourt_bnr_and_media: view_state == views.MEDIA_ONLY,
+    block_chat_on: view_state == views.CHAT_ONLY
+  }"
+>
+  <app-ask-user-guesture
+    [audioPlayFailed]="audioPlayFailed"
+  ></app-ask-user-guesture>
+  <app-notification-tooltip
+    [isModerator]="isModerator"
+  ></app-notification-tooltip>
+  <div class="saidbar_main">
+    <div class="block_left_saidbar">
+      <!--<app-control-sidebar (viewChanged)="viewChangedHandler($event)"></app-control-sidebar>-->
+      <app-left-menu-sidebar
+        [view_state]="view_state"
+        [event_id]="event?.eventId"
+        [event_status]="event?.eventStatus"
+        [is_available_sidechat]="
+          isAvailableForSidechat &&
+          !agoraRTCStreamHandler.checkParticipantOnAir(user.user_id)
+        "
+        (viewChanged)="viewChangedHandler($event)"
+        [messenger_indicator]="messenger_indicator"
+        [handlerRole]="handlerRole"
+        [isFullScreenActive]="agoraRTCStreamHandler.isFullScreenActive"
+      >
+      </app-left-menu-sidebar>
+    </div>
+    <div class="block_right_saidbar">
+      <div class="block_top_banner">
+        <app-advertise-carousel
+          [advertise_banners]="advertise_carousel_banners"
+          [interval]="carousel_setting.ad_carousel_interval"
+          [is_active]="carousel_setting.is_ad_carousel_active"
+          [active_advertise_banner]="selectedAdvertiseCarouselBanner"
+          [advertise_banner_url]="advertisecarouselBannerRedirectUrl"
+          *ngIf="!agoraRTCStreamHandler.isFullScreenActive"
+        >
+        </app-advertise-carousel>
+      </div>
+      <div class="block_video_main">
+        <div class="block_video">
+          <!--<img *ngIf="!media" src="/assets/image/default-stream@2x.png" alt="">
+          <img *ngIf="media" [src]="media" alt="">-->
+          <app-live-media-renderer
+            [handlerRole]="handlerRole"
+            [eventId]="event?.eventId"
+            (onMediaClick)="broadcastLiveEventState($event)"
+            [hidden]="view_state !== views.ALL"
+            [viewState]="view_state"
+            [renderPos]="views.ALL"
+          ></app-live-media-renderer>
+
+          <!-- <img
+            *ngIf="selectedOverlay"
+            class="block_overlay"
+            [src]="selectedOverlay"
+            alt="media"
+          /> -->
+          <!-- <div class="block_hover">
+            <ul class="">
+              <li>
+                <a class="link_cusor">
+                  <img src="/assets/image/icon/ic_pause.svg" alt="Pause" />
+                </a>
+              </li>
+            </ul>
+            <div class="block_onclick_pause d-none">
+              <ul>
+                <li>
+                  <a class="link_cusor">
+                    <img src="/assets/image/icon/ic_play.svg" alt="Play" />
+                    <span>Resume</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="link_cusor">
+                    <img src="/assets/image/icon/ic_live.svg" alt="Live" />
+                    <span>Go to live</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <div
+        class="block_btm_bar"
+        [ngClass]="{ hide: agoraRTCStreamHandler.isFullScreenActive }"
+      >
+        <div
+          class="block_searchbar"
+          *ngIf="!agoraRTCStreamHandler.isFullScreenActive"
+        >
+          <div class="input-group">
+            <div class="block_icon">
+              <img src="/assets/image/icon/ic_search.svg" alt="Search" />
+            </div>
+            <input
+              #searchInput
+              type="text"
+              maxlength="100"
+              (input)="onSearchChange($event.target.value)"
+            />
+          </div>
+          <div
+            class="block_clear_filter tooltip"
+            *ngIf="isBookmark || isSidechat || searchInput.value"
+          >
+            <a
+              class="link_cusor"
+              (click)="clearFilter(); searchInput.value = ''"
+            >
+              Clear Filter</a
+            >
+            <span class="tooltiptext right_side">Clear selection</span>
+          </div>
+          <div class="block_right">
+            <span data-toggle="dropdown" class="tooltip" #filterShow>
+              <img
+                *ngIf="!isBookmark && !isSidechat"
+                src="/assets/image/icon/ic_filter_off.svg"
+                alt="Filter"
+              />
+              <img
+                *ngIf="isBookmark || isSidechat"
+                src="/assets/image/icon/ic_filter_on.svg"
+                alt="Filter"
+              />
+              <span class="tooltiptext right_side">Filter</span>
+            </span>
+
+            <div
+              class="dropdown-menu dropdown-menu-right custom_dropdownbg"
+              id="filterPopup"
+            >
+              <div class="filter_option">
+                <ul>
+                  <li
+                    class="link_cusor"
+                    [ngClass]="{ selected: isBookmark }"
+                    (click)="bookmarkFilter(searchInput.value)"
+                  >
+                    Bookmarked
+                  </li>
+                  <li
+                    class="link_cusor"
+                    [ngClass]="{ selected: isSidechat }"
+                    (click)="availableSideChatFilter(searchInput.value)"
+                  >
+                    Available for Sidechat
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="block_tabbar">
+          <!--<ul ngbNav #nav="ngbNav" [(activeId)]="ngbActiveTab" class="nav-tabs">
+            <li [ngbNavItem]="ngb_tabs.live_chat">
+              <a ngbNavLink>Live Chat<span>0</span></a>
+              <ng-template ngbNavContent>
+                <app-live-chat
+                  [user_id]="user?.user_id"
+                  [event_id]="event?.eventId"
+                  [event_status]="event?.eventStatus"
+                ></app-live-chat>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="ngb_tabs.calls">
+              <a ngbNavLink>Calls</a>
+              <ng-template ngbNavContent>
+                <app-call-history></app-call-history>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="ngb_tabs.profile">
+              <a ngbNavLink>Profile</a>
+              <ng-template ngbNavContent>
+                <app-profile
+                  [participant_id]="selectedAttendeeProfileId"
+                  (navigateTo)="navigateToHandler($event)"
+                  (messageRecipient)="messageRecipientHandler($event)"
+                ></app-profile>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="ngb_tabs.messenger">
+              <a ngbNavLink>Messenger<span>{{messageIndicator}}</span></a>
+              <ng-template ngbNavContent>
+                <app-messenger [sender_id]="user?.user_id" [chosen_recipient]="messageRecipient" (messageIndicator)="messageIndicatorHandler($event)"></app-messenger>
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class=""></div>-->
+
+          <app-side-chat
+            [view_state]="view_state"
+            [user_id]="user?.user_id"
+            [event_id]="event?.eventId"
+            [event_status]="event?.eventStatus"
+            [is_moderator]="isModerator"
+            [participant_user_id]="selectedAttendeeProfileId"
+            [is_allow_livechat]="event?.eventSetting?.allowLiveChat"
+            [is_allow_sidechat_audio]="
+              event?.eventSetting?.allowParticipantSidechat
+            "
+            [is_allow_sidechat_video]="
+              event?.eventSetting?.allowParticipantSidechatVideo
+            "
+            [navigate_to_profile]="navigateToProfile"
+            (messengerIndicator)="messengerIndicatorHandler($event)"
+            (moveNextPreviousProfile)="moveNextPreviousProfileHandler($event)"
+            [sideCallRoom]="sideCallRoom"
+            [isSidePanelRoom]="isSidePanelRoom"
+          >
+          </app-side-chat>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="block_attendee_cart"
+    [ngClass]="{ active: agoraRTCStreamHandler.isFullScreenActive }"
+  >
+    <div class="block_bnr_main" *ngIf="view_state === views.NONE">
+      <app-advertise-carousel
+        class="bnr_height"
+        [advertise_banners]="advertise_carousel_banners"
+        [interval]="carousel_setting.ad_carousel_interval"
+        [is_active]="carousel_setting.is_ad_carousel_active"
+        [active_advertise_banner]="selectedAdvertiseCarouselBanner"
+        ,
+        [advertise_banner_url]="advertisecarouselBannerRedirectUrl"
+      ></app-advertise-carousel>
+    </div>
+    <div
+      class="block_sidecall"
+      [ngClass]="{
+        attendee_cart_detail_hide:
+          view_state === views.NONE || view_state === views.CHAT_ONLY,
+        four_plus_user:
+          sidecallService.remoteStreams.length > 3 &&
+          !agoraRTCStreamHandler.isFullScreenActive
+      }"
+      *ngIf="isSidePanelRoom"
+    >
+      <app-sidecall-panel
+        [user_id]="user?.user_id"
+        [calleInfo]="calleInfo"
+        [event_id]="event?.eventId"
+        [room]="sideCallRoom"
+        [eventParticipants]="participants"
+      >
+      </app-sidecall-panel>
+    </div>
+    <div
+      class="block_center"
+      [ngClass]="{
+        attendee_cart_detail_hide:
+          view_state === views.NONE || view_state === views.CHAT_ONLY,
+        active: agoraRTCStreamHandler.isFullScreenActive
+      }"
+    >
+      <ul id = "attendeeCards">
+        <li [hidden]="view_state !== views.MEDIA_ONLY">
+          <div class="block_bnr_main">
+            <app-advertise-carousel
+              class="bnr_height"
+              [advertise_banners]="advertise_carousel_banners"
+              [interval]="carousel_setting.ad_carousel_interval"
+              [is_active]="carousel_setting.is_ad_carousel_active"
+              [active_advertise_banner]="selectedAdvertiseCarouselBanner"
+              [advertise_banner_url]="advertisecarouselBannerRedirectUrl"
+            ></app-advertise-carousel>
+          </div>
+        </li>
+        <li *ngFor="let participant of participants">
+          <app-attendee-cart
+            [profile_card_banner]="selectedProfileCardBanner"
+            [view_state]="view_state"
+            [attendee_Profile_picture]="participant.user.profilePicture"
+            [attendee_name]="participant.user.displayName"
+            [attendee_tagline]="participant.user.tagLine"
+            [participant_id]="participant.eventParticipantId"
+            [is_moderator]="participant.isModerator"
+            [participant_user_id]="participant.user.userId"
+            [is_fake]="is_fake"
+            [text_limit]="cardTextLimit"
+            (attendeeSelected)="attendeeSelectedHandler($event)"
+            [selected_participant_user_id]="selectedAttendeeProfileId"
+            [is_available_for_sidechat]="
+              participant.isAvailableForSidechat &&
+              !agoraRTCStreamHandler.checkParticipantOnAir(
+                participant.user.userId
+              )
+            "
+            [sidechat_call]="participant.sidechatCall"
+          >
+          </app-attendee-cart>
+        </li>
+
+        <li *ngFor="let item of fake_array">
+          <app-attendee-cart
+            [profile_card_banner]="selectedProfileCardBanner"
+            [view_state]="view_state"
+          >
+          </app-attendee-cart>
+        </li>
+
+        <li *ngFor="let item of filter_fake_array">
+          <app-attendee-cart
+            [profile_card_banner]="selectedProfileCardBanner"
+            [view_state]="view_state"
+          >
+          </app-attendee-cart>
+        </li>
+      </ul>
+
+      <div
+        class="block_striming"
+        [ngClass]="{
+          fullscreen: !!agoraRTCStreamHandler.isFullScreenActive,
+          callActive:
+            isSidePanelRoom &&
+            sidecallService.remoteStreams.length <= 3 &&
+            !agoraRTCStreamHandler.isFullScreenActive,
+          callandFullScreen:
+            isSidePanelRoom && agoraRTCStreamHandler.isFullScreenActive,
+          callActiveFourUser:
+            sidecallService.remoteStreams.length > 3 &&
+            !agoraRTCStreamHandler.isFullScreenActive
+        }"
+        [hidden]="view_state === views.ALL"
+      >
+        <app-live-media-renderer
+          [handlerRole]="handlerRole"
+          [eventId]="event?.eventId"
+          (onMediaClick)="broadcastLiveEventState($event)"
+          [viewState]="view_state"
+          [renderPos]="views.CHAT_ONLY"
+        >
+        </app-live-media-renderer>
+      </div>
+    </div>
+  </div>
+  <div
+    class="block_setting_bar"
+    [hidden]="agoraRTCStreamHandler.isFullScreenActive"
+  >
+    <!--<app-setting-sidebar (mediaChanged)="mediaChangedHandler($event)" (profileCardBannerChanged)="profileCardBannerChangedHandler($event)" (advertiseBannerChanged)="adversiteBannerChangedHandler($event)" (advertiseCarouselSettingChanged)="advertiseCarouselSettingChangedHandler($event)" (advertiseCarouselBannerChanged)="advertiseCarouselBannerChangedHandler($event)"></app-setting-sidebar>-->
+
+    <div class="saidbar_right">
+      <div class="block_saidbar_right_top">
+        <!-- (click)="toggleTab()" -->
+        <a class="link_cusor" (click)="deactivateTab()">
+          <img src="/assets/image/icon/ic_live_media.svg" alt="Media" />
+          <span>Live Media</span>
+        </a>
+        <!-- *ngIf="activeTab == tabs.block_live_media" -->
+        <div
+          class="custom_dropdownbg block_live_media"
+          *ngIf="isLiveMediaTabactive"
+        >
+          <div
+            class="block_topbar"
+            [ngClass]="{
+              block_event_status_pending:
+                event?.eventStatus != event_statuses.PENDING
+            }"
+          >
+            <div class="block_topbar_buttons">
+              <app-audio-balancer
+                [moderatorAudio]="isModeratorAudioOnly"
+                [moderatorVideo]="moderatorOnCommentry"
+                [attendeeAudio]="onAudioSceneActiveState"
+                [attendeeVideo]="attendeeOnCommentry"
+                (onAudioBalancerChange)="broadcastLiveEventState($event)"
+              ></app-audio-balancer>
+
+              <div class="block_media_add">
+                <!-- // This is for showing local user video stream -->
+                <div
+                  class="block_moderator_audio"
+                  [style.visibility]="
+                    !switchStreamInProcess || !initialRender
+                      ? 'visible'
+                      : 'hidden'
+                  "
+                >
+                  <!-- Moderator Live Button -->
+                  <div
+                    class="block_moderator"
+                    [ngClass]="{
+                      block_active:
+                        agoraRTCStreamHandler.isVideoEnabled &&
+                        !moderatorOnCommentry
+                    }"
+                    (click)="setOnAir('agora', user.user_id)"
+                  >
+                    <div
+                      loadinga
+                      loader_img="/assets/image/button_loader.svg"
+                      loaderClass="block_loader_image"
+                      *ngIf="switchStreamInProcess"
+                    ></div>
+                    <div
+                      id="{{ user.user_id }}-local_stream"
+                      [ngStyle]="{
+                        height:
+                          !agoraRTCStreamHandler.isVideoEnabled &&
+                          !agoraRTCStreamHandler.isCameraMuted
+                            ? '100%'
+                            : '0',
+                        width: '100%'
+                      }"
+                      [hidden]="switchStreamInProcess"
+                    ></div>
+                    <!-- <img [src]="user.profile_picture" alt="Media" /> -->
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="!agoraRTCStreamHandler.isVideoEnabled"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div
+                        class="bottom_bar_text"
+                        *ngIf="
+                          agoraRTCStreamHandler.isVideoEnabled &&
+                          !moderatorOnCommentry
+                        "
+                      >
+                        <span>On Air</span>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        agoraRTCStreamHandler.isVideoEnabled &&
+                        !moderatorOnCommentry
+                      "
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                    <div
+                      class="profile_img"
+                      [hidden]="
+                        !agoraRTCStreamHandler.isVideoEnabled &&
+                        !agoraRTCStreamHandler.isCameraMuted
+                      "
+                    >
+                      <img [src]="getUserProfileImage()" alt="Media" />
+                    </div>
+                  </div>
+                  <!-- Moderator Live Video Commentary Button -->
+                  <div
+                    class="block_audio"
+                    (click)="setOnAir('agora', user.user_id, true)"
+                    [ngClass]="{ active: moderatorOnCommentry }"
+                  >
+                    <div
+                      loadinga
+                      loader_img="/assets/image/button_loader.svg"
+                      loaderClass="block_loader_image"
+                      *ngIf="switchStreamInProcess"
+                    ></div>
+                    <div class="audio_icon">
+                      <img
+                        src="/assets/image/{{
+                          isModeratorAudioOnly && moderatorOnCommentry
+                            ? 'volume_active'
+                            : 'volume_deactive'
+                        }}.svg"
+                        alt="Add People Audio Mode"
+                      />
+                      <span>Video Commentary</span>
+                    </div>
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="!moderatorOnCommentry"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div class="bottom_bar_text" *ngIf="moderatorOnCommentry">
+                        <span>On Air</span>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="isModeratorAudioOnly"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Moderator Live Audio Commentary Button -->
+                  <div
+                    class="block_audio"
+                    (click)="toggleModeratorAudioOnAir()"
+                    [ngClass]="{ active: isModeratorAudioOnly }"
+                  >
+                    <div
+                      loadinga
+                      loader_img="/assets/image/button_loader.svg"
+                      loaderClass="block_loader_image"
+                      *ngIf="switchStreamInProcess"
+                    ></div>
+                    <div class="audio_icon">
+                      <img
+                        src="/assets/image/{{
+                          isModeratorAudioOnly
+                            ? 'volume_active'
+                            : 'volume_deactive'
+                        }}.svg"
+                        alt="Add People Audio Mode"
+                      />
+                      <span>Audio Commentary</span>
+                    </div>
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="!isModeratorAudioOnly"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div class="bottom_bar_text" *ngIf="isModeratorAudioOnly">
+                        <span>On Air</span>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="isModeratorAudioOnly"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="scene_wrapper"
+                  [style.visibility]="
+                    !switchStreamInProcess || !initialRender
+                      ? 'visible'
+                      : 'hidden'
+                  "
+                >
+                  <!-- Attendees Live Button -->
+                  <div
+                    class="on_screen scene"
+                    [ngClass]="{
+                      active: onScreenSceneActiveState && !attendeeOnCommentry,
+                      disabled: attendeeActionLoader
+                    }"
+                    (click)="toggleOnScreenScene()"
+                  >
+                    <div
+                      loadinga
+                      loader_img="/assets/image/button_loader.svg"
+                      loaderClass="block_loader_image"
+                      *ngIf="attendeeActionLoader"
+                    ></div>
+                    <div class="scene_icon_block">
+                      <img
+                        src="/assets/image/{{
+                          onScreenSceneActiveState && !attendeeOnCommentry
+                            ? 'event_people_active'
+                            : 'event_add_people'
+                        }}.svg"
+                        alt="Add People"
+                        [ngStyle]="{ 'margin-right': '10px' }"
+                      />
+                    </div>
+
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="!onScreenSceneActiveState"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div
+                        class="bottom_bar_text"
+                        *ngIf="onScreenSceneActiveState && !attendeeOnCommentry"
+                      >
+                        <span>On Air</span>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="onScreenSceneActiveState"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Attendees Live Video Commentary Button -->
+                  <div
+                    class="on_screen scene"
+                    [ngClass]="{
+                      active: attendeeOnCommentry,
+                      disabled: attendeeActionLoader
+                    }"
+                    (click)="toggleOnScreenScene(true)"
+                  >
+                    <div
+                      loadinga
+                      loader_img="/assets/image/button_loader.svg"
+                      loaderClass="block_loader_image"
+                      *ngIf="attendeeActionLoader"
+                    ></div>
+                    <div class="scene_icon_block">
+                      <img
+                        src="/assets/image/{{
+                          attendeeOnCommentry
+                            ? 'event_people_active'
+                            : 'event_add_people'
+                        }}.svg"
+                        alt="Add People"
+                        [ngStyle]="{ 'margin-right': '10px' }"
+                      />
+                    </div>
+
+                    <div class="bottom_bar">
+                      <div class="bottom_bar_icon" *ngIf="!attendeeOnCommentry">
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div class="bottom_bar_text" *ngIf="attendeeOnCommentry">
+                        <span>On Air</span>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="onScreenSceneActiveState"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Attendees Live Audio Commentary Button -->
+                  <div
+                    class="on_audio scene"
+                    [ngClass]="{
+                      active: onAudioSceneActiveState,
+                      disabled: attendeeActionLoader
+                    }"
+                    (click)="toggleOnAudioScene()"
+                  >
+                    <div
+                      loadinga
+                      loader_img="/assets/image/button_loader.svg"
+                      loaderClass="block_loader_image"
+                      *ngIf="attendeeActionLoader"
+                    ></div>
+                    <div class="scene_icon_block">
+                      <img
+                        src="/assets/image/{{
+                          onAudioSceneActiveState
+                            ? 'event_people_active'
+                            : 'event_add_people'
+                        }}.svg"
+                        alt="Add People"
+                        [ngStyle]="{ 'margin-right': '10px' }"
+                      />
+                      <img
+                        src="/assets/image/{{
+                          onAudioSceneActiveState
+                            ? 'volume_active'
+                            : 'volume_deactive'
+                        }}.svg"
+                        alt="Add People Audio Mode"
+                      />
+                    </div>
+
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="!onAudioSceneActiveState"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div
+                        class="bottom_bar_text"
+                        *ngIf="onAudioSceneActiveState"
+                      >
+                        <span>On Air</span>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="onAudioSceneActiveState"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="overlay_process"
+                  [hidden]="!switchStreamInProcess"
+                  loadinga
+                  *ngIf="initialRender"
+                >
+                  <!-- <img
+                  src="/assets/image/BillionsIntro.gif"
+                  alt="block overlay" -->
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="block_topbar_stream" id="block_topbar_stream">
+              <!-- // loop through live media urls -->
+              <ng-container
+                *ngFor="
+                  let youtubeMedia of liveMediaUrls;
+                  index as i;
+                  trackBy: identify
+                "
+              >
+                <ng-container *ngIf="!youtubeMedia.url">
+                  <!-- // This contains the user's screen share video stream -->
+                  <div
+                    class="block_media"
+                    [ngClass]="{
+                      block_active: agoraRTCStreamHandler.isScreenSharePublished
+                    }"
+                    (click)="setOnAir('agorascreen', user.user_id)"
+                    [hidden]="!isScreenShareMediaAdded"
+                  >
+                    <div
+                      id="{{ user.user_id }}s-local_stream"
+                      [ngStyle]="{
+                        height: !isScreenShareMediaAdded ? 0 : '100%'
+                      }"
+                      *ngIf="agoraRTCStreamHandler.isScreenShareEnabled"
+                    ></div>
+                    <div
+                      class="screen_default_preview"
+                      *ngIf="
+                        !agoraRTCStreamHandler.isScreenShareEnabled ||
+                        agoraRTCStreamHandler.isScreenSharePublished
+                      "
+                    >
+                      <img src="/assets/image/screen_shared.svg" alt="Media" />
+                      <span>Shared Screen</span>
+                    </div>
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="!agoraRTCStreamHandler.isScreenSharePublished"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div
+                        class="bottom_bar_text"
+                        *ngIf="agoraRTCStreamHandler.isScreenSharePublished"
+                      >
+                        <span>On Air</span>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="agoraRTCStreamHandler.isScreenSharePublished"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+
+                    <span
+                      class="media_close_button"
+                      (click)="
+                        deleteLiveMedia($event, youtubeMedia.eventLiveMediaId)
+                      "
+                      *ngIf="!agoraRTCStreamHandler.isScreenSharePublished"
+                    >
+                      x
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="youtubeMedia.url">
+                  <div
+                    class="block_media"
+                    [ngClass]="{ block_active: youtubeMedia.url == media }"
+                    (click)="setOnAir('externalMedia', youtubeMedia.url)"
+                  >
+                    <div id="overlay" class="youtube-overlay"></div>
+                    <img
+                      src="https://img.youtube.com/vi/{{
+                        youtubeMedia.videoId
+                      }}/0.jpg"
+                      alt="Youtube Media"
+                    />
+                    <!-- <app-youtube-player
+                      [youtubePlayerConfig]="{
+                        videoId: youtubeMedia.url,
+                        playerVars: {
+                          autoplay: false,
+                          mute: true,
+                          controls: 0
+                        }
+                      }"
+                      [eventId]="event?.eventId"
+                      [handlerRole]="handlerRole"
+                      renderTo="rightPanel"
+                    >
+                    </app-youtube-player> -->
+
+                    <div class="bottom_bar">
+                      <div
+                        class="bottom_bar_icon"
+                        *ngIf="youtubeMedia.url !== media"
+                      >
+                        <i
+                          class="fas fa-chevron-up fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </div>
+                      <div
+                        class="bottom_bar_text"
+                        *ngIf="youtubeMedia.url == media"
+                      >
+                        <span>On Air</span>
+                      </div>
+                    </div>
+                    <span
+                      class="media_close_button"
+                      (click)="
+                        deleteLiveMedia($event, youtubeMedia.eventLiveMediaId)
+                      "
+                      *ngIf="youtubeMedia.url !== media"
+                    >
+                      x
+                    </span>
+                    <div
+                      *ngIf="youtubeMedia.url == media"
+                      class="block_moderatorhover"
+                    >
+                      <span class="hover_icon_block">
+                        <i
+                          class="fas fa-chevron-down fa-xs"
+                          style="color: #fff"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                </ng-container>
+                <div class="block_media_title">
+                  <input
+                    type="text"
+                    [value]="youtubeMedia?.title"
+                    placeholder="Add Media Title"
+                    maxlength="50"
+                    (keyup)="
+                      onMediaTitleChange($event, youtubeMedia.eventLiveMediaId)
+                    "
+                  />
+                </div>
+              </ng-container>
+              <!-- </ng-template> -->
+
+              <div class="block_medai_add" *ngIf="!setScrollButton">
+                <a
+                  class="link_cusor"
+                  (click)="openAddLiveMediaModel(modalAddLiveMedia)"
+                >
+                  <img
+                    class="ic_normal"
+                    src="/assets/image/icon/ic_add_round.svg"
+                    alt="Plus"
+                  />
+                  <img
+                    class="ic_hover"
+                    src="/assets/image/icon/ic_add_round_hover.svg"
+                    alt="Plus"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="block_medai_add" *ngIf="setScrollButton">
+              <a
+                class="link_cusor"
+                (click)="openAddLiveMediaModel(modalAddLiveMedia)"
+              >
+                <img
+                  class="ic_normal"
+                  src="/assets/image/icon/ic_add_round.svg"
+                  alt="Plus"
+                />
+                <img
+                  class="ic_hover"
+                  src="/assets/image/icon/ic_add_round_hover.svg"
+                  alt="Plus"
+                />
+              </a>
+            </div>
+          </div>
+          <div
+            class="block_btmbar"
+            *ngIf="event?.eventStatus == event_statuses.PENDING"
+          >
+            <ul>
+              <li *ngIf="!event?.isPublished">
+                <button
+                  type="button"
+                  class="link_cusor btn btn_publish"
+                  (click)="openModel(modelEventPublish, 'publish_window')"
+                >
+                  publish
+                </button>
+              </li>
+              <li *ngIf="event?.isPublished">
+                <button
+                  type="button"
+                  class="link_cusor btn btn_unpublish"
+                  (click)="openModel(modelEventUnpublish, 'unpublish_window')"
+                >
+                  un publish
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="link_cusor btn btn-prime"
+                  (click)="
+                    preProcessEvent(modelStartEvent, 'start_event_window')
+                  "
+                >
+                  start event
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class="block_saidbar_right_btm"
+        [ngClass]="{
+          block_start_event: event?.eventStatus == event_statuses.STARTED
+        }"
+      >
+        <ul *ngIf="event?.eventStatus == event_statuses.STARTED">
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_live_qa }"
+              (click)="activateTab(tabs.block_live_qa)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_live_q&a.svg"
+                alt="Live Q&A"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_live_q&a_hover.svg"
+                alt="Live Q&A"
+              />
+              <span>Live Q&A</span>
+            </a>
+            <div
+              class="custom_dropdownbg block_invite_link live_qna_list"
+              [hidden]="activeTab !== tabs.block_live_qa"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <app-live-qa
+                  [eventParticipants]="all_participants"
+                  [audioSceneTab]="onAudioSceneActiveState"
+                  [videoSceneTab]="
+                    onScreenSceneActiveState || attendeeOnCommentry
+                  "
+                  [event]="event"
+                  (attendeeSelected)="attendeeSelectedHandler($event)"
+                >
+                </app-live-qa>
+              </div>
+            </div>
+          </li>
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_visuals }"
+              (click)="activateTab(tabs.block_visuals)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_visuals.svg"
+                alt="Visuals"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_visuals_hover.svg"
+                alt="Visuals"
+              />
+              <span>Visuals</span>
+            </a>
+            <div
+              class="custom_dropdownbg visual_drop"
+              *ngIf="activeTab == tabs.block_visuals"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="visual_details">
+                  <div class="visual_box">
+                    <p>Background images</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let background_visual of event_visuals.background_visuals
+                        "
+                        [ngClass]="{
+                          is_selected:
+                            background_visual.fileName === selectedBackground
+                        }"
+                      >
+                        <img
+                          [src]="background_visual.fileName"
+                          alt="bg_img"
+                          (click)="setBackground(background_visual.fileName)"
+                        />
+                        <!--<div class="page_loader_image" *ngIf="bgLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <div
+                          class="block_remove_im"
+                          *ngIf="
+                            background_visual.fileName !== selectedBackground
+                          "
+                        >
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                background_visual.eventVisualId,
+                                visual_types.BACKGROUND
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.BACKGROUND
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="visual_box">
+                    <p>Overlay images</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let overlay_visual of event_visuals.overlay_visuals
+                        "
+                        [ngClass]="{
+                          is_selected:
+                            overlay_visual.fileName === selectedOverlay
+                        }"
+                      >
+                        <img
+                          [src]="overlay_visual.fileName"
+                          alt="bg_img"
+                          (click)="setOverlay(overlay_visual.fileName)"
+                        />
+                        <!--<div class="page_loader_image" *ngIf="overlayImageLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <div
+                          class="block_remove_im"
+                          *ngIf="overlay_visual.fileName !== selectedOverlay"
+                        >
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                overlay_visual.eventVisualId,
+                                visual_types.OVERLAY
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.OVERLAY
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="visual_box">
+                    <p>Set profile card banner</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let profile_card_banner_visual of event_visuals.profile_card_banner_visuals
+                        "
+                        [ngClass]="{
+                          is_selected: profile_card_banner_visual.isActive
+                        }"
+                      >
+                        <img
+                          [src]="profile_card_banner_visual.fileName"
+                          alt="bg_img"
+                          (click)="
+                            setProfileCardBannerChanged(
+                              profile_card_banner_visual.fileName,
+                              profile_card_banner_visual.eventVisualId
+                            )
+                          "
+                        />
+                        <!--<div class="page_loader_image" *ngIf="profileCardLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <div class="block_remove_im">
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                profile_card_banner_visual.eventVisualId,
+                                visual_types.PROFILE_CARD_BANNER
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.PROFILE_CARD_BANNER
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="visual_box">
+                    <p>Set transition</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let transition of event_visuals.transition_visuals
+                        "
+                      >
+                        <img [src]="transition.fileName" alt="bg_img" />
+                        <div class="block_remove_im">
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                transition.eventVisualId,
+                                visual_types.TRANSITION
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.TRANSITION
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_ad_carousel }"
+              (click)="activateTab(tabs.block_ad_carousel)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_ads.svg"
+                alt="Ad Carousel"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_ads_hover.svg"
+                alt="Ad Carousel"
+              />
+              <span>Ad Carousel</span>
+            </a>
+
+            <div
+              class="custom_dropdownbg ad_carousel"
+              *ngIf="activeTab == tabs.block_ad_carousel"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="block_top">
+                  <div class="ad_carousol_block">
+                    <div class="block_im_main">
+                      <div
+                        class="block_carousol_im"
+                        *ngFor="
+                          let advertise_banner of advertise_carousel_banners
+                        "
+                        [ngClass]="{ is_selected: advertise_banner.isActive }"
+                      >
+                        <div class="block_carousel_list">
+                          <img
+                            [src]="advertise_banner.fileName"
+                            alt="bg_img"
+                            (click)="
+                              setAdvertiseCarouelBanner(
+                                advertise_banner.fileName,
+                                advertise_banner.eventAdCarouselId,
+                                advertise_banner.isActive,
+                                advertise_banner.redirectUrl
+                              )
+                            "
+                          />
+                          <!--<div class="page_loader_image" *ngIf="advertiseCarouselLoader">
+                            <img src="/assets/image/page_loader.svg" alt="Loader" />
+                          </div>-->
+                          <div class="block_remove_im">
+                            <a
+                              *ngIf="!advertise_banner.isActive"
+                              class="remove_im link_cusor"
+                              (click)="
+                                openRemoveAdCarouselModal(
+                                  modelRemoveAdCarousel,
+                                  advertise_banner.eventAdCarouselId
+                                )
+                              "
+                            >
+                              <img
+                                src="/assets/image/icon/ic_close_white.svg"
+                                alt="Close"
+                              />
+                            </a>
+                          </div>
+                        </div>
+                        <div class="block_url">
+                          <div
+                            class="block_text_view"
+                            *ngIf="
+                              advertise_banner.eventAdCarouselId ==
+                              carouselBannerId
+                            "
+                          >
+                            <app-carousel-url-input
+                              #urlInput
+                              class="block_tagline"
+                              [(ngModel)]="advertise_banner.redirectUrl"
+                            ></app-carousel-url-input>
+                            <div class="block_edit">
+                              <a class="link_cusor">
+                                <img
+                                  src="../../../assets/image/checkmark.svg"
+                                  alt="save"
+                                  (click)="
+                                    saveCarouselUrl(
+                                      advertise_banner.eventAdCarouselId,
+                                      advertise_banner.fileName,
+                                      urlInput.value
+                                    )
+                                  "
+                                />
+                                <!--<img *ngIf="carouselUrlEditLoader" style="
+                                    height: 20px;
+                                    width: 20px;
+                                    margin-left: 3px;
+                                  " src="/assets/image/button_loader.svg" alt="Loader" />-->
+                              </a>
+                            </div>
+                          </div>
+
+                          <div
+                            class="block_edit_view"
+                            *ngIf="
+                              advertise_banner.eventAdCarouselId !=
+                              carouselBannerId
+                            "
+                          >
+                            <p class="p-color">
+                              {{
+                                advertise_banner.redirectUrl
+                                  ? advertise_banner.redirectUrl
+                                  : "Destination URL"
+                              }}
+                            </p>
+                            <img
+                              (click)="
+                                editCarouselUrlToggale(
+                                  advertise_banner.eventAdCarouselId
+                                )
+                              "
+                              class="link_cusor"
+                              src="../../../assets/image/bxs-edit-alt-clr.svg"
+                              alt="edit url"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        (click)="openAddAdCarouselModel(modalAddAdCarousel)"
+                        class="block_add_ad_carousel"
+                      >
+                        <a class="link_cusor upload_visual_img"
+                          ><img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                        /></a>
+                      </div>
+
+                      <div class="block_carousol_setting">
+                        <div class="block_row">
+                          <div class="block_switch">
+                            <label for="">
+                              Activate carousel
+                              <span
+                                >If carousel turned off,You can toggle ads
+                                manually</span
+                              >
+                            </label>
+
+                            <div class="toggle_switch">
+                              <label class="switch">
+                                <!--[(ngModel)]="carousel_setting.is_ad_carousel_active" -->
+                                <input
+                                  type="checkbox"
+                                  [checked]="
+                                    carousel_setting.is_ad_carousel_active
+                                  "
+                                  (change)="activateAdCarousel()"
+                                />
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="block_row">
+                          <label for="">Set Interval</label>
+                          <ng-select
+                            class="custom_selectbox"
+                            [selectOnTab]="true"
+                            [items]="interval_data"
+                            [clearable]="false"
+                            bindLabel="name"
+                            bindValue="value"
+                            placeholder="Select Interval"
+                            [(ngModel)]="carousel_setting.ad_carousel_interval"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="block_btm">
+                  <ul>
+                    <li>
+                      <button
+                        (click)="saveAdCarouselSetting()"
+                        class="link_cusor btn btn-prime"
+                        [disabled]="loading"
+                      >
+                        Save
+                        <img
+                          *ngIf="loading"
+                          style="height: 20px; width: 20px; margin-left: 3px"
+                          src="/assets/image/button_loader.svg"
+                          alt="Loader"
+                        />
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              (click)="openModel(modelmanageUsers, 'User_modal_window')"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_manage_user.svg"
+                alt="Manage Users"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_manage_user_hover.svg"
+                alt="Manage Users"
+              />
+              <span>Manage Users</span>
+            </a>
+          </li>
+
+          <!-- <li>
+            <a
+              class="link_cusor"
+              (click)="openModel(modelLockEvent, 'eventlock_modal_window')"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_lock_event.svg"
+                alt="Lock Event"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_lock_event_hover.svg"
+                alt="Lock Event"
+              />
+              <span>Lock Event</span>
+            </a>
+          </li> -->
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_preferences }"
+              (click)="activateTab(tabs.block_preferences)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_preferences.svg"
+                alt="Preferences"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_preferences_hover.svg"
+                alt="Preferences"
+              />
+              <span>Preferences</span>
+            </a>
+            <div
+              class="custom_dropdownbg block_preferences"
+              *ngIf="activeTab == tabs.block_preferences"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="block_top">
+                  <div class="block_row">
+                    <div class="block_switch">
+                      <span>Allow participants to audio side chat</span>
+                      <div class="toggle_switch">
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            [checked]="
+                              event?.eventSetting.allowParticipantSidechat
+                            "
+                            (change)="
+                              allowParticipantSideChat($event.target.checked)
+                            "
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block_row">
+                    <div class="block_switch">
+                      <span>Allow participants to video side chat</span>
+                      <div class="toggle_switch">
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            [checked]="
+                              event?.eventSetting.allowParticipantSidechatVideo
+                            "
+                            (change)="
+                              allowParticipantVideoInSiteChat(
+                                $event.target.checked
+                              )
+                            "
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block_row">
+                    <div class="block_switch">
+                      <span>Hide live chat</span>
+                      <div class="toggle_switch">
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            [checked]="!event?.eventSetting.allowLiveChat"
+                            (change)="hideLiveChat($event.target.checked)"
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!--<li>
+            <a class="link_cusor" (click)="openModel(modelstats, 'stats_modal_window')">
+              <img class="normal_view" src="/assets/image/icon/ic_stats.svg" alt="Stats" />
+              <img class="hover_view" src="/assets/image/icon/ic_stats_hover.svg" alt="Stats" />
+              <span>Stats</span>
+            </a>
+          </li>-->
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_invite_link }"
+              (click)="activateTab(tabs.block_invite_link)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_link.svg"
+                alt="Invite Link"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_link_hover.svg"
+                alt="Invite Link"
+              />
+              <span>Invite Link</span>
+            </a>
+            <div
+              class="custom_dropdownbg block_invite_link"
+              *ngIf="activeTab == tabs.block_invite_link"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="block_top">
+                  <div class="block_row">
+                    <label for=""
+                      >To invite people, simply share the link or
+                      invitation</label
+                    >
+                    <div class="block_link_main">
+                      <div *ngIf="!invite_link" class="block_link">
+                        bvb.billions.live
+                      </div>
+                      <div *ngIf="invite_link" class="block_link">
+                        {{ invite_link }}
+                      </div>
+                      <ul>
+                        <li
+                          class="link_cusor"
+                          (click)="copyInviteLink(invite_link)"
+                        >
+                          <img
+                            src="/assets/image/ic_copy.svg"
+                            alt="Copy"
+                            placement="top"
+                            ngbTooltip="Invite Link"
+                          />
+                        </li>
+                        <li
+                          class="link_cusor"
+                          (click)="
+                            openModel(modalInvitation, 'modal_copy_window')
+                          "
+                        >
+                          <img
+                            src="/assets/image/ic_mail_copy.svg"
+                            alt="Mail"
+                            placement="top"
+                            ngbTooltip="Invitation"
+                          />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_details }"
+              (click)="activateTab(tabs.block_details)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_detail.svg"
+                alt="Detail"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_detail_hover.svg"
+                alt="Detail"
+              />
+              <span>Details</span>
+            </a>
+            <!--[ngClass]="{ 'block_hide': activeTab != tabs.block_details}"-->
+            <div
+              class="custom_dropdownbg block_detail"
+              *ngIf="activeTab == tabs.block_details"
+            >
+              <form
+                [formGroup]="eventDetailsFG"
+                class="h-100"
+                (ngSubmit)="
+                  submitEventDetailsForm(
+                    eventDetailsFG.valid,
+                    eventDetailsFG.value
+                  )
+                "
+                novalidate
+              >
+                <div class="block_main">
+                  <div class="block_cls">
+                    <a class="link_cusor"
+                      ><img
+                        src="/assets/image/icon/ic_close.svg"
+                        alt="Close"
+                        (click)="deactivateTab()"
+                    /></a>
+                  </div>
+                  <div class="block_top">
+                    <div class="block_row">
+                      <app-control-container
+                        label="Event Name"
+                        isRequired="true"
+                      >
+                        <input
+                          formControlName="eventName"
+                          type="text"
+                          tabindex="1"
+                          maxlength="255"
+                        />
+                      </app-control-container>
+                    </div>
+                    <div class="block_row">
+                      <div class="w-100 d-flex justify-content-between">
+                        <app-control-container
+                          label="Event Start"
+                          isRequired=""
+                        >
+                          <input
+                            formControlName="scheduleStartTime"
+                            [owlDateTimeTrigger]="dtPicker2"
+                            [owlDateTime]="dtPicker2"
+                            [min]="minDate"
+                            readonly
+                          />
+                          <owl-date-time #dtPicker2></owl-date-time>
+                          <div class="block_reset">
+                            <a class="link_cusor" (click)="resetDateTime()"
+                              >Reset</a
+                            >
+                          </div>
+                        </app-control-container>
+                      </div>
+                    </div>
+                    <div class="block_row">
+                      <app-control-container label="Duration">
+                        <ng-select
+                          class="custom_selectbox"
+                          [selectOnTab]="true"
+                          [items]="duration_data"
+                          [clearable]="false"
+                          bindLabel="name"
+                          bindValue="value"
+                          placeholder="Select Duration"
+                          formControlName="duration"
+                        >
+                        </ng-select>
+                      </app-control-container>
+                    </div>
+                    <div class="block_row">
+                      <app-control-container label="Description (optional)">
+                        <textarea
+                          formControlName="description"
+                          rows="3"
+                          tabindex="6"
+                        ></textarea>
+                      </app-control-container>
+                    </div>
+                  </div>
+                  <div class="block_btm">
+                    <ul>
+                      <li>
+                        <button
+                          type="submit"
+                          class="link_cusor btn btn-prime"
+                          [disabled]="loading"
+                        >
+                          Save
+                          <img
+                            *ngIf="loading"
+                            style="height: 20px; width: 20px; margin-left: 3px"
+                            src="/assets/image/button_loader.svg"
+                            alt="Loader"
+                          />
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </li>
+        </ul>
+
+        <ul *ngIf="event?.eventStatus != event_statuses.STARTED">
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_details }"
+              (click)="activateTab(tabs.block_details)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_detail.svg"
+                alt="Detail"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_detail_hover.svg"
+                alt="Detail"
+              />
+              <span>Details</span>
+            </a>
+            <!--[ngClass]="{ 'block_hide': activeTab != tabs.block_details}"-->
+            <div
+              class="custom_dropdownbg block_detail"
+              *ngIf="activeTab == tabs.block_details"
+            >
+              <form
+                [formGroup]="eventDetailsFG"
+                class="h-100"
+                (ngSubmit)="
+                  submitEventDetailsForm(
+                    eventDetailsFG.valid,
+                    eventDetailsFG.value
+                  )
+                "
+                novalidate
+              >
+                <div class="block_main">
+                  <div class="block_cls">
+                    <a class="link_cusor"
+                      ><img
+                        src="/assets/image/icon/ic_close.svg"
+                        alt="Close"
+                        (click)="deactivateTab()"
+                    /></a>
+                  </div>
+                  <div class="block_top">
+                    <div class="block_row">
+                      <app-control-container
+                        label="Event Name"
+                        isRequired="true"
+                      >
+                        <input
+                          formControlName="eventName"
+                          type="text"
+                          tabindex="1"
+                          maxlength="255"
+                        />
+                      </app-control-container>
+                    </div>
+                    <div class="block_row">
+                      <div class="w-100 d-flex justify-content-between">
+                        <app-control-container
+                          label="Event Start"
+                          isRequired=""
+                        >
+                          <input
+                            formControlName="scheduleStartTime"
+                            [owlDateTimeTrigger]="dtPicker2"
+                            [owlDateTime]="dtPicker2"
+                            [min]="minDate"
+                            readonly
+                          />
+                          <owl-date-time #dtPicker2></owl-date-time>
+                          <div class="block_reset">
+                            <a class="link_cusor" (click)="resetDateTime()"
+                              >Reset</a
+                            >
+                          </div>
+                        </app-control-container>
+                      </div>
+                    </div>
+                    <div class="block_row">
+                      <app-control-container label="Duration">
+                        <ng-select
+                          class="custom_selectbox"
+                          [selectOnTab]="true"
+                          [items]="duration_data"
+                          [clearable]="false"
+                          bindLabel="name"
+                          bindValue="value"
+                          placeholder="Select Duration"
+                          formControlName="duration"
+                        >
+                        </ng-select>
+                      </app-control-container>
+                    </div>
+                    <div class="block_row">
+                      <app-control-container label="Description (optional)">
+                        <textarea
+                          formControlName="description"
+                          rows="3"
+                          tabindex="6"
+                        ></textarea>
+                      </app-control-container>
+                    </div>
+                  </div>
+                  <div class="block_btm">
+                    <ul>
+                      <li>
+                        <button
+                          type="submit"
+                          class="link_cusor btn btn-prime"
+                          [disabled]="loading"
+                        >
+                          Save
+                          <img
+                            *ngIf="loading"
+                            style="height: 20px; width: 20px; margin-left: 3px"
+                            src="/assets/image/button_loader.svg"
+                            alt="Loader"
+                          />
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_preferences }"
+              (click)="activateTab(tabs.block_preferences)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_preferences.svg"
+                alt="Preferences"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_preferences_hover.svg"
+                alt="Preferences"
+              />
+              <span>Preferences</span>
+            </a>
+            <div
+              class="custom_dropdownbg block_preferences"
+              *ngIf="activeTab == tabs.block_preferences"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="block_top">
+                  <div class="block_row">
+                    <div class="block_switch">
+                      <span>Allow participants to audio side chat</span>
+                      <div class="toggle_switch">
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            [checked]="
+                              event?.eventSetting.allowParticipantSidechat
+                            "
+                            (change)="
+                              allowParticipantSideChat($event.target.checked)
+                            "
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block_row">
+                    <div class="block_switch">
+                      <span>Allow participants to video side chat</span>
+                      <div class="toggle_switch">
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            [checked]="
+                              event?.eventSetting.allowParticipantSidechatVideo
+                            "
+                            (change)="
+                              allowParticipantVideoInSiteChat(
+                                $event.target.checked
+                              )
+                            "
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block_row">
+                    <div class="block_switch">
+                      <span>Hide live chat</span>
+                      <div class="toggle_switch">
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            [checked]="!event?.eventSetting.allowLiveChat"
+                            (change)="hideLiveChat($event.target.checked)"
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_visuals }"
+              (click)="activateTab(tabs.block_visuals)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_visuals.svg"
+                alt="Visuals"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_visuals_hover.svg"
+                alt="Visuals"
+              />
+              <span>Visuals</span>
+            </a>
+            <div
+              class="custom_dropdownbg visual_drop"
+              *ngIf="activeTab == tabs.block_visuals"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="visual_details">
+                  <div class="visual_box">
+                    <p>Background images</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let background_visual of event_visuals.background_visuals
+                        "
+                        [ngClass]="{
+                          is_selected:
+                            background_visual.fileName ===
+                            agoraRTCStreamHandler.activeEventState?.data
+                              ?.selectedBackground
+                        }"
+                      >
+                        <img
+                          [src]="background_visual.fileName"
+                          alt="bg_img"
+                          (click)="setBackground(background_visual.fileName)"
+                        />
+                        <!--<div class="page_loader_image" *ngIf="bgLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <div class="block_remove_im">
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                background_visual.eventVisualId,
+                                visual_types.BACKGROUND
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.BACKGROUND
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="visual_box">
+                    <p>Overlay images</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let overlay_visual of event_visuals.overlay_visuals
+                        "
+                        [ngClass]="{
+                          is_selected:
+                            overlay_visual.fileName ===
+                            agoraRTCStreamHandler.activeEventState?.data
+                              ?.selectedOverlay
+                        }"
+                      >
+                        <img
+                          [src]="overlay_visual.fileName"
+                          alt="bg_img"
+                          (click)="setOverlay(overlay_visual.fileName)"
+                        />
+                        <!--<div class="page_loader_image" *ngIf="overlayImageLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <!--<div class="page_loader_image" *ngIf="advertiseCarouselLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <div class="block_remove_im">
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                overlay_visual.eventVisualId,
+                                visual_types.OVERLAY
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.OVERLAY
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="visual_box">
+                    <p>Set profile card banner</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let profile_card_banner_visual of event_visuals.profile_card_banner_visuals
+                        "
+                        [ngClass]="{
+                          is_selected: profile_card_banner_visual.isActive
+                        }"
+                      >
+                        <img
+                          [src]="profile_card_banner_visual.fileName"
+                          alt="bg_img"
+                          (click)="
+                            setProfileCardBannerChanged(
+                              profile_card_banner_visual.fileName,
+                              profile_card_banner_visual.eventVisualId
+                            )
+                          "
+                        />
+                        <!--<div class="page_loader_image" *ngIf="profileCardLoader">
+                          <img src="/assets/image/page_loader.svg" alt="Loader" />
+                        </div>-->
+                        <div class="block_remove_im">
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                profile_card_banner_visual.eventVisualId,
+                                visual_types.PROFILE_CARD_BANNER
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.PROFILE_CARD_BANNER
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="visual_box">
+                    <p>Set transition</p>
+                    <ul class="visual_img_box">
+                      <li
+                        *ngFor="
+                          let transition of event_visuals.transition_visuals
+                        "
+                      >
+                        <img [src]="transition.fileName" alt="bg_img" />
+                        <div class="block_remove_im">
+                          <a
+                            class="remove_im link_cusor"
+                            (click)="
+                              openRemoveVisualModal(
+                                modelRemoveVisual,
+                                transition.eventVisualId,
+                                visual_types.TRANSITION
+                              )
+                            "
+                          >
+                            <img
+                              src="/assets/image/icon/ic_close_white.svg"
+                              alt="Close"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a
+                          class="upload_visual_img link_cusor block_upload_im"
+                          (click)="
+                            openAddVisualModel(
+                              modalAddVisuals,
+                              visual_types.TRANSITION
+                            )
+                          "
+                        >
+                          <img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                          />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_ad_carousel }"
+              (click)="activateTab(tabs.block_ad_carousel)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_ads.svg"
+                alt="Ad Carousel"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_ads_hover.svg"
+                alt="Ad Carousel"
+              />
+              <span>Ad Carousel</span>
+            </a>
+
+            <div
+              class="custom_dropdownbg ad_carousel"
+              *ngIf="activeTab == tabs.block_ad_carousel"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="block_top">
+                  <div class="ad_carousol_block">
+                    <div class="block_im_main">
+                      <div
+                        class="block_carousol_im"
+                        *ngFor="
+                          let advertise_banner of advertise_carousel_banners
+                        "
+                        [ngClass]="{ is_selected: advertise_banner.isActive }"
+                      >
+                        <div class="block_carousel_list">
+                          <img
+                            [src]="advertise_banner.fileName"
+                            alt="bg_img"
+                            (click)="
+                              setAdvertiseCarouelBanner(
+                                advertise_banner.fileName,
+                                advertise_banner.eventAdCarouselId,
+                                advertise_banner.isActive,
+                                advertise_banner.redirectUrl
+                              )
+                            "
+                          />
+                          <!--<div class="page_loader_image" *ngIf="advertiseCarouselLoader">
+                            <img src="/assets/image/page_loader.svg" alt="Loader" />
+                          </div>-->
+                          <div class="block_remove_im">
+                            <a
+                              *ngIf="!advertise_banner.isActive"
+                              class="remove_im link_cusor"
+                              (click)="
+                                openRemoveAdCarouselModal(
+                                  modelRemoveAdCarousel,
+                                  advertise_banner.eventAdCarouselId
+                                )
+                              "
+                            >
+                              <img
+                                src="/assets/image/icon/ic_close_white.svg"
+                                alt="Close"
+                              />
+                            </a>
+                          </div>
+                        </div>
+                        <div class="block_url">
+                          <div
+                            class="block_text_view"
+                            *ngIf="
+                              advertise_banner.eventAdCarouselId ==
+                              carouselBannerId
+                            "
+                          >
+                            <app-carousel-url-input
+                              #urlInput
+                              class="block_tagline"
+                              [(ngModel)]="advertise_banner.redirectUrl"
+                            ></app-carousel-url-input>
+                            <div class="block_edit">
+                              <a class="link_cusor">
+                                <img
+                                  src="../../../assets/image/checkmark.svg"
+                                  alt="save"
+                                  (click)="
+                                    saveCarouselUrl(
+                                      advertise_banner.eventAdCarouselId,
+                                      advertise_banner.fileName,
+                                      urlInput.value
+                                    )
+                                  "
+                                />
+                                <!--<img *ngIf="carouselUrlEditLoader" style="
+                                    height: 20px;
+                                    width: 20px;
+                                    margin-left: 3px;
+                                  " src="/assets/image/button_loader.svg" alt="Loader" />-->
+                              </a>
+                            </div>
+                          </div>
+
+                          <div
+                            class="block_edit_view"
+                            *ngIf="
+                              advertise_banner.eventAdCarouselId !=
+                              carouselBannerId
+                            "
+                          >
+                            <p class="p-color">
+                              {{
+                                advertise_banner.redirectUrl
+                                  ? advertise_banner.redirectUrl
+                                  : "Destination URL"
+                              }}
+                            </p>
+                            <img
+                              (click)="
+                                editCarouselUrlToggale(
+                                  advertise_banner.eventAdCarouselId
+                                )
+                              "
+                              class="link_cusor"
+                              src="../../../assets/image/bxs-edit-alt-clr.svg"
+                              alt="edit url"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        (click)="openAddAdCarouselModel(modalAddAdCarousel)"
+                        class="block_add_ad_carousel"
+                      >
+                        <a class="link_cusor upload_visual_img"
+                          ><img
+                            src="/assets/image/icon/ic_add_round_light.svg"
+                            alt="add_img"
+                        /></a>
+                      </div>
+
+                      <div class="block_carousol_setting">
+                        <div class="block_row">
+                          <div class="block_switch">
+                            <label for="">
+                              Activate carousel
+                              <span
+                                >If carousel turned off,You can toggle ads
+                                manually</span
+                              >
+                            </label>
+
+                            <div class="toggle_switch">
+                              <label class="switch">
+                                <!--[(ngModel)]="carousel_setting.is_ad_carousel_active" -->
+                                <input
+                                  type="checkbox"
+                                  [checked]="
+                                    carousel_setting.is_ad_carousel_active
+                                  "
+                                  (change)="activateAdCarousel()"
+                                />
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="block_row">
+                          <label for="">Set Interval</label>
+                          <ng-select
+                            class="custom_selectbox"
+                            [selectOnTab]="true"
+                            [items]="interval_data"
+                            [clearable]="false"
+                            bindLabel="name"
+                            bindValue="value"
+                            placeholder="Select Interval"
+                            [(ngModel)]="carousel_setting.ad_carousel_interval"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="block_btm">
+                  <ul>
+                    <li>
+                      <button
+                        (click)="saveAdCarouselSetting()"
+                        class="link_cusor btn btn-prime"
+                        [disabled]="loading"
+                      >
+                        Save
+                        <img
+                          *ngIf="loading"
+                          style="height: 20px; width: 20px; margin-left: 3px"
+                          src="/assets/image/button_loader.svg"
+                          alt="Loader"
+                        />
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_invite_link }"
+              (click)="activateTab(tabs.block_invite_link)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_link.svg"
+                alt="Invite Link"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_link_hover.svg"
+                alt="Invite Link"
+              />
+              <span>Invite Link</span>
+            </a>
+            <div
+              class="custom_dropdownbg block_invite_link"
+              *ngIf="activeTab == tabs.block_invite_link"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <div class="block_top">
+                  <div class="block_row">
+                    <label for=""
+                      >To invite people, simply share the link or
+                      invitation</label
+                    >
+                    <div class="block_link_main">
+                      <div *ngIf="!invite_link" class="block_link">
+                        bvb.billions.live
+                      </div>
+                      <div *ngIf="invite_link" class="block_link">
+                        {{ invite_link }}
+                      </div>
+                      <ul>
+                        <li
+                          class="link_cusor"
+                          (click)="copyInviteLink(invite_link)"
+                        >
+                          <img
+                            src="/assets/image/ic_copy.svg"
+                            alt="Copy"
+                            placement="top"
+                            ngbTooltip="Invite Link"
+                          />
+                        </li>
+                        <li
+                          class="link_cusor"
+                          (click)="
+                            openModel(modalInvitation, 'modal_copy_window')
+                          "
+                        >
+                          <img
+                            src="/assets/image/ic_mail_copy.svg"
+                            alt="Mail"
+                            placement="top"
+                            ngbTooltip="Invitation"
+                          />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              [ngClass]="{ active: activeTab == tabs.block_live_qa }"
+              (click)="activateTab(tabs.block_live_qa)"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_live_q&a.svg"
+                alt="Live Q&A"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_live_q&a_hover.svg"
+                alt="Live Q&A"
+              />
+              <span>Live Q&A</span>
+            </a>
+            <div
+              class="custom_dropdownbg block_invite_link"
+              [hidden]="activeTab !== tabs.block_live_qa"
+            >
+              <div class="block_main">
+                <div class="block_cls">
+                  <a class="link_cusor"
+                    ><img
+                      src="/assets/image/icon/ic_close.svg"
+                      alt="Close"
+                      (click)="deactivateTab()"
+                  /></a>
+                </div>
+                <app-live-qa
+                  [eventParticipants]="participants"
+                  [audioSceneTab]="onAudioSceneActiveState"
+                  [videoSceneTab]="
+                    onScreenSceneActiveState || attendeeOnCommentry
+                  "
+                  [event]="event"
+                  (attendeeSelected)="attendeeSelectedHandler($event)"
+                >
+                </app-live-qa>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a
+              class="link_cusor"
+              (click)="openModel(modelmanageUsers, 'User_modal_window')"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_manage_user.svg"
+                alt="Manage Users"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_manage_user_hover.svg"
+                alt="Manage Users"
+              />
+              <span>Manage Users</span>
+            </a>
+          </li>
+
+          <!-- <li>
+            <a
+              class="link_cusor"
+              (click)="openModel(modelLockEvent, 'eventlock_modal_window')"
+            >
+              <img
+                class="normal_view"
+                src="/assets/image/icon/ic_lock_event.svg"
+                alt="Lock Event"
+              />
+              <img
+                class="hover_view"
+                src="/assets/image/icon/ic_lock_event_hover.svg"
+                alt="Lock Event"
+              />
+              <span>Lock Event</span>
+            </a>
+          </li> -->
+
+          <!--<li>
+            <a class="link_cusor" (click)="openModel(modelstats, 'stats_modal_window')">
+              <img class="normal_view" src="/assets/image/icon/ic_stats.svg" alt="Stats" />
+              <img class="hover_view" src="/assets/image/icon/ic_stats_hover.svg" alt="Stats" />
+              <span>Stats</span>
+            </a>
+          </li>-->
+        </ul>
+
+        <div
+          class="block_end_event"
+          *ngIf="event?.eventStatus == event_statuses.STARTED"
+        >
+          <a
+            class="link_cusor"
+            (click)="openModel(modelEndEvent, 'eventend_modal_window')"
+            >End</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="block_incoming_call">
+    <app-incoming-call></app-incoming-call>
+  </div> -->
+</div>
+
+<ng-template
+  #modalAddVisuals
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">
+      Add image <img src="/assets/image/icon/ic_tooltip.svg" alt="info" />
+    </h4>
+    <button type="button" class="close" (click)="closeModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <!-- <a class="nav-item nav-link active" id="nav-url-tab" data-toggle="tab" href="#nav-url" role="tab" aria-controls="nav-url" aria-selected="true">Paste URL</a> -->
+        <a
+          class="nav-item nav-link active"
+          id="nav-drag-tab"
+          data-toggle="tab"
+          href="#nav-drag"
+          role="tab"
+          aria-controls="nav-drag"
+          aria-selected="false"
+          >Upload a file</a
+        >
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <!-- <div class="tab-pane fade show active" id="nav-url" role="tabpanel" aria-labelledby="nav-url-tab">
+          <div class="block_url">
+              <input type="text"   placeholder="Paste image URL here">
+          </div>
+      </div> -->
+      <div
+        class="tab-pane fade show active"
+        id="nav-drag"
+        role="tabpanel"
+        aria-labelledby="nav-drag-tab"
+      >
+        <div class="block_dreg">
+          <ngx-dropzone
+            class="block_browse_im"
+            (change)="onVisualsSelect($event, visualType)"
+            [multiple]="true"
+            [accept]="'image/*'"
+            [maxFileSize]="5000000"
+          >
+            <ngx-dropzone-label class="block_im_label">
+              <h5>Drag img file here</h5>
+              <div>or <span>browse</span> to choose a file</div>
+              <p>(Max file size : 5 MB | Recommended size *** x ***)</p>
+            </ngx-dropzone-label>
+            <ngx-dropzone-image-preview
+              ngProjectAs="ngx-dropzone-preview"
+              *ngFor="let f of visual_files"
+              [file]="f"
+              [removable]="true"
+              (removed)="onVisualRemove(f)"
+            >
+            </ngx-dropzone-image-preview>
+          </ngx-dropzone>
+        </div>
+      </div>
+    </div>
+    <span style="color: red" *ngIf="error_message">{{ error_message }}</span>
+    <button
+      (click)="saveVisuals(visualType)"
+      class="btn btn-prime w-100 mt-4"
+      [disabled]="loading"
+    >
+      Add to Visuals
+      <img
+        *ngIf="loading"
+        style="height: 20px; width: 20px; margin-left: 3px"
+        src="/assets/image/button_loader.svg"
+        alt="Loader"
+      />
+    </button>
+  </div>
+</ng-template>
+
+<ng-template
+  #modalAddAdCarousel
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">
+      Add ad banner <img src="/assets/image/icon/ic_tooltip.svg" alt="info" />
+    </h4>
+    <button type="button" class="close" (click)="closeModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a
+          class="nav-item nav-link active"
+          id="nav-drag-tab"
+          data-toggle="tab"
+          href="#nav-drag"
+          role="tab"
+          aria-controls="nav-drag"
+          aria-selected="false"
+          >Upload a file</a
+        >
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="nav-drag"
+        role="tabpanel"
+        aria-labelledby="nav-drag-tab"
+      >
+        <div class="block_dreg">
+          <ngx-dropzone
+            class="block_browse_im"
+            (change)="onAdCarouselsSelect($event)"
+            [multiple]="true"
+            [accept]="'image/*'"
+            [maxFileSize]="5000000"
+          >
+            <ngx-dropzone-label class="block_im_label">
+              <h5>Drag img file here</h5>
+              <div>or <span>browse</span> to choose a file</div>
+              <p>(Max file size : 5 MB | Recommended size *** x ***)</p>
+            </ngx-dropzone-label>
+            <ngx-dropzone-image-preview
+              ngProjectAs="ngx-dropzone-preview"
+              *ngFor="let f of carousel_files"
+              [file]="f"
+              [removable]="true"
+              (removed)="onAdCarouselRemove(f)"
+            >
+            </ngx-dropzone-image-preview>
+          </ngx-dropzone>
+        </div>
+      </div>
+    </div>
+    <span style="color: red" *ngIf="error_message">{{ error_message }}</span>
+    <button
+      (click)="saveAdCarousels()"
+      class="btn btn-prime w-100 mt-4"
+      [disabled]="loading"
+    >
+      Add to AD Carousel
+      <img
+        *ngIf="loading"
+        style="height: 20px; width: 20px; margin-left: 3px"
+        src="/assets/image/button_loader.svg"
+        alt="Loader"
+      />
+    </button>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelEventPublish
+  let-modal
+  let-c="close"
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">
+      Want to publish the event ?
+    </h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul>
+      <li>Publish the event so it will show up in the users eventlist</li>
+    </ul>
+    <div class="block_btn">
+      <button
+        type="button"
+        class="btn btn_publish"
+        (click)="publishUnpublishEvent(true)"
+        [disabled]="loading"
+      >
+        Publish
+        <img
+          *ngIf="loading"
+          style="height: 20px; width: 20px; margin-left: 3px"
+          src="/assets/image/button_loader.svg"
+          alt="Loader"
+        />
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelEventUnpublish
+  let-modal
+  let-c="close"
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Event Confirmation</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_btn">
+      <button
+        type="button"
+        class="btn btn_unpublish"
+        (click)="publishUnpublishEvent(false)"
+        [disabled]="loading"
+      >
+        Unpublish
+        <img
+          *ngIf="loading"
+          style="height: 20px; width: 20px; margin-left: 3px"
+          src="/assets/image/button_loader.svg"
+          alt="Loader"
+        />
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">
+        Keep Published
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelmanageUsers
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Manage attendees</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_user_tab">
+      <nav>
+        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+          <a
+            class="nav-item nav-link active"
+            id="nav-alluser-tab"
+            data-toggle="tab"
+            href="#nav-alluser"
+            role="tab"
+            aria-controls="nav-alluser"
+            aria-selected="true"
+            >All users</a
+          >
+          <a
+            class="nav-item nav-link"
+            id="nav-Guest-list-tab"
+            data-toggle="tab"
+            href="#nav-Guest-list"
+            role="tab"
+            aria-controls="nav-Guest-list"
+            aria-selected="false"
+            >Guest list
+            <p *ngIf="guestCount" class="modal-title-small">
+              {{ guestCount }}
+            </p></a
+          >
+          <a
+            class="nav-item nav-link"
+            id="nav-Add-tab"
+            data-toggle="tab"
+            href="#nav-Add"
+            role="tab"
+            aria-controls="nav-Add"
+            aria-selected="false"
+            ><span><img src="/assets/image/bx-plus-white.svg" alt="" /></span>
+            Add</a
+          >
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div
+          class="tab-pane fade show active"
+          id="nav-alluser"
+          role="tabpanel"
+          aria-labelledby="nav-alluser-tab"
+        >
+          <div class="table-responsive">
+            <table class="table" summary="">
+              <thead>
+                <tr>
+                  <th scope="col">Email</th>
+                  <th scope="col">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let participant of participants">
+                  <td>{{ participant.user?.email }}</td>
+                  <td>{{ participant.user?.displayName }}</td>
+                </tr>
+
+                <tr *ngIf="!participants?.length">
+                  <td colspan="3">
+                    <div class="block_no_found">No participant found!</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="nav-Flagged"
+          role="tabpanel"
+          aria-labelledby="nav-Flagged-tab"
+        >
+          <div class="table-responsive">
+            <table class="table" summary="">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">By</th>
+                  <th scope="col">Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jordyn Donin</td>
+                  <td>Flagged</td>
+                  <td>Smith Lenon</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="
+                        dropdown-menu dropdown-menu-left
+                        custom_dropdownbg
+                        Flagged_sliddorp
+                      "
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Kareena Smith</td>
+                  <td>Flagged</td>
+                  <td>Stanely Morgan</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="
+                        dropdown-menu dropdown-menu-left
+                        custom_dropdownbg
+                        Flagged_sliddorp
+                      "
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Smith Lenon</td>
+                  <td>Flagged</td>
+                  <td>Jordyn Donin</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="
+                        dropdown-menu dropdown-menu-left
+                        custom_dropdownbg
+                        Flagged_sliddorp
+                      "
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Stanely Morgan</td>
+                  <td>Flagged</td>
+                  <td>Jason Wheels</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="
+                        dropdown-menu dropdown-menu-left
+                        custom_dropdownbg
+                        Flagged_sliddorp
+                      "
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jason Wheels</td>
+                  <td>Flagged</td>
+                  <td>Kareena Smith</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="
+                        dropdown-menu dropdown-menu-left
+                        custom_dropdownbg
+                        Flagged_sliddorp
+                      "
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="nav-Deactivated"
+          role="tabpanel"
+          aria-labelledby="nav-Deactivated-tab"
+        >
+          <div class="table-responsive">
+            <table class="table" summary="">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jordyn Donin</td>
+                  <td>Deactivated</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-left custom_dropdownbg"
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Kareena Smith</td>
+                  <td>Deactivated</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-left custom_dropdownbg"
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Smith Lenon</td>
+                  <td>Deactivated</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-left custom_dropdownbg"
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Stanely Morgan</td>
+                  <td>Deactivated</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-left custom_dropdownbg"
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jason Wheels</td>
+                  <td>Deactivated</td>
+                  <td>
+                    <a class="link_cusor" data-toggle="dropdown">
+                      <img
+                        _ngcontent-cdb-c112=""
+                        src="/assets/image/ic_dot_menu.svg"
+                        alt="Menu Icon"
+                      />
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-left custom_dropdownbg"
+                    >
+                      <div class="block_action">
+                        <ul>
+                          <li>
+                            <a class="link_cusor">Unflag</a>
+                          </li>
+                          <li>
+                            <a class="link_cusor">Deactivate</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- guest list section -->
+        <div
+          class="tab-pane fade"
+          id="nav-Guest-list"
+          role="tabpanel"
+          aria-labelledby="nav-Guest-list-tab"
+        >
+          <div class="table-responsive">
+            <table class="table" summary="">
+              <thead>
+                <tr>
+                  <th scope="col">Email</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let guest of eventGuests">
+                  <td>{{ guest.email }}</td>
+                  <td>{{ guest.name }}</td>
+                  <td>
+                    <a
+                      class="link_cusor"
+                      (click)="
+                        deleteGuest(
+                          modelDeleteGuestUser,
+                          guest.eventGuestUserId
+                        )
+                      "
+                      >Remove</a
+                    >
+                  </td>
+                </tr>
+                <tr *ngIf="!eventGuests?.length">
+                  <<<<<<< HEAD
+                  <td colspan="3">
+                    <div class="block_no_found">Guest not added yet!</div>
+                    =======
+                  </td>
+
+                  <td colspan="3">
+                    <div class="block_no_found">No guests added yet!</div>
+                    >>>>>>> b1bf62b4a2223c9af6f5e1bb0bb2fea00ac2e032
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- add guest section -->
+        <div
+          class="tab-pane fade"
+          id="nav-Add"
+          role="tabpanel"
+          aria-labelledby="nav-Add-tab"
+        >
+          <form
+            [formGroup]="guestFG"
+            (ngSubmit)="submitGuestForm(guestFG.valid, guestFG.value)"
+            novalidate
+          >
+            <div class="block_add_user">
+              <div class="block_top">
+                <div class="block_top_cnt" formArrayName="guest_users">
+                  <div
+                    class="custom_row"
+                    *ngFor="let guest of guest_users().controls; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <div class="custom_field">
+                      <app-control-container label="Email Address">
+                        <input
+                          class="input-field"
+                          placeholder="Enter Your Email"
+                          type="text"
+                          formControlName="email"
+                          tabindex="2"
+                          maxlength="150"
+                        />
+                      </app-control-container>
+                    </div>
+                    <div class="custom_field">
+                      <app-control-container label="Name or Reference">
+                        <input
+                          class="input-field"
+                          placeholder="Enter Your Full Name"
+                          type="text"
+                          formControlName="name"
+                          tabindex="2"
+                          maxlength="100"
+                        />
+                      </app-control-container>
+                    </div>
+                    <div class="custom_field" *ngIf="indexStart && i >= 0">
+                      <label>&nbsp;</label>
+                      <div
+                        *ngIf="i >= 0"
+                        class="delete-icon link_cusor"
+                        (click)="removeGuests(i)"
+                      >
+                        <i
+                          class="fas fa-trash-alt fa-lg"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                    </div>
+                    <div class="custom_field" *ngIf="!indexStart && i >= 1">
+                      <label>&nbsp;</label>
+                      <div
+                        *ngIf="i >= 1"
+                        class="delete-icon link_cusor"
+                        (click)="removeGuests(i)"
+                      >
+                        <i
+                          class="fas fa-trash-alt fa-lg"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="block_addmore">
+                    <a
+                      class="link_cusor"
+                      (click)="addGuests(guestFG.value.guest_users)"
+                    >
+                      <img
+                        src="/assets/image/bx-small-plus-white.svg"
+                        alt="add-icon"
+                        class="pr-2"
+                      />Add more
+                    </a>
+                  </div>
+                  <span class="text-danger" *ngIf="add_guest_error_message">{{
+                    add_guest_error_message
+                  }}</span>
+                </div>
+
+                <div class="block_btm_cnt">
+                  <div class="row pt-3">
+                    <div class="col-12 pb-2">
+                      <div class="block_txt">
+                        Add multiple email addresses (separated by comma)
+                      </div>
+                    </div>
+                    <div class="col-5">
+                      <app-control-container label="Email Address">
+                        <textarea
+                          formControlName="email_address"
+                          class="form-control"
+                          rows="3"
+                        ></textarea>
+                      </app-control-container>
+                    </div>
+                    <div class="col-7">
+                      <app-control-container label="Name or Reference">
+                        <textarea
+                          formControlName="reference_name"
+                          class="form-control"
+                          rows="3"
+                        ></textarea>
+                      </app-control-container>
+                    </div>
+                    <span
+                      class="col-12 text-danger"
+                      *ngIf="duplicate_guest_error_message"
+                      >{{ duplicate_guest_error_message }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="block_btm">
+                <div class="col-12">
+                  <button
+                    type="submit"
+                    class="btn btn-prime w-100 mt-4"
+                    [disabled]="loading"
+                  >
+                    Add to Guest List
+                    <img
+                      *ngIf="loading"
+                      style="height: 20px; width: 20px; margin-left: 3px"
+                      src="/assets/image/button_loader.svg"
+                      alt="Loader"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelLockEvent
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Lock your event?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_event_lock_txt">
+      <ul>
+        <li>
+          when you lock your event, only people on your guest list will be able
+          to join. To add people to your guest list,go to "manage users".
+        </li>
+        <li>
+          You can lock and unlock your event at any time. Currently active users
+          will remain in session.
+        </li>
+      </ul>
+      <div class="block_btn">
+        <button
+          type="button"
+          class="btn btn_unpublish"
+          (click)="unlockEvent(modelUnLockEvent)"
+        >
+          Yes, lock event
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelstats
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <div class="block_model_head">
+      <h4 class="modal-title" id="exampleModalLongTitle">Stats</h4>
+      <span
+        ><a class="link_cusor"
+          ><img src="/assets/image/ic_copy_white.svg" alt="Copy" /> Copy
+          Stats</a
+        ></span
+      >
+    </div>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_stats_list">
+      <ul>
+        <li># of people on guest list : <span>92</span></li>
+        <li>Currently viewing : <span>48</span></li>
+        <li>Total # attendees : <span>85</span></li>
+        <li>Total # Of livechat participants : <span>35</span></li>
+        <li>Total # Of slidchats : <span>18</span></li>
+        <li>Total # of messages sent : <span>283</span></li>
+      </ul>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelStartEvent
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+  [ngHidden]="activeBox == boxes.join_event_step1_box"
+>
+  <div class="modal-header">
+    <div class="block_model_head">
+      <h4 class="modal-title" id="exampleModalLongTitle">
+        Start & enter event (1/2)
+      </h4>
+    </div>
+    <button type="button" class="close" (click)="closeStartEventModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_event_field">
+      <form
+        class="w-100"
+        [formGroup]="startEventFG"
+        (ngSubmit)="
+          submitStartEventForm(startEventFG.valid, modalMediaInputOutputCheck)
+        "
+        novalidate
+      >
+        <div class="block_field">
+          <div class="avatar-upload">
+            <div class="avatar-edit invisible avtar_top"></div>
+            <div
+              class="avatar-preview link_cusor"
+              (click)="openProfileImgModal()"
+            >
+              <img
+                class="profile-user-img img-responsive img-circle"
+                id="imagePreview"
+                [src]="profilePicture"
+                *ngIf="profilePicture"
+                alt="User profile picture"
+              />
+
+              <img
+                class="profile-user-img img-responsive img-circle"
+                *ngIf="!profilePicture"
+                id="imagePreview"
+                src="../../../assets/image/user.svg"
+                alt="User profile picture"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="block_field">
+          <app-control-container label="Display Name" isRequired="true">
+            <div class="modrator_prefix d-flex">
+              <input
+                type="text"
+                formControlName="display_name"
+                id="inputDisplayName"
+                tabindex="1"
+                class="input-field"
+                placeholder="Enter Your Display Name"
+                maxlength="100"
+              />
+            </div>
+          </app-control-container>
+          <!--<div class="form-group">
+            <label>Display Name <img src="/assets/image/icon/ic_tooltip.svg" alt="Info"></label>
+            <input placeholder="Enter Your Full Name" type="text" tabindex="1" class="input-field">
+          </div>-->
+        </div>
+        <div class="block_field">
+          <!--<div class="form-group">
+                <label>Update your tagline <img src="/assets/image/icon/ic_tooltip.svg" alt="Info"></label>
+                <div class="input-group block_emoji">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">
+                      <img _ngcontent-pda-c120="" src="/assets/image/bxs-smile.svg" alt="smile">
+                  </span>
+              </div>
+              <input type="text" placeholder="Add Tagline" class="" >
+          </div>
+              </div>-->
+          <!--<app-control-container label="Update your tagline" >
+            <app-tagline-input formControlName="tag_line"></app-tagline-input>
+          </app-control-container>-->
+          <div class="form-group">
+            <label
+              >Update your tagline
+              <span>
+                <img
+                  src="/assets/image/icon/ic_tooltip.svg"
+                  alt="Info"
+                  style="cursor: pointer"
+                  (mouseover)="updateTaglineTooltip = true"
+                  (mouseout)="updateTaglineTooltip = false"
+                />
+                <app-info-native-tooltip
+                  [hidden]="!updateTaglineTooltip"
+                  data="Share your mood, expectation, some inspiration, a networking teaser, or else"
+                >
+                </app-info-native-tooltip>
+              </span>
+            </label>
+            <app-tagline-input formControlName="tag_line"></app-tagline-input>
+          </div>
+        </div>
+        <div class="block_switch">
+          <span
+            >Other participants can call me on Billions.
+            <span>
+              <img
+                src="/assets/image/icon/ic_tooltip.svg"
+                alt="Info"
+                style="cursor: pointer"
+                (mouseover)="otherParticipantTooltip = true"
+                (mouseout)="otherParticipantTooltip = false"
+              />
+              <app-info-native-tooltip
+                [hidden]="!otherParticipantTooltip"
+                data="You can change your availability at any time. Please remember that this is mutual. You can only call others if you allow others to call you."
+              >
+              </app-info-native-tooltip>
+            </span>
+          </span>
+          <div class="toggle_switch">
+            <label class="switch">
+              <input
+                type="checkbox"
+                formControlName="is_available_for_sidechat"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        <div class="block_btn_event">
+          <button
+            type="submit"
+            class="link_cusor btn btn-prime"
+            [disabled]="loading"
+          >
+            Continue
+            <img
+              *ngIf="loading"
+              style="height: 20px; width: 20px; margin-left: 3px"
+              src="/assets/image/button_loader.svg"
+              alt="Loader"
+            />
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modalMediaInputOutputCheck
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+  [ngHidden]="activeBox == boxes.join_event_step2_box"
+>
+  <div class="modal-header">
+    <div class="block_model_head">
+      <button
+        type="button"
+        class="link_cusor"
+        (click)="backToStep1()"
+        [disabled]="loading"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h4 class="modal-title" id="exampleModalLongTitle">
+        Start & enter event (2/2)
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="close"
+      (click)="closeStartEventModal()"
+      [disabled]="loading"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-media-input-output-check
+      (submitClick)="startEvent()"
+      [loading]="loading"
+    ></app-media-input-output-check>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelEndEvent
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">End the event?</h4>
+    <button
+      type="button"
+      [disabled]="loading"
+      class="close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_btn">
+      <button
+        type="button"
+        [disabled]="loading"
+        class="btn btn_unpublish"
+        (click)="endEvent()"
+      >
+        Yes, end event
+      </button>
+      <button
+        type="button"
+        [disabled]="loading"
+        class="btn btn-main"
+        (click)="d('Cross click')"
+      >
+        Continue event
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelUnLockEvent
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Unlock your event?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_event_lock_txt">
+      <ul>
+        <li>
+          When you unlock your event, everyone with the general invite link will
+          be able to join the event.
+        </li>
+        <li>
+          You can lock and unlock your event at any time. Currently active users
+          will remain in session.
+        </li>
+      </ul>
+      <div class="block_btn">
+        <button type="button" class="btn btn_publish">Yes, lock event</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelRemoveVisual
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Delete Image ?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_event_lock_txt">
+      <div class="block_btn">
+        <button
+          type="button"
+          class="btn btn_unpublish"
+          (click)="deleteVisaul(deleteImageId, selected_image_type)"
+          [disabled]="loading"
+        >
+          Yes
+          <img
+            *ngIf="loading"
+            style="height: 20px; width: 20px; margin-left: 3px"
+            src="/assets/image/button_loader.svg"
+            alt="Loader"
+          />
+        </button>
+        <button type="button" class="btn btn-main" (click)="d('Cross click')">
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modalInvitation
+  let-modal
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Invitation</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_link">
+      <h5>
+        {{ fanspace_name }} is inviting you to a scheduled event on Billions:
+      </h5>
+      <ul>
+        <li>{{ event?.eventName }}</li>
+        <li>
+          {{ event?.scheduleStartTime | date: "MMMM d" }}
+          {{ event?.scheduleStartTime | date: "h:mm a" }}
+        </li>
+      </ul>
+      <p>Join on your computer</p>
+      <p>link : {{ invite_link }}</p>
+    </div>
+    <div class="block_btn">
+      <button (click)="copyInvitation()" type="button" class="btn btn-main">
+        Copy
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelRemoveAdCarousel
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Delete Image ?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_event_lock_txt">
+      <div class="block_btn">
+        <button
+          type="button"
+          class="btn btn_unpublish"
+          (click)="deleteAdvertiseCarouselBanner(deleteImageId)"
+          [disabled]="loading"
+        >
+          Yes
+          <img
+            *ngIf="loading"
+            style="height: 20px; width: 20px; margin-left: 3px"
+            src="/assets/image/button_loader.svg"
+            alt="Loader"
+          />
+        </button>
+        <button type="button" class="btn btn-main" (click)="d('Cross click')">
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add Media URL And Screen Share -->
+<ng-template
+  #modalAddLiveMedia
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Add media</h4>
+    <button type="button" class="close" (click)="closeModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <!-- <a class="nav-item nav-link active" id="nav-url-tab" data-toggle="tab" href="#nav-url" role="tab" aria-controls="nav-url" aria-selected="true">Paste URL</a> -->
+        <a
+          class="nav-item nav-link"
+          [ngClass]="{ active: activeLiveMediaTab === 'addLink' }"
+          id="nav-drag-tab"
+          data-toggle="tab"
+          href="#nav-drag"
+          role="tab"
+          aria-controls="nav-drag"
+          aria-selected="false"
+          (click)="
+            activeLiveMediaTab = 'addLink';
+            agoraRTCStreamHandler.closeScreenShareStream()
+          "
+          >Paste Link</a
+        >
+        <ng-container *ngIf="!isScreenShareMediaAdded">
+          <span class="vertical-divider"></span>
+          <a
+            class="nav-item nav-link"
+            [ngClass]="{ active: activeLiveMediaTab === 'screenShare' }"
+            id="nav-drag-tab"
+            data-toggle="tab"
+            href="#nav-drag"
+            role="tab"
+            aria-controls="nav-drag"
+            aria-selected="false"
+            (click)="activeLiveMediaTab = 'screenShare'"
+            >Share Screen</a
+          >
+        </ng-container>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <!-- <div class="tab-pane fade show active" id="nav-url" role="tabpanel" aria-labelledby="nav-url-tab">
+          <div class="block_url">
+              <input type="text"   placeholder="Paste image URL here">
+          </div>
+      </div> -->
+      <div
+        class="tab-pane fade show active"
+        id="nav-drag"
+        role="tabpanel"
+        aria-labelledby="nav-drag-tab"
+      >
+        <div class="add-form-input">
+          <ng-container *ngIf="activeLiveMediaTab === 'addLink'">
+            <input
+              type="text"
+              [(ngModel)]="liveMediaUrl"
+              id="liveMediaUrl"
+              class="input-field"
+              placeholder="Please enter a Youtube URL"
+              maxlength="255"
+              autocomplete="off"
+            />
+            <a
+              class="youtube-terms"
+              href="https://www.youtube.com/t/terms"
+              target="_blank"
+              >YouTube Terms of Service</a
+            >
+          </ng-container>
+          <ng-container *ngIf="activeLiveMediaTab === 'screenShare'">
+            <div
+              class="add-screen-media"
+              *ngIf="!this.agoraRTCStreamHandler.isScreenShareEnabled"
+            >
+              <div class="block_medai_add">
+                <a
+                  class="link_cusor"
+                  (click)="startScreenShare('screen_share_preview')"
+                >
+                  <img
+                    class="ic_hover"
+                    src="/assets/image/icon/ic_add_round_hover.svg"
+                    alt="Plus"
+                  />
+                </a>
+                <div>Click here to choose what to share</div>
+              </div>
+            </div>
+            <div
+              class="screen-preview"
+              id="screen_share_preview"
+              *ngIf="this.agoraRTCStreamHandler.isScreenShareEnabled"
+            >
+              <span
+                class="media_close_button"
+                (click)="this.agoraRTCStreamHandler.closeScreenShareStream()"
+                *ngIf="this.agoraRTCStreamHandler.isScreenShareEnabled"
+              >
+                x
+              </span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <span style="color: red" *ngIf="error_message">{{ error_message }}</span>
+    <button
+      (click)="saveLiveMedia()"
+      class="btn btn-prime w-100 mt-4"
+      [disabled]="loading"
+    >
+      Add to Media Library
+      <img
+        *ngIf="loading"
+        style="height: 20px; width: 20px; margin-left: 3px"
+        src="/assets/image/button_loader.svg"
+        alt="Loader"
+      />
+    </button>
+  </div>
+</ng-template>
+
+<!-- guest delete confirmation popup -->
+<ng-template
+  #modelDeleteGuestUser
+  let-modal
+  let-c="close"
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Delete Confirmation</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_btn">
+      <button
+        type="button"
+        class="btn btn_unpublish"
+        (click)="deleteGuestUser(deleteGuestId)"
+        [disabled]="loading"
+      >
+        Yes
+        <img
+          *ngIf="loading"
+          style="height: 20px; width: 20px; margin-left: 3px"
+          src="/assets/image/button_loader.svg"
+          alt="Loader"
+        />
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">
+        No
+      </button>
+    </div>
+  </div>
+</ng-template>

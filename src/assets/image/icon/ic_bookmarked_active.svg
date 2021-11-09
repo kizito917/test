@@ -1,0 +1,10 @@
+<svg id="bookmarked" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <circle id="Ellipse_77" data-name="Ellipse 77" cx="16" cy="16" r="16" fill="#5b55ff"/>
+  <g id="Group_494" data-name="Group 494" transform="translate(-305 -512)">
+    <g id="Rectangle_288" data-name="Rectangle 288" transform="translate(313 520)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="16" height="16" stroke="none"/>
+      <rect x="0.5" y="0.5" width="15" height="15" fill="none"/>
+    </g>
+    <path id="bxs-bookmark" d="M14.333,7.5V3.474A1.339,1.339,0,0,0,13,2.132H6.333A1.339,1.339,0,0,0,5,3.474V15.465l4.667-3.131,4.667,3.131Z" transform="translate(311.333 519.201)" fill="#fff"/>
+  </g>
+</svg>

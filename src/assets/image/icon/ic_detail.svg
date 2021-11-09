@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="detail" transform="translate(-1188 -186)">
+    <g id="Rectangle_53" data-name="Rectangle 53" transform="translate(1188 186)" fill="#1c1f37" stroke="#5e6287" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="Icon_feather-more-vertical" data-name="Icon feather-more-vertical" transform="translate(1188 186)">
+      <path id="Path_490" data-name="Path 490" d="M13,12a1,1,0,1,1-1-1A1,1,0,0,1,13,12Z" fill="none" stroke="#5e6287" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path id="Path_491" data-name="Path 491" d="M13,5a1,1,0,1,1-1-1A1,1,0,0,1,13,5Z" fill="none" stroke="#5e6287" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path id="Path_492" data-name="Path 492" d="M13,19a1,1,0,1,1-1-1A1,1,0,0,1,13,19Z" fill="none" stroke="#5e6287" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

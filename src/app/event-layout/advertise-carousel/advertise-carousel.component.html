@@ -1,0 +1,43 @@
+
+<div class="block_bnr">
+  <a *ngIf="advertise_banner_url && active_advertise_banner && !is_active" [href]="advertise_banner_url" target="_blank">
+    <img [src]="active_advertise_banner" alt="active banner">
+  </a>
+
+  <img *ngIf="!advertise_banner_url && active_advertise_banner && !is_active" [src]="active_advertise_banner" alt="active banner">
+
+  <span *ngIf="advertise_banners.length<1"></span>
+
+  <!--<ngb-carousel *ngIf="advertise_banners.length>0" #carousel [interval]="interval" [pauseOnHover]="pauseOnHover" [pauseOnFocus]="pauseOnFocus" (slide)="onSlide($event)">
+    <ng-template ngbSlide *ngFor="let advertise_banner of advertise_banners; index as i">
+      <div class="carousel-caption">
+        <h3>My slide {{i + 1}} title</h3>
+      </div>
+      <a href="javascript:void(0)" target="_blank" rel="nofollow noopener noreferrer">
+        <div class="picsum-img-wrapper">
+          <img [src]="advertise_banner.fileName" alt="advertise banner">
+        </div>
+      </a>
+
+    </ng-template>
+  </ngb-carousel>-->
+
+  <ngb-carousel [interval]="interval * 1000" *ngIf="(advertise_banners.length>0) && is_active" [showNavigationArrows]="showNavigationArrows" [showNavigationIndicators]="showNavigationIndicators">
+    <ng-template ngbSlide *ngFor="let advertise_banner of advertise_banners">
+      <div class="picsum-img-wrapper">
+        <a *ngIf="advertise_banner.redirectUrl" [href]="advertise_banner.redirectUrl" target="_blank">
+          <img [src]="advertise_banner.fileName" alt="Random slide">
+        </a>
+
+        <img *ngIf="!advertise_banner.redirectUrl" [src]="advertise_banner.fileName" alt="Random slide">
+      </div>
+      <!--<div class="carousel-caption">
+        <h3>No mouse navigation</h3>
+        <p>This carousel hides navigation arrows and indicators.</p>
+      </div>-->
+    </ng-template>
+  </ngb-carousel>
+
+</div>
+
+

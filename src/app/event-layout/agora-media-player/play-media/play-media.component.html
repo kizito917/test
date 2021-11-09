@@ -1,0 +1,19 @@
+<div class="remote-stream" [ngStyle]="streamWrapperStyle">
+        
+    <div
+    class="video-container"
+    id="{{stream.userId}}-video_streaming-{{renderPos}}"
+    [hidden]="isVideoMuted"
+    
+    >
+</div>
+<div class="profile_img" [ngClass]="{
+  'active-main': isVideoMuted && (viewState == 1 || viewState == 4),
+  'active-left': isVideoMuted && (viewState == 2 || viewState == 3),
+  'active-full': isVideoMuted && agoraRTCStreamHandler.isFullScreenActive
+ 
+}" [hidden]="!isVideoMuted">
+<img [src]="stream.profilePicture || '/assets/image/user.svg'" alt="Media" />
+</div>
+
+</div>

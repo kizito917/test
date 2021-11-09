@@ -1,0 +1,11 @@
+<div class="tooltipDecor" *ngIf="isRender" [ngClass]="{decoForModerator:isModerator}" [hidden]="agoraStreamHandler.isMicAndCameraBlocked()"> 
+    <div class="tooltipheader">
+    Your camera and microphone are currently blocked 
+    <span (click)="deactivate()">&times;</span>
+    </div>
+    <div class="container">
+      <p class="tooltiptext">Camera and microphone access is needed to join calls or participate 
+        in live discussions. To allow Billions to access your camera and microphone, 
+        please update your permissions in the privacy or security settings of your browser.</p>
+    </div>
+  </div>

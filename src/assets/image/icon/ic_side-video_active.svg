@@ -1,0 +1,14 @@
+<svg id="side_video_active" data-name="side video active" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <circle id="Ellipse_67" data-name="Ellipse 67" cx="18" cy="18" r="18" fill="#5b55ff"/>
+  <g id="side_video_active-2" data-name="side video active" transform="translate(14811 -3972)">
+    <g id="Rectangle_946" data-name="Rectangle 946" transform="translate(-14805 3978)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="Minimize" transform="translate(-14804.5 3978)">
+      <path id="Path_1228" data-name="Path 1228" d="M21.75,8.684v7.131c0,1.855,0,2.782-.579,3.358s-1.51.576-3.372.576H5.7c-1.862,0-2.794,0-3.372-.576s-.579-1.5-.579-3.358V8.684c0-1.855,0-2.782.579-3.358S3.838,4.75,5.7,4.75H17.8c1.862,0,2.793,0,3.372.576S21.75,6.83,21.75,8.684Z" transform="translate(-0.25 -0.25)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" opacity="0.4"/>
+      <path id="Path_1229" data-name="Path 1229" d="M14,12v3.5M14,12h3.5M14,12l5,5" transform="translate(-0.5 -0.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_1234" data-name="Path 1234" d="M12.019,8V7.285c0,1.534,0,2.3-.478,2.777s-1.248.476-2.788.476H5.017c-1.54,0-2.31,0-2.788-.476S1.75,8.818,1.75,7.285V8c0-1.534,0-2.3.478-2.777S3.477,4.75,5.017,4.75H8.752c1.54,0,2.31,0,2.788.476S12.019,6.47,12.019,8Z" transform="translate(-0.25 -0.25)" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

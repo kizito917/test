@@ -1,0 +1,25 @@
+
+<div class="main-section" *ngIf="!page_loader" >
+    <div class="description">
+        <div class="d-content">
+            <div class="content_top">
+                <div class="block_avatar_im">
+                     <img *ngIf="fanspaceData && fanspaceData.logo" class="profile-user-img img-responsive img-circle" id="imagePreview" [src]="fanspaceData.logo" alt="Fanspace Image">
+                    <div class="block_round" *ngIf="!(fanspaceData && fanspaceData.logo)">
+                        <span>{{fanspaceData?.fanspaceName | firstLetter}}</span>
+                    </div>
+                </div>
+                <h2 class="d-fanspace">
+                    {{fanspaceData?.fanspaceName}}
+                </h2>
+            </div>
+            <div class="block_cnt_text">
+                <div class="block_txt">
+                    <p [innerHTML]="fanspaceData?.description | breckLine"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="center" *ngIf="page_loader" loadinga></div>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="ic_clock" transform="translate(-464 -209)">
+    <g id="Rectangle_61" data-name="Rectangle 61" transform="translate(464 209)" fill="#5e6287" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bxs-time" d="M12.25,2a10,10,0,1,0,10,10A10.011,10.011,0,0,0,12.25,2ZM18,13H11.25V6h2v5H18Z" transform="translate(463.75 209)" fill="#5e6287"/>
+  </g>
+</svg>

@@ -1,0 +1,168 @@
+<div class="side_call_section">
+  <div
+    class="readyForLiveScene"
+    [ngClass]="{ active: readyForLiveScene }"
+  ></div>
+  <div class="block_row">
+    <div
+      class="side_call_users_wrapper"
+      [ngClass]="{
+        moderator: AgoraRTCStreamService.handlerRole === 3 && !AgoraRTCStreamService.isFullScreenActive,
+        attendee: AgoraRTCStreamService.handlerRole === 4 || 
+        AgoraRTCStreamService.handlerRole === 3 && AgoraRTCStreamService.isFullScreenActive
+      }"
+    >
+      <ng-container>
+        <div class="userblock user_block" *ngIf= "calleInfo && is_someone_joining"
+        [ngClass]="{
+          userblock2: remoteUsers.length ===3 && calleInfo && is_someone_joining,
+          userblock1: remoteUsers.length >3 && remoteUsers.length < 5,
+          userblock3: remoteUsers.length>=5,
+          userblock4: remoteUsers.length === 1
+        }">
+          <div class="user_block_invite">
+            <div class="circular">
+              <div class="user_block_invite_image_block">
+                <div class="user_block_invite_image">
+                  <img
+                    *ngIf="calleInfo.profilePicture"
+                    [src]="calleInfo.profilePicture"
+                    alt="profile pic"
+                  />
+                  <img
+                    *ngIf="!calleInfo.profilePicture"
+                    src="/assets/image/user.svg"
+                    alt="profile pic"
+                  />
+                </div>
+              </div>
+              <div class="circle">
+                  <div class="bar left">
+                    <div class="progress"></div>
+                  </div>
+                  <div class="bar right">
+                    <div class="progress"></div>
+                  </div>
+              </div>
+            </div>
+            <div class="user_block_invite_calling">
+              {{ current_invition_flag }}...<div>
+                {{ calleInfo?.displayName }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="user_block" *ngIf="localStream"
+        [ngClass]="{
+          userBlock2: remoteUsers.length ===3 && calleInfo && is_someone_joining,
+          userBlock1: remoteUsers.length >3 && remoteUsers.length <= 5,
+          userBlock3: remoteUsers.length>=5 && is_someone_joining
+        }">
+          <div class="user_block_stream">
+            <!-- <div class="block_cls">
+              <a class="link_cursor">
+                <i
+                  class="fas fa-microphone-slash fa-xs"
+                  style="color: #fff"
+                ></i>
+              </a>
+            </div> -->
+            <app-agora-video-player
+              [stream]="localStream"
+              [streamID]="localStream.uid"
+              [videoTrack]="localStream.videoTrack"
+              [audioTrack]="localStream.audioTrack"
+            >
+            </app-agora-video-player>
+          </div>
+        </div>
+        <div class="user_block" *ngFor="let stream of remoteUsers" 
+        [ngClass]="{
+          userBlock2: remoteUsers.length ===3 && calleInfo && is_someone_joining,
+          userBlock1: remoteUsers.length >3 && remoteUsers.length <= 5, 
+          userBlock3: remoteUsers.length>=5 && is_someone_joining
+        }">
+          <div class="user_block_stream">
+            <app-agora-video-player
+              [stream]="stream"
+              [streamID]="stream.uid"
+              [videoTrack]="stream.videoTrack"
+              [audioTrack]="stream.audioTrack"
+            >
+            </app-agora-video-player>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="progress_container">
+        <div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            [value]="audioSideCallVolume"
+            (input)="audioChangeHandler($event)"
+            [ngClass]="{
+              moderator: AgoraRTCStreamService.handlerRole === 3,
+              for_plus_user:AgoraRTCStreamService.handlerRole === 3 && AgoraSideCallService.remoteStreams.length>3 && !AgoraRTCStreamService.isFullScreenActive
+            }"
+          />
+        </div>
+        <div class="image" [ngClass]="{imgFourUser:AgoraRTCStreamService.handlerRole === 3 && AgoraSideCallService.remoteStreams.length>3 && !AgoraRTCStreamService.isFullScreenActive}" (click)="setMuteOrUnmute()">
+          <img src="../../../assets/image/icon/volume_down_white_18dp.svg" alt="" srcset="" class="img"
+           *ngIf="isUnMuted && audioSideCallVolume>0"/>
+          <img src="../../../assets/image/icon/volume_mute_white_18dp.svg" alt="" srcset="" class="img"
+          *ngIf="!isUnMuted || audioSideCallVolume ===0"/>
+        </div>
+    </div>
+    <div class="side_call_control_wrapper">
+      <ul class="buttons_block">
+        <!-- "style display none" for hiding lock button temporary -->
+        <li class="lock_button" style="display: none;"> 
+          <a
+            class="link_cusor"
+            (click)="lockSideChatRoom()"            
+            *ngIf="room.callStatus == 1 && !lockLoading"
+          >
+            <i
+              class="fas fa-lock"
+              style="color: #fff"
+              *ngIf="room.isLocked"
+            ></i>
+            <i
+              class="fas fa-unlock"
+              style="color: #fff"
+              *ngIf="!room.isLocked"
+            ></i>
+          </a>
+          <img
+            *ngIf="lockLoading"
+            style="height: 20px; width: 20px; margin-left: 5px; margin-top: 5px"
+            src="/assets/image/button_loader.svg"
+            alt="Loader"
+          />
+        </li>
+        <li>
+          <a class="link_cusor" (click)="leaveCall()" *ngIf="!endCallLoading">
+            <img
+            *ngIf="!endCallLoading"
+            style="height: 30px; width: 30px;"
+            src="/assets/image/icon/ic_call_cut.svg"
+            alt="Loader"
+            />
+          </a>
+          <img
+            *ngIf="endCallLoading"
+            style="height: 20px; width: 20px; margin-left: 5px; margin-top: 5px"
+            src="/assets/image/button_loader.svg"
+            alt="Loader"
+          />
+        </li>
+        <!-- <a (click)="handleCameraMute()" *ngIf="localStream">
+    			<i class="fas fa-video fa-xs" *ngIf="!isCameraMute" style="color: #fff"></i>
+    			<i class="fas fa-video-slash fa-xs" *ngIf="isCameraMute" style="color: #fff"></i>
+    		</a> -->
+      </ul>
+    </div>
+  </div>
+</div>

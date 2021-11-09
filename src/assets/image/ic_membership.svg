@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="membership" transform="translate(12304 -17093)">
+    <g id="Rectangle_1780" data-name="Rectangle 1780" transform="translate(-12304 17093)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bxs-user-detail" d="M15,11h7v2H15Zm1,4h6v2H16ZM14,7h8V9H14ZM4,19H14V18a5.006,5.006,0,0,0-5-5H7a5.006,5.006,0,0,0-5,5v1H4Zm4-7a3.424,3.424,0,0,0,3.5-3.5A3.424,3.424,0,0,0,8,5,3.424,3.424,0,0,0,4.5,8.5,3.424,3.424,0,0,0,8,12Z" transform="translate(-12304 17093)" fill="#8284a8"/>
+  </g>
+</svg>

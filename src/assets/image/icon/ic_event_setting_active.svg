@@ -1,0 +1,7 @@
+<svg id="ic_event_setting_active" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <circle id="Ellipse_1" data-name="Ellipse 1" cx="18" cy="18" r="18" fill="#5b55ff"/>
+  <g id="Group_1" data-name="Group 1" transform="translate(6 6)">
+    <path id="Path_1" data-name="Path 1" d="M0,0H24V24H0Z" fill="none"/>
+    <path id="Path_2" data-name="Path 2" d="M3,17v2H9V17ZM3,5V7H13V5ZM13,21V19h8V17H13V15H11v6ZM7,9v2H3v2H7v2H9V9Zm14,4V11H11v2ZM15,9h2V7h4V5H17V3H15Z" fill="#fff"/>
+  </g>
+</svg>

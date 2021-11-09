@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="email" transform="translate(12459 -17050)">
+    <g id="Rectangle_1779" data-name="Rectangle 1779" transform="translate(-12459 17050)" fill="#8284a8" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bxs-envelope" d="M20,4H4A2,2,0,0,0,2,6V18a2,2,0,0,0,2,2H20a2,2,0,0,0,2-2V6A2,2,0,0,0,20,4Zm0,4.7-8,5.334L4,8.7V6.3l8,5.333L20,6.3Z" transform="translate(-12459 17050)" fill="#8284a8"/>
+  </g>
+</svg>

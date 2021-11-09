@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="ic_close_white" transform="translate(-897 -213)">
+    <g id="Rectangle_1" data-name="Rectangle 1" transform="translate(897 213)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="Path_1" data-name="Path 1" d="M16.793,6.344l-4.5,4.5-4.5-4.5-1.5,1.5,4.5,4.5-4.5,4.5,1.5,1.5,4.5-4.5,4.5,4.5,1.5-1.5-4.5-4.5,4.5-4.5Z" transform="translate(896.707 212.656)" fill="#fff"/>
+  </g>
+</svg>

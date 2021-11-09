@@ -1,0 +1,401 @@
+@import "../../../styles/scss/_variable.scss";
+
+.profile-section {
+  background-color: color(secondary-color);
+  height: 100%;
+
+  .p-title {
+    border-bottom: 1px solid color(input-color);
+    padding: 20px 20px 5px 20px;
+    color: color(white-text);
+
+    h4 {
+      font-family: $font-Medium;
+    }
+  }
+
+  .p-content {
+    padding: 30px 20px;
+
+    ::placeholder {
+      font-size: 14px;
+      color: color(placeholder-text);
+    }
+
+    .avatar-upload {
+      position: relative;
+      max-width: 124px;
+      margin: 0px auto 20px;
+
+      .avatar-edit {
+        position: relative;
+        z-index: 1;
+
+        &.avtar_top {
+          position: absolute;
+        }
+
+        form {
+          line-height: 0;
+        }
+
+        input {
+          display: none;
+
+          + label {
+            display: inline-block;
+            width: 124px;
+            height: 124px;
+            margin-bottom: 0;
+            border-radius: 100%;
+            background: color(input-color);
+            border: none;
+            box-shadow: none;
+            cursor: pointer;
+            font-weight: normal;
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+              background: color(primary-btn);
+
+              &:after {
+                content: "CHANGE";
+                color: color(white-text);
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
+
+            &:after {
+              content: url(../../../assets/image/bx-plus.svg);
+              width: auto;
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+        }
+      }
+      .avatar-preview {
+        &:before {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          content: "change";
+          background-color: color(primary-btn);
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-transform: uppercase;
+          color: color(white-text);
+          font-family: $font-Medium;
+          font-size: 14px;
+          opacity: 0;
+        }
+      }
+
+      &:hover {
+        .avatar-preview {
+          &:before {
+            opacity: 1;
+            z-index: 99;
+          }
+        }
+      }
+    }
+
+    .p-user-name {
+      padding: 10px 0px;
+      text-align: center;
+      margin: 0px;
+      color: color(white-text);
+    }
+
+    .block_main {
+      display: flex;
+      align-items: center;
+
+      .block_emoji {
+        padding: 0px 10px 0px 0px;
+        background: color(input-color);
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+
+        .block_tagline {
+          width: calc(100% - 35px);
+        }
+        /*.input-group-prepend {
+          .input-group-text {
+            padding: 0;
+            background: color(input-color);
+            border-color: color(input-color);
+          }
+        }
+
+        input {
+          &.form-control {
+            background: color(input-color);
+            border-color: color(input-color);
+            color: color(popup-msg-text);
+            font-size: 14px;
+
+            &:focus {
+              box-shadow: none;
+            }
+          }
+        }*/
+        .block_edit {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding-left: 10px;
+          border-left: 1px solid color(icon-color);
+        }
+      }
+    }
+
+    .block_edit_view {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      p {
+        color: color(popup-msg-text);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin: 0 00px 0 0;
+        white-space: normal;
+        word-wrap: break-word;
+        width: calc(100% - 25px);
+        text-align: center;
+      }
+
+      img {
+        margin: 5px 0 0;
+      }
+    }
+
+    .block_emoji {
+      position: relative;
+
+      .emoji_dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 9;
+
+        ::ng-deep.emoji-mart {
+          background: color(secondary-color) !important;
+          border-color: color(input-color) !important;
+
+          .emoji-mart-bar {
+            border-color: color(input-color) !important;
+
+            .emoji-mart-anchors {
+              .emoji-mart-anchor {
+                svg {
+                  fill: color(white-text);
+                }
+
+                .emoji-mart-anchor-bar {
+                  background-color: color(white-text) !important;
+                }
+              }
+            }
+          }
+
+          .emoji-mart-search {
+            input {
+              background: color(input-color);
+              border-color: color(input-color);
+              color: color(white-text);
+            }
+
+            .emoji-mart-search-icon {
+              svg {
+                fill: color(white-text);
+                opacity: 1;
+              }
+            }
+          }
+
+          .emoji-mart-category-label {
+            span {
+              background: color(primary-bg);
+              color: color(white-text);
+            }
+          }
+
+          .emoji-mart-category {
+            .emoji-mart-emoji {
+              &:hover {
+                &::before {
+                  background: color(input-color);
+                }
+              }
+            }
+          }
+
+          .emoji-mart-bar {
+            .emoji-mart-preview-data {
+              .emoji-mart-title-label {
+                color: color(white-text);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .profile-detail {
+      padding-top: 30px;
+
+      span {
+        font-size: 12px;
+        color: color(placeholder-text);
+        margin: 0 0 8px;
+      }
+
+      p {
+        font-size: 14px;
+        color: color(white-text);
+        margin: 0;
+        word-wrap: break-word;
+      }
+
+      .b-right {
+        border-right: 1px solid color(input-color);
+      }
+
+      .b-top {
+        border-top: 1px solid color(input-color);
+        padding: 10px;
+        padding-left: 25px;
+      }
+    }
+  }
+}
+
+::ng-deep.profile_change {
+  padding-right: 0px !important;
+
+  p {
+    font-size: 12px;
+    color: color(white-text);
+  }
+
+  a {
+    color: color(primary-btn);
+    font-size: 12px;
+
+    &:hover {
+      color: color(primary-btn);
+    }
+  }
+
+  .modal-dialog {
+    justify-content: center;
+
+    .modal-content {
+      background-color: color(secondary-color);
+      border-radius: 12px;
+      min-width: 600px;
+      width: 100%;
+
+      button {
+        &:focus {
+          outline: none;
+        }
+
+        &.close {
+          color: color(white-text);
+          font-weight: 300;
+          line-height: 1;
+          text-shadow: none;
+          opacity: 1;
+        }
+
+        span {
+          font-size: 26px;
+        }
+      }
+
+      .modal-header {
+        border-bottom: 1px solid color(input-color);
+        align-items: center;
+
+        .modal-title {
+          color: color(white-text);
+          font-family: $font-Medium;
+
+          &.b-divider {
+            border-right: 1px solid color(input-color);
+          }
+        }
+      }
+
+      .modal-body {
+        color: color(white-text);
+        padding: 24px;
+
+        .change-profile-picture {
+          border-radius: 12px;
+          background: color(primary-bg);
+          padding: 58px 0;
+        }
+
+        .block_opt {
+          .block_round {
+            width: 64px;
+            height: 64px;
+            background: color(icon-color);
+            border-radius: 50%;
+            position: relative;
+
+            .fileupload_input {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              opacity: 0;
+              z-index: 2;
+              cursor: pointer;
+            }
+
+            img {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+
+          span {
+            font-size: 14px;
+            color: color(white-text);
+            font-family: $font-Medium;
+            margin: 10px 0 0;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  &.modal-small {
+    .modal-content {
+      width: 100%;
+      min-width: 460px;
+    }
+  }
+}

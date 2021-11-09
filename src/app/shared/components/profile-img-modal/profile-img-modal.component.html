@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="exampleModalLongTitle">Change profile picture</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="change-profile-picture ">
+        <div class="row justify-content-center align-items-center w-100">
+          <div class="col-md-4">
+            <div class="user-profile-image text-center">
+               <img [src]="profilePicture" *ngIf="profilePicture" alt="user profile image">
+               <img src="/assets/image/user.svg" *ngIf="!profilePicture" alt="user profile image">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="camera block_opt text-center">
+              <div class="block_round link_cusor">
+                <img src="/assets/image/camera-icon.svg" alt="camera">
+              </div>
+              <span>Capture</span>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="retake block_opt text-center">
+              <div class="block_round link_cusor">
+                <img src="/assets/image/retake-icon.svg" alt="retake">
+              </div>
+              <span>Retake</span>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="upload block_opt text-center">
+              <div class="block_round link_cusor" for="imUpload">
+                <input id="imUpload" class="fileupload_input" type="file" (change)="onFileChange($event)">
+                <img src="/assets/image/upload-icon.svg" alt="retake">
+              </div>
+              <span>Upload</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span style="color:red;" *ngIf="profileError">{{profileError}}</span> 
+  <button (click)="saveProfilePicture()" class="btn btn-prime w-100 mt-4" [disabled]="loading">Save
+    <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+  </button>
+</div>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_250" data-name="Group 250" transform="translate(-827 -167)">
+    <g id="Rectangle_136" data-name="Rectangle 136" transform="translate(827 167)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bxs-download" d="M15.25,7.667h-3V3H7.75V7.667h-3L10,13.889ZM4,15.444H16V17H4Z" transform="translate(829 169)" fill="#fff"/>
+  </g>
+</svg>

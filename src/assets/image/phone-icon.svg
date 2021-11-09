@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_493" data-name="Group 493" transform="translate(-291 -520)">
+    <g id="Rectangle_287" data-name="Rectangle 287" transform="translate(291 520)" fill="#5e6287" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bxs-phone" d="M20.669,17.285l-4.107-3.734a1.011,1.011,0,0,0-1.405.043l-2.418,2.487A5.8,5.8,0,0,1,9.782,14.4,5.772,5.772,0,0,1,8.1,11.447l2.485-2.419a1.01,1.01,0,0,0,.043-1.405L6.9,3.516a1.01,1.01,0,0,0-1.405-.088L3.3,5.309a1.01,1.01,0,0,0-.293.656A15.26,15.26,0,0,0,7.344,16.843a15.3,15.3,0,0,0,10.514,4.343c.2,0,.329-.006.363-.008a1,1,0,0,0,.655-.294l1.879-2.194A1.008,1.008,0,0,0,20.669,17.285Z" transform="translate(291 519.815)" fill="#5e6287"/>
+  </g>
+</svg>

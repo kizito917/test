@@ -1,0 +1,49 @@
+<section class="contact-section py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <div class="brand_logo_login text-center text-md-right mb-5 mb-md-0">
+                    <img src="../../../assets/image/logo-white.png" class="img-fluid" alt="white-logo">
+                </div>
+            </div>
+            <div class="offset-md-1 col-md-6">
+                <div class="contact-right-form w-100">
+                    <div class="contact-form d-flex align-items-center justify-content-center text-left">
+                        <form [formGroup]="contactusFG" novalidate>
+                            <h4 class="box_title">
+                                Drop Us a Line
+                            </h4>
+                            <div class="block_reg">
+                                <div class="full_name">
+                                    <app-control-container label="Full Name" isRequired="true">
+                                    <input type="text" formControlName="full_name" class="input-field" placeholder="Enter your full name" maxlength="100">
+                                    </app-control-container>
+                                </div>
+                                <div class="email_id">
+                                    <app-control-container label="Email Address" isRequired="true">
+                                    <input type="text" formControlName="email" class="input-field" placeholder="Enter your email address" maxlength="150">
+                                    </app-control-container>
+                                </div>
+                                <div class="subject">
+                                    <app-control-container label="Subject" isRequired="true">
+                                    <input type="text" formControlName="subject" class="input-field" placeholder="Enter the subject" maxlength="255">
+                                    </app-control-container>
+                                </div>
+                                <div class="subject">
+                                    <app-control-container label="Message" isRequired="true">
+                                    <textarea name="How can we help" formControlName="message" placeholder="How can we help?" id="" cols="1" rows="2"></textarea>
+                                    </app-control-container>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-prime w-100 mt-1" (click)="submitContactUsForm(contactusFG.valid, contactusFG.value)" [disabled]="loading">Send Message
+                                        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

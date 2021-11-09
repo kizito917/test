@@ -1,0 +1,22 @@
+<div class="video-player-container" title="{{stream.displayName}}" (click)="onattendeeSelected(streamID)">
+	<div 
+		id="stream-{{streamID}}"
+		#container
+		[hidden]="!videoTrack?.isPlaying"
+		class="stream-container" 
+	>
+	</div>
+	<div 
+		class="profile_img" 
+		[ngClass]="{ active: videoTrack?.isPlaying}"
+		[hidden]="videoTrack?.isPlaying"
+	>
+  	<img 
+  		[src]="stream.profile_picture"
+  		alt="Media"
+  	/>
+  </div>
+  <div class="user_block_name_block">
+  	<span>{{stream.displayName.length>6 ? stream.displayName.substring(0,6)+".." : stream.displayName}}</span>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+@import "../../../styles/scss/_variable.scss";
+
+.contact-section {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+
+  @include tab-view {
+    position: relative;
+    top: 50px;
+    transform: none;
+  }
+
+  .brand_logo_login {
+    .img-fluid {
+      @include tab-view {
+        max-width: 150px;
+      }
+    }
+  }
+
+  .contact-right-form {
+    .contact-form {
+      background-color: color(secondary-color);
+      padding: 0px;
+      border-radius: 12px;
+      max-width: 400px;
+      box-shadow: 0px 32px 32px color(shadow-color);
+      margin: 0 auto;
+
+      @include tab-view {
+        margin: 0 auto 30px;
+      }
+
+      .block_reg {
+        padding: 24px;
+        width: 100%;
+
+        @include mobile-view {
+          padding: 20px 15px;
+        }
+      }
+
+      .box_title {
+        color: color(white-text);
+        padding: 24px 24px 20px;
+        margin-bottom: 0;
+        text-align: start;
+        border-bottom: 1px solid color(input-color);
+        font-family: $font-Medium;
+        width: 100%;
+        @include mobile-view {
+          font-size: 18px;
+          padding: 20px 15px;
+        }
+      }
+
+      form {
+        width: 100%;
+
+        .btn {
+          min-width: 208px;
+          text-align: center;
+          margin-bottom: 16px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="live_media" data-name="live media" transform="translate(-1192 -4869)">
+    <g id="Rectangle_109" data-name="Rectangle 109" transform="translate(1192 4869)" fill="#5e6287" stroke="#5e6287" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="Group_185" data-name="Group 185">
+      <g id="Ellipse_69" data-name="Ellipse 69" transform="translate(1201 4878)" fill="none" stroke="#5e6287" stroke-width="1.5">
+        <circle cx="3" cy="3" r="3" stroke="none"/>
+        <circle cx="3" cy="3" r="2.25" fill="none"/>
+      </g>
+      <g id="Ellipse_70" data-name="Ellipse 70" transform="translate(1199 4876)" fill="none" stroke="#5e6287" stroke-width="5.5">
+        <circle cx="5" cy="5" r="5" stroke="none"/>
+        <circle cx="5" cy="5" r="7.75" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg id="mic_on" data-name="mic on" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <circle id="Ellipse_66" data-name="Ellipse 66" cx="18" cy="18" r="18" fill="#4ec47f"/>
+  <g id="mic_on-2" data-name="mic on" transform="translate(-48 -4821)">
+    <g id="Rectangle_82" data-name="Rectangle 82" transform="translate(54 4827)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="bxs-microphone" transform="translate(54 4827.021)">
+      <path id="Path_499" data-name="Path 499" d="M12,16a4,4,0,0,0,4-4V6a4,4,0,0,0-3.979-4.021A.933.933,0,0,0,11.812,2,4.006,4.006,0,0,0,8,6v6A4,4,0,0,0,12,16Z" fill="#fff"/>
+      <path id="Path_500" data-name="Path 500" d="M11,19.931V22h2V19.931A8.008,8.008,0,0,0,20,12H18A6,6,0,0,1,6,12H4A8.008,8.008,0,0,0,11,19.931Z" transform="translate(0 -0.021)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

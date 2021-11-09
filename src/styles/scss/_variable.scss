@@ -1,0 +1,160 @@
+/*--------------------------- Colors For The Demo ----------------------*/
+$color: (
+  primary-bg: #1c1f37,
+  secondary-color: #2b2f4e,
+  primary-btn: #5b55ff,
+  primary-light-bg: #dbdce4,
+  profile-light-bg: #ededf1,
+  icon-color: #5e6287,
+  input-color: #3c4066,
+  popup-bg-gray: #26272a,
+  white-text: #ffffff,
+  white-text-o50: rgba(255, 255, 255, 0.5),
+  green-text: #1ee784,
+  placeholder-text: #8284a8,
+  white-light-text: rgba(255, 255, 255, 0.75),
+  white-light-text-o20: rgba(255, 255, 255, 0.2),
+  popup-msg-text: #8284a8,
+  black-text: #000000,
+  txt-color-ddd: #dddddd,
+  txt-color-bd: #bdbdbd,
+  txt-color-fcfcfe: #fcfcfe,
+  shadow-color: rgba(0, 0, 0, 0.16),
+  switch_bg: #2a2e4c,
+  bg_unpublish: #ff5555,
+  bg_publish: #4ec47f,
+  on_call: #f8e90f,
+  text-blue: #4d4acd,
+  boder_light: rgba(94, 98, 135, 0.5),
+  txt_status: #5b55ff,
+  border_clr: #5e6287,
+  loader_bg: rgba(28, 31, 55, 0.5),
+  overlay_bg: rgba(28, 31, 55, 0.76),
+  white-bg-o30: rgba(255, 255, 255, 0.3),
+  white-bg-o10: rgba(255, 255, 255, 0.1),
+  call_bg_025: rgba(91, 85, 255, 0.25),
+  call_bg: #1b1e36,
+  green_border: #1ce783,
+  text_cle_one: #6051f7,
+  text_cle_two: #6e31a3,
+  clr_bg_upload: #252844,
+);
+
+$fonts: (
+  primary: "SF UI Display Medium",
+);
+
+$font-bold: "SFUIDisplay-Bold";
+$font-Black: "SFUIDisplay-Black";
+$font-Light: "SFUIDisplay-Light";
+$font-Heavy: "SFUIDisplay-Heavy";
+$font-Medium: "SFUIDisplay-Medium";
+$font-Thin: "SFUIDisplay-Thin";
+$font-Semibold: "SFUIDisplay-Semibold";
+$font-Ultralight: "SFUIDisplay-Ultralight";
+$font-Font-Awesome: "Font Awesome 5 Free";
+
+@function color($color-name) {
+  @return map-get($color, $color-name);
+}
+
+$laptop-view: 991px;
+$tab-view: 767px;
+$mobile-view: 575px;
+$mobile-view-small: 380px;
+
+@mixin laptop-view {
+  @media (max-width: #{$laptop-view}) {
+    @content;
+  }
+}
+
+@mixin tab-view {
+  @media (max-width: #{$tab-view}) {
+    @content;
+  }
+}
+
+@mixin mobile-view {
+  @media (max-width: #{$mobile-view}) {
+    @content;
+  }
+}
+
+@mixin mobile-view-small {
+  @media (max-width: #{$mobile-view-small}) {
+    @content;
+  }
+}
+
+@mixin theme-btn {
+  text-transform: uppercase;
+  color: color(white-text);
+  font-size: 14px;
+  font-weight: 300;
+  border-radius: 25px;
+  padding: 14px;
+  text-align: center;
+
+  img {
+    margin-right: 15px;
+  }
+
+  &:hover {
+    color: color(white-text);
+  }
+}
+
+@mixin primary-btn {
+  @include theme-btn;
+  border: 1px solid color(primary-btn);
+  background: color(primary-btn);
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+@mixin secondary-btn {
+  @include theme-btn;
+  border: 1px solid color(input-color);
+  background: color(input-color);
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+@mixin signout_btn {
+  padding: 10px 16px;
+  color: color(white-text);
+  font-size: 14px;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid color(icon-color);
+  background: color(icon-color);
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+@mixin publish {
+  @include theme-btn;
+  border: 1px solid color(bg_publish);
+  background: color(bg_publish);
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+@mixin unpublish {
+  @include theme-btn;
+  border: 1px solid color(bg_unpublish);
+  background: color(bg_unpublish);
+
+  &:hover {
+    background: transparent;
+  }
+}

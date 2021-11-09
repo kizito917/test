@@ -1,0 +1,485 @@
+@import "../../../styles/scss/_variable.scss";
+
+.user-home {
+  height: 100%;
+}
+
+.main-section {
+  padding: 24px;
+  height: calc(100vh - 24px);
+  overflow: auto;
+  position: relative;
+  @include tab-view {
+    padding: 24px 15px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .loader_center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+  }
+
+  .description {
+    background-color: color(secondary-color);
+    border-radius: 12px;
+    //height: 100%;
+
+    &.block_edit_fanspace {
+      .b-title {
+        border-bottom: 1px solid color(input-color);
+        padding: 20px 20px 5px 20px;
+        color: color(white-text);
+
+        h4 {
+          font-family: $font-Medium;
+        }
+      }
+    }
+
+    .d-content {
+      padding: 30px;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+      height: calc(100vh - 110px);
+
+      @include tab-view {
+        padding: 20px 15px;
+      }
+
+      .content_top {
+        padding: 0;
+        height: 23%;
+      }
+
+      .block_cnt_text {
+        height: 77%;
+
+        form {
+          height: 100%;
+          display: flex;
+          flex-flow: column;
+          justify-content: space-between;
+
+          .block_top_row {
+            height: 100%;
+            .row {
+              height: 100%;
+
+              .col {
+                height: 110px;
+              }
+              .col-12 {
+                height: calc(100% - 110px);
+
+                .block_area {
+                  height: 100%;
+                  position: relative;
+
+                  ::ng-deep {
+                    .block_height {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+
+                      .form-group {
+                        height: 100% !important;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          textarea {
+            height: calc(100% - 4vh);
+            overflow-y: auto;
+          }
+        }
+      }
+
+      ::placeholder {
+        font-size: 14px;
+        color: color(placeholder-text);
+      }
+
+      .d-fanspace {
+        padding-bottom: 25px;
+        text-align: center;
+        margin: 0;
+        color: color(white-text);
+        font-family: $font-Medium;
+      }
+
+      .block_edit_text {
+        padding: 30px;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+
+        .input-group {
+          height: 100%;
+        }
+      }
+
+      p {
+        padding-bottom: 16px;
+        color: color(placeholder-text);
+      }
+
+      textarea {
+        font-size: 14px;
+        border-radius: 6px;
+        padding: 16px;
+        height: 100%;
+        overflow: hidden;
+        resize: none;
+        font-weight: 300;
+        background: color(input-color);
+        border-color: color(input-color);
+        color: color(white-text);
+      }
+    }
+  }
+
+  .avatar-upload {
+    position: relative;
+    max-width: 124px;
+    margin: 0px auto 0;
+
+    .avatar-preview {
+      &:before {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: "change";
+        background-color: color(primary-btn);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-transform: uppercase;
+        color: color(white-text);
+        font-family: $font-Medium;
+        font-size: 14px;
+        opacity: 0;
+      }
+
+      .block_round {
+        width: 124px;
+        height: 124px;
+        margin-right: 16px;
+        border-radius: 50%;
+        background: color(input-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: color(white-text);
+
+        span {
+          text-transform: uppercase;
+          font-size: 80px;
+          font-weight: bold;
+          color: color(border_clr);
+          font-family: $font-Medium;
+        }
+      }
+    }
+
+    .avatar-edit {
+      position: relative;
+      z-index: 1;
+
+      &.avtar_top {
+        position: absolute;
+      }
+
+      form {
+        line-height: 0;
+      }
+
+      input {
+        display: none;
+
+        + label {
+          display: inline-block;
+          width: 124px;
+          height: 124px;
+          margin-bottom: 0;
+          border-radius: 100%;
+          background: color(input-color);
+          border: none;
+          box-shadow: none;
+          cursor: pointer;
+          font-weight: normal;
+          transition: all 0.2s ease-in-out;
+
+          &:hover {
+            background: color(primary-btn);
+
+            &:after {
+              content: "CHANGE";
+              color: color(white-text);
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+
+          &:after {
+            content: url(../../../assets/image/bx-plus.svg);
+            width: auto;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      .avatar-preview {
+        &:before {
+          opacity: 1;
+          z-index: 99;
+        }
+      }
+    }
+  }
+}
+
+.profile_change {
+  padding-right: 0px !important;
+
+  p {
+    font-size: 12px;
+    color: color(white-text);
+  }
+
+  a {
+    color: color(primary-btn);
+    font-size: 12px;
+
+    &:hover {
+      color: color(primary-btn);
+    }
+  }
+
+  .modal-dialog {
+    justify-content: center;
+
+    .modal-content {
+      background-color: color(secondary-color);
+      border-radius: 12px;
+      min-width: 600px;
+      width: 100%;
+
+      button {
+        &:focus {
+          outline: none;
+        }
+
+        &.close {
+          color: color(white-text);
+          font-weight: 300;
+          line-height: 1;
+          text-shadow: none;
+          opacity: 1;
+        }
+
+        span {
+          font-size: 26px;
+        }
+      }
+
+      .modal-header {
+        border-bottom: 1px solid color(input-color);
+        align-items: center;
+
+        .modal-title {
+          color: color(white-text);
+          font-family: $font-Medium;
+
+          &.b-divider {
+            border-right: 1px solid color(input-color);
+          }
+        }
+      }
+
+      .modal-body {
+        color: color(white-text);
+        padding: 24px;
+
+        .change-profile-picture {
+          border-radius: 12px;
+          background: color(primary-bg);
+          padding: 58px 0;
+        }
+        .block_opt {
+          .block_round {
+            width: 64px;
+            height: 64px;
+            background: color(icon-color);
+            border-radius: 50%;
+            position: relative;
+
+            img {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+          span {
+            font-size: 14px;
+            color: color(white-text);
+            font-family: $font-Medium;
+            margin: 10px 0 0;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  &.modal-small {
+    .modal-content {
+      width: 100%;
+      min-width: 460px;
+    }
+  }
+}
+
+::ng-deep.creat_fanspacelogo_modal {
+  .modal-dialog {
+    max-width: 650px;
+    .modal-content {
+      background: color(secondary-color);
+      border-radius: 12px;
+      padding: 0;
+
+      .modal-header {
+        padding: 24px;
+        border-bottom-color: color(input-color);
+
+        h4 {
+          font-size: 24px;
+          color: color(white-text);
+          font-family: $font-Medium;
+        }
+
+        button {
+          &:focus {
+            outline: none;
+          }
+
+          &.close {
+            color: color(white-text);
+            font-weight: 300;
+            line-height: 1;
+            text-shadow: none;
+            opacity: 1;
+          }
+
+          span {
+            font-size: 26px;
+          }
+        }
+      }
+      .modal-body {
+        padding: 0 24px 24px;
+
+        .nav-tabs {
+          display: flex;
+          border-bottom: 0;
+          margin: 0 24px;
+
+          a {
+            padding: 20px 24px;
+            border-bottom: 3px solid transparent;
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+            font-size: 14px;
+            color: color(white-text);
+            flex: none;
+            font-family: $font-Medium;
+
+            &.active {
+              border-bottom-color: color(txt_status);
+              background: transparent;
+            }
+          }
+        }
+
+        .tab-content {
+          background: color(primary-bg);
+          border-radius: 12px;
+
+          .block_url {
+            padding: 95px 24px;
+
+            input {
+              height: 52px;
+              padding: 0 24px;
+              background: color(input-color);
+              font-size: 14px;
+              color: color(placeholder-text);
+              width: 100%;
+              border: 0;
+              border-radius: 6px;
+
+              &::placeholder {
+                color: color(placeholder-text);
+                -webkit-text-fill-color: color(placeholder-text);
+              }
+            }
+          }
+          .block_dreg {
+            .block_browse_im {
+              background: color(primary-bg);
+              border-color: color(icon-color);
+              border-radius: 12px;
+
+              .block_im_label {
+                margin: 48px auto 24px;
+                h5 {
+                  font-size: 24px;
+                  color: color(placeholder-text);
+                  font-family: $font-Medium;
+                }
+                div {
+                  margin: 8px 0;
+                  font-size: 16px;
+                  color: color(placeholder-text);
+                  font-family: $font-Medium;
+
+                  span {
+                    color: color(txt_status);
+                  }
+                }
+                p {
+                  font-size: 14px;
+                  color: color(icon-color);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

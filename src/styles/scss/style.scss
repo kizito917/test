@@ -1,0 +1,809 @@
+@import "bootstrap/bootstrap-reboot.scss";
+@import "bootstrap/bootstrap.scss";
+@import "_variable.scss";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~@ctrl/ngx-emoji-mart/picker";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import "~ngx-toastr/toastr";
+/* Fonts Face */
+@font-face {
+  font-family: "SFUIDisplay-Bold";
+  src: url("../fonts/SFUIDisplay-Bold.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Black";
+  src: url("../fonts/SFUIDisplay-Black.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Light";
+  src: url("../fonts/SFUIDisplay-Light.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Light.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Heavy";
+  src: url("../fonts/SFUIDisplay-Heavy.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Heavy.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Medium";
+  src: url("../fonts/SFUIDisplay-Medium.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Thin";
+  src: url("../fonts/SFUIDisplay-Thin.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Thin.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Semibold";
+  src: url("../fonts/SFUIDisplay-Semibold.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Semibold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFUIDisplay-Ultralight";
+  src: url("../fonts/SFUIDisplay-Ultralight.woff2") format("woff2"),
+    url("../fonts/SFUIDisplay-Ultralight.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+//-----------General sass starts here----------
+
+html,
+body {
+  font-family: $font-Light;
+  font-size: 14px;
+  font-weight: 300;
+  height: auto;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: color(primary-bg);
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 10%;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px color(white-text);
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: color(icon-color);
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: color(icon-color);
+  }
+}
+
+.block_root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+app-layout {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+a {
+  color: color(white-text);
+
+  &:hover {
+    color: color(white-text);
+    text-decoration: none;
+  }
+}
+
+p {
+  color: color(popup-bg-gray);
+  margin: 0px;
+}
+
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+hr {
+  border-top: 1px solid color(input-color);
+  margin: 10px 0px;
+}
+
+label {
+  color: color(placeholder-text);
+}
+
+.btn-prime {
+  @include primary_btn;
+  font-family: $font-Medium;
+  color: color(white-text);
+  &[disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.btn-main {
+  @include secondary_btn;
+  font-family: $font-Medium;
+  color: color(white-text);
+  &[disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.btn-signout {
+  @include signout_btn;
+  font-family: $font-Medium;
+  color: color(white-text);
+  &[disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.btn_publish {
+  @include publish;
+  font-family: $font-Medium;
+  color: color(white-text);
+  &[disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.btn_unpublish {
+  @include unpublish;
+  font-family: $font-Medium;
+  color: color(white-text);
+  &[disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.link_cusor {
+  cursor: pointer;
+}
+
+.modal-backdrop.show {
+  opacity: 0.9;
+}
+
+input {
+  &.input-field {
+    width: 100%;
+    padding: 0px 15px;
+    line-height: 52px;
+    background: color(input-color);
+    border-radius: 6px;
+    border: none;
+    color: color(white-text);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: color(placeholder-text);
+  }
+}
+
+textarea {
+  width: 100%;
+  padding: 0px 15px;
+  line-height: 52px;
+  background: color(input-color);
+  border-radius: 6px;
+  border: none;
+  color: color(white-text);
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: color(placeholder-text);
+  }
+}
+
+//-----------General sass ends here----------
+
+//==============--------------- Home page login and create fanspace scss starts here ---------------==============
+.prime-bg {
+  background: color(primary-bg);
+  min-height: 100vh;
+
+  &.login_page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: color(primary-bg) url(../../assets/image/login_bg.svg) no-repeat
+      right;
+    background-size: cover;
+  }
+
+  .event-view {
+    .e-menu-section {
+      height: 100%;
+      width: 100%;
+      display: flex;
+
+      .e-menu-left {
+        width: 100%;
+        height: 100%;
+        background: color(primary-bg);
+        max-width: 60px;
+        padding: 20px 15px;
+        display: inline-block;
+      }
+
+      .block-left {
+        display: inline-block;
+        width: 100%;
+        padding: 10px 0px;
+
+        .ad-banner {
+          background: color(secondary-color);
+          border-radius: 6px;
+          height: 100%;
+          max-height: 114px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 10px;
+
+          p {
+            color: color(icon-color);
+          }
+        }
+
+        .video-resize {
+          background: url(../../assets/image/video-image.svg);
+          background-repeat: no-repeat;
+          background-size: cover;
+          margin: 10px 0px;
+          height: 100%;
+          max-height: 180px;
+          border-radius: 6px;
+        }
+
+        .chat-section {
+          margin-bottom: 10px;
+          height: 100%;
+
+          .input-group {
+            display: inline-flex;
+            width: 85%;
+
+            .input-group-prepend {
+              width: 20%;
+
+              span {
+                background: color(secondary-color);
+                border: 0px;
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+              }
+            }
+
+            .input-field {
+              width: 100%;
+              max-width: 80%;
+              padding-right: 15px;
+              height: auto;
+              min-height: 32px;
+              background: color(secondary-color);
+              border-radius: 6px;
+              border-top-left-radius: 0px;
+              border-bottom-left-radius: 0px;
+              border: none;
+              color: color(icon-color);
+            }
+          }
+
+          .chat-menu {
+            display: inline-flex;
+            padding: 6px;
+            background: color(secondary-color);
+            border-radius: 6px;
+          }
+
+          .chat-tabs {
+            padding-top: 10px;
+            height: 100%;
+
+            .nav-tabs {
+              border: 0px;
+              background: color(input-color);
+              border-top-right-radius: 6px;
+              border-top-left-radius: 6px;
+
+              .nav-item {
+                .modal-title {
+                  display: inline;
+                }
+
+                .modal-title-small {
+                  display: inline;
+                  padding-left: 10px;
+                }
+
+                .nav-link {
+                  color: color(icon-color);
+                  border: none;
+                  font-size: 14px;
+                  padding: 10px;
+
+                  &.active {
+                    background: none;
+                    border: none;
+                    border-bottom: 2px solid color(primary-btn);
+                    color: color(white-text);
+
+                    &:hover {
+                      border: none;
+                      border-bottom: 2px solid color(primary-btn);
+                    }
+                  }
+
+                  &:hover {
+                    background: none;
+                    border: none;
+                  }
+                }
+              }
+            }
+
+            .tab-content {
+              background: color(secondary-color);
+              border-bottom-right-radius: 6px;
+              border-bottom-left-radius: 6px;
+              min-height: 220px;
+
+              .tab-pane {
+                height: 100%;
+
+                .empty-text {
+                  height: 220px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+
+                  p {
+                    color: color(icon-color);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .popup {
+      position: relative;
+      display: flex;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      hr {
+        border-top: 1px solid color(input-color);
+        margin: 10px 0px;
+      }
+
+      .popuptext {
+        font-size: 14px;
+        visibility: hidden;
+        width: 100%;
+        min-width: 250px;
+        background-color: color(secondary-color);
+        color: color(white-text);
+        text-align: center;
+        border-radius: 12px;
+        padding: 8px 10px;
+        position: absolute;
+        z-index: 1;
+        left: 170%;
+
+        span {
+          color: color(popup-msg-text);
+        }
+
+        ul {
+          li {
+            padding: 5px 5px;
+            color: color(white-text);
+          }
+        }
+
+        .popup-header {
+          img {
+            max-width: 64px;
+            margin: 20px;
+          }
+        }
+
+        .popup-footer {
+          ul {
+            display: flex;
+            justify-content: center;
+          }
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 1.5%;
+          left: -10%;
+          margin-left: -5px;
+          border-width: 15px;
+          border-style: solid;
+          border-color: transparent color(input-color) transparent transparent;
+        }
+      }
+
+      .show {
+        visibility: visible;
+        -webkit-animation: fadeIn 1s;
+        animation: fadeIn 1s;
+      }
+    }
+
+    .modal-content {
+      background-color: color(secondary-color);
+      border-radius: 12px;
+      min-width: 737px;
+      width: 100%;
+
+      .nav-tabs {
+        border: 0px;
+
+        .separator {
+          border-right: 1px solid color(input-color);
+          height: 20px;
+        }
+
+        .nav-item {
+          .modal-title {
+            display: inline;
+          }
+
+          .modal-title-small {
+            display: inline;
+            padding-left: 10px;
+          }
+
+          .nav-link {
+            color: color(white-text);
+            border: none;
+            border-bottom: 2px solid color(secondary-color);
+            padding: 0px 20px 10px 20px;
+
+            &.active {
+              background: none;
+              border: none;
+              border-bottom: 2px solid color(primary-btn);
+              padding: 0px 20px 10px 20px;
+
+              &:hover {
+                border: none;
+                border-bottom: 2px solid color(primary-btn);
+              }
+            }
+
+            &:hover {
+              background: none;
+              border: none;
+            }
+          }
+        }
+      }
+
+      .tab-content {
+        .tab-pane {
+          padding: 0;
+
+          .tab-bg {
+            background: color(primary-bg);
+            border-radius: 12px;
+            min-height: 240px;
+            padding: 20px;
+            text-align: center;
+
+            &.dashed-border {
+              border: 2px dashed color(icon-color);
+
+              i {
+                font-size: 74px;
+                color: color(icon-color);
+
+                &:hover {
+                  color: color(primary-btn);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .msger {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 867px;
+    margin: 25px 10px;
+    height: calc(100% - 50px);
+    border: var(--border);
+    border-radius: 5px;
+    background: var(--msger-bg);
+    box-shadow: 0 15px 15px -5px color(shadow-color);
+  }
+
+  .msger-chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: color(txt-color-fcfcfe);
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color(txt-color-ddd);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color(txt-color-bd);
+    }
+  }
+
+  .msg {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+
+    &:last-of-type {
+      margin: 0;
+    }
+  }
+
+  .msg-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    background: color(txt-color-ddd);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+  }
+
+  .msg-bubble {
+    max-width: 450px;
+    padding: 15px;
+    border-radius: 15px;
+    background: var(--left-msg-bg);
+  }
+
+  .msg-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .msg-info-name {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  .msg-info-time {
+    font-size: 0.85em;
+  }
+
+  .left-msg {
+    .msg-bubble {
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .right-msg {
+    flex-direction: row-reverse;
+
+    .msg-bubble {
+      background: var(--right-msg-bg);
+      color: color(white-text);
+      border-bottom-right-radius: 0;
+    }
+
+    .msg-img {
+      margin: 0 0 0 10px;
+    }
+  }
+
+  .msger-inputarea {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid color(input-color);
+
+    .btn-prime {
+      height: 32px;
+      width: 32px;
+
+      img {
+        margin-right: 0px;
+      }
+    }
+  }
+
+  .msger-input {
+    flex: 1;
+    background: color(secondary-color);
+    border: none;
+
+    &::placeholder {
+      color: color(placeholder-text);
+    }
+  }
+}
+
+.profile-user-img,
+.user-profile-image img {
+  width: 124px;
+  object-fit: cover;
+  border-radius: 50%;
+  height: 124px;
+  position: relative;
+}
+
+.upload_profile_pop {
+  position: relative;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ng-select {
+  &.custom_selectbox {
+    .ng-select-container {
+      background: color(input-color);
+      height: 52px;
+      border-color: color(input-color);
+      border-radius: 6px;
+
+      .ng-value {
+        color: color(white-text);
+      }
+
+      .ng-spinner-loader {
+        border: 2px solid color(white-light-text-o20);
+        border-left-color: color(white-text);
+      }
+
+      .ng-value-container {
+        .ng-input {
+          height: 100%;
+          top: 0;
+
+          input {
+            height: 100%;
+            color: color(white-text);
+          }
+        }
+      }
+    }
+
+    .ng-dropdown-panel {
+      background: color(primary-bg);
+      border-color: color(primary-bg);
+
+      .ng-dropdown-panel-items {
+        .ng-option {
+          background: color(primary-bg);
+          color: color(icon-color);
+          font-weight: 600;
+
+          &.ng-option-marked {
+            background: color(secondary-color);
+            color: color(white-text);
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: none;
+  scrollbar-color: color(border_clr);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  border: 3px solid color(boder_light);
+}
+
+app-feedback {
+  width: 100%;
+  height: 100vh;
+  background: url(../../assets/image/coming_soon.png) no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-flow: column;
+}

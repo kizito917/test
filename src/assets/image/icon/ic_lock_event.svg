@@ -1,0 +1,7 @@
+<svg id="lock_event" data-name="lock event" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Rectangle_160" data-name="Rectangle 160" fill="#5e6287" stroke="#707070" stroke-width="1" opacity="0">
+    <rect width="24" height="24" stroke="none"/>
+    <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+  </g>
+  <path id="bxs-lock-open-alt" d="M17,8V7A5,5,0,0,0,7,7v3H6a2,2,0,0,0-2,2v8a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2V12a2,2,0,0,0-2-2H9V7a3,3,0,0,1,6,0V8Z" fill="#5e6287"/>
+</svg>

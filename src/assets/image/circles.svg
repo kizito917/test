@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="12" viewBox="0 0 52 12">
+  <g id="circles" transform="translate(0 -44)">
+    <circle id="Ellipse_1" data-name="Ellipse 1" cx="6" cy="6" r="6" transform="translate(0 44)" fill="#5368f2"/>
+    <circle id="Ellipse_2" data-name="Ellipse 2" cx="6" cy="6" r="6" transform="translate(20 44)" fill="#5368f2"/>
+    <circle id="Ellipse_3" data-name="Ellipse 3" cx="6" cy="6" r="6" transform="translate(40 44)" fill="#5368f2"/>
+  </g>
+</svg>

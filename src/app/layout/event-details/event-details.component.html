@@ -1,0 +1,439 @@
+<div class="main-section" *ngIf="!page_loader">
+  <div class="block_event" *ngIf="isEventModerator">
+    <div class="block_event_head">
+      <div class="block_top">
+        <div class="block_title_top">
+          <h5 class="c_event">{{event?.eventName}}</h5>
+
+          <div class="dropdown">
+            <a class="link_cusor" data-toggle="dropdown">
+              <img src="/assets/image/ic_dot_menu.svg" alt="Menu Icon">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right custom_dropdownbg">
+              <!--<li><a class="link_cusor">See Stats</a></li>
+              <li *ngIf="event && event.eventStatus != event_statuses.ENDED"><a class="link_cusor">View as Guest</a></li>-->
+              <li><a class="link_cusor" (click)="openModel(modelcopyEvent,'modal_eventcopy_window')">Copy Event</a></li>
+              <li (click)="openModel(modelDeleteEvent,'eventdelete_window')"><a class="link_cusor">Delete Event</a></li>
+            </ul>
+          </div>
+        </div>
+        <ul class="block_title_btm">
+          <li *ngIf="event?.scheduleStartTime">
+            <span><img src="/assets/image/ic_calender.svg" alt="Calender"></span>
+            {{event.scheduleStartTime | date:'MMMM d'}} at
+            {{event.scheduleStartTime | date:'h:mm a'}}
+          </li>
+          <li *ngIf="event?.duration"><span><img src="/assets/image/ic_clock.svg" alt="Clock"></span>{{event?.duration}} Min</li>
+        </ul>
+      </div>
+    </div>
+    <div *ngIf="event?.description" class="block_event_cnt">
+      <p [innerHTML]="event?.description | breckLine"></p>
+    </div>
+
+    <div class="banner_section">
+      <div class="banner_update_image" *ngIf="event.eventSetting?.eventPageImage">
+        <div class="avatar-upload">
+          <div class="avatar-preview link_cusor" (click)="openModel(modalHeroImageChange, 'modal_hero_image_change')">
+            <img class="profile-user-img img-responsive img-circle" id="imagePreview" [src]="event.eventSetting?.eventPageImage" alt="User profile picture">
+          </div>
+        </div>
+      </div>
+      <div class="avatar-upload" *ngIf="!event.eventSetting?.eventPageImage">
+        <div class="avatar-preview link_cusor" (click)="openModel(modalHeroImageChange, 'modal_hero_image_change')">
+          <img class="profile-user-img img-responsive img-circle" id="imagePreview" src="/assets/image/icon/ic_add_border_new_latest.svg" alt="User profile picture">
+        </div>
+      </div>
+    </div>
+
+    <div class="block_event_cnt_btm">
+      <div class="block_inn">
+        <div class="c_link">
+          invite : <span *ngIf="!invite_link">bvb.billions.live</span> <span *ngIf="invite_link">{{invite_link}}</span>
+        </div>
+        <ul>
+          <li (click)="copyInviteLink(invite_link)" class="link_cusor"><img src="/assets/image/ic_copy.svg" alt="Copy" placement="top" ngbTooltip="Invite Link"></li>
+          <li (click)="openModel(modal_copy_invite,'modal_copy_window')" class="link_cusor"><img src="/assets/image/ic_mail_copy.svg" alt="Mail" placement="top" ngbTooltip="Invitation"></li>
+        </ul>
+      </div>
+      <div class="block_inn border_left" *ngIf="event && event.eventStatus != event_statuses.ENDED">
+        <div>Guests Only</div>
+        <div class="toggle_switch">
+          <label class="switch">
+            <input type="checkbox" [checked]="event?.eventSetting.allowGuestOnly" (change)="isGuestAllowOnly($event.target.checked ? 'true' : 'false')">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="block_event_btn" *ngIf="event && event.eventStatus != event_statuses.ENDED">
+      <ul>
+        <li>
+          <a *ngIf="isEditGuest" class="btn btn-main" (click)="openGuestModal(modalGuest)"><img src="/assets/image/ic_edit.svg" alt="Edit">Edit guest list</a>
+        </li>
+        <li *ngIf=!event?.isPublished>
+          <a class="btn btn_publish" (click)="openModel(modelEventPublish,'publish_window')">publish</a>
+        </li>
+        <li *ngIf=event?.isPublished>
+          <a class="btn btn_unpublish" (click)="openModel(modelEventUnpublish,'unpublish_window')">UnPublish</a>
+        </li>
+        <li>
+          <!--<a [routerLink]="['/event', 'event-moderator-dashboard', event.eventCode]" target="_blank" class="btn btn-prime">Enter Studio</a>-->
+          <a (click)="enterEventStudio(event.eventCode)" class="btn btn-prime">Enter Studio</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block_event_user" *ngIf="!isEventModerator">
+    <div class="block_event_head">
+      <div class="block_top">
+        <span>You're invited to :</span>
+        <h5>{{event?.eventName}}</h5>
+        <div class="block_event_info">
+          <ul>
+            <!-- <li><img src="/assets/image/ic_calender.svg" alt="Calender"> December 25 at 3:00 PM ET</li> -->
+            <li *ngIf="event?.scheduleStartTime">
+              <img src="/assets/image/ic_calender.svg" alt="Calender"> {{event.scheduleStartTime | date:'MMMM d'}} at
+              {{event.scheduleStartTime | date:'h:mm a'}}
+            </li>
+            <li *ngIf="event?.duration"><img src="/assets/image/ic_clock.svg" alt="Calender">Duration : {{event?.duration}} Min</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="block_event_cnt">
+      <div class="block_inn">
+        <p [innerHTML]="event?.description | breckLine"></p>
+        <!-- <a class="link_cusor">READ MORE</a> -->
+      </div>
+      <div class="block_event_btn">
+        <ul>
+          <li>
+            <button type="button" class="btn btn-prime link_cusor w-100" [disabled]="!event" (click)="enterIntoEvent()">Enter Event</button>
+            <!--<a [routerLink]="['/event', 'join', event.eventCode]" target="_blank" class="btn btn-prime link_cusor w-100">Enter Event</a>-->
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="description" *ngIf="!isEventModerator">
+    <div class="d-content">
+      <div class="content_top">
+        <div class="block_avatar_im">
+            <img *ngIf="fanspaceData && fanspaceData.logo" class="profile-user-img img-responsive img-circle" id="imagePreview" [src]="fanspaceData.logo" alt="Fanspace Image">
+            <div class="block_round" *ngIf="!(fanspaceData && fanspaceData.logo)">
+                <span>{{fanspaceData?.fanspaceName | firstLetter}}</span>
+            </div>
+        </div>
+        <h2 class="d-fanspace">
+          {{fanspaceData?.fanspaceName}}
+        </h2>
+      </div>
+      <div class="block_cnt_text">
+        <div class="block_txt">
+          <p [innerHTML]="fanspaceData?.description | breckLine">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="center" *ngIf="page_loader" loadinga></div>
+
+<ng-template #modalGuest let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header pb-0">
+    <ul id="tabs" class="nav nav-tabs">
+      <li class="nav-item">
+        <a href="javascript:void(0);" data-target="#guestlisttab" data-toggle="tab" class="nav-link small">
+          <h4 class="modal-title">Guest list</h4>
+          <p class="modal-title-small">{{guestCount}}</p>
+        </a>
+      </li>
+      <li class="separator"></li>
+      <li class="nav-item">
+        <a href="javascript:void(0);" data-target="#addguesttab" data-toggle="tab" class="nav-link small active">
+          <span><img src="/assets/image/bx-plus-white.svg" class="guest-add-icon" alt="add-icon"></span>
+          <h4 class="modal-title">
+            Add guests
+          </h4>
+        </a>
+      </li>
+      <li class="separator"></li>
+    </ul>
+    <a href="javascript:void(0);" (click)="downloadCSV()" class="modal-title pl-3"><img src="/assets/image/download-icon-white.svg" class="p-2" alt="download icon">Download Guest List</a>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!--  <form [formGroup]="guestFG"> -->
+    <div class="row">
+      <div class="col-md-12">
+
+        <div id="tabsContent" class="tab-content ">
+          <div id="guestlisttab" class="tab-pane fade">
+            <div class="block_guest_list">
+              <div class="block_list_head">
+                <div class="block_text">
+                  <lable>Email Address</lable>
+                </div>
+                <div class="block_text">
+                  <lable>Name or Reference</lable>
+                </div>
+                <div class="block_text">
+                  <lable>&nbsp;</lable>
+                </div>
+              </div>
+              <div class="block_list_body">
+                <div class="row_body" *ngFor="let guest of eventGuests">
+                  <div class="block_list_cnt">
+                    <input class="input-field" placeholder="Enter Your Email" type="email" tabindex="2" readonly="" value="{{guest.email}}" maxlength="150">
+                  </div>
+                  <div class="block_list_cnt">
+                    <input class="input-field" placeholder="Enter Your Name" type="text" tabindex="2" readonly="" value="{{guest.name}}" maxlength="100">
+                  </div>
+                  <div class="block_list_cnt">
+                    <a class="delete-icon link_cusor" (click)="deleteGuest(modelDeleteGuestUser,guest.eventGuestUserId)">
+                      <i class="fas fa-trash-alt fa-lg" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </div>
+                <div *ngIf="!eventGuests?.length" class="block_no_found">
+                  Guest not added yet!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="addguesttab" class="tab-pane fade active show">
+            <form [formGroup]="guestFG"  (ngSubmit)="submitGuestForm(guestFG.valid, guestFG.value)" novalidate>
+              <div class="block_top">
+                <div formArrayName="guest_users">
+                  <div class="custom_row" *ngFor="let guest of guest_users().controls; let i=index" [formGroupName]="i">
+                    <div class="custom_field">
+                      <app-control-container label="Email Address">
+                        <input class="input-field" placeholder="Enter Your Email" type="text" formControlName="email" tabindex="2" maxlength="150">
+                      </app-control-container>
+                    </div>
+                    <div class="custom_field">
+                      <app-control-container label="Name or Reference">
+                        <input class="input-field" placeholder="Enter Your Full Name" type="text" formControlName="name" tabindex="2" maxlength="100">
+                      </app-control-container>
+                    </div>
+                    <div class="custom_field" *ngIf="indexStart && i>=0">
+                      <label>&nbsp;</label>
+                      <div *ngIf="i>=0" class="delete-icon link_cusor" (click)="removeGuests(i)">
+                        <i class="fas fa-trash-alt fa-lg" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="custom_field" *ngIf="!indexStart && i>=1">
+                      <label>&nbsp;</label>
+                      <div *ngIf="i>=1" class="delete-icon link_cusor" (click)="removeGuests(i)">
+                        <i class="fas fa-trash-alt fa-lg" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block_addmore">
+                    <a class="link_cusor" (click)="addGuests(guestFG.value.guest_users)">
+                      <img src="/assets/image/bx-small-plus-white.svg" alt="add-icon" class="pr-2">Add more
+                    </a>
+                  </div>
+                  <span style="color:red;" *ngIf="add_guest_error_message">{{add_guest_error_message}}</span>
+                </div>
+              </div>
+              <div class="block_btm">
+                <div class="row pt-3">
+                  <div class="col-12 pb-2">
+                    <div class="block_txt">Add multiple email addresses (separated by comma)</div>
+                  </div>
+                  <div class="col-5">
+                    <app-control-container label="Email Address">
+                      <textarea formControlName="email_address" class="form-control" rows="3"></textarea>
+                    </app-control-container>
+
+                  </div>
+                  <div class="col-7">
+                    <app-control-container label="Name or Reference">
+                      <textarea formControlName="reference_name" class="form-control" rows="3"></textarea>
+                    </app-control-container>
+                  </div>
+                  <span class="col-12" style="color:red;" *ngIf="duplicate_guest_error_message">{{duplicate_guest_error_message}}</span>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-prime w-100 mt-4" [disabled]="loading">
+                      Add to Guest List
+                      <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modelDeleteGuestUser let-modal let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Delete Confirmation</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <p>Are you sure you want to delete this guest user  ?</p> -->
+    <div class="block_btn">
+      <button type="button" class="btn btn_unpublish" (click)="deleteGuestUser(deleteGuestId)" [disabled]="loading">
+        Yes
+        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">No</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modelEventPublish let-modal let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Want to publish the event ?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul>
+      <li>Publish the event so it will show up in the users eventlist</li>
+    </ul>
+    <div class="block_btn">
+      <button type="button" class="btn btn_publish" (click)="publishUnpublishEvent(true)" [disabled]="loading">
+        Publish
+        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+      </button>
+      <!-- <button type="button" class="btn btn_unpublish" (click)="modal.close()">No</button> -->
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modelEventUnpublish let-modal let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Event Confirmation</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <p>Are you sure you want to unpublish this event  ?</p> -->
+    <div class="block_btn">
+      <button type="button" class="btn btn_unpublish" (click)="publishUnpublishEvent(false)" [disabled]="loading">
+        Unpublish
+        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">Keep Published</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modelDeleteEvent let-modal let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Delete Event ?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+     <!-- <p>Are you sure you want to delete this event  ?</p>  -->
+     <div class="block_btn">
+      <button type="button" class="btn btn_unpublish" (click)="deleteEvent()" [disabled]="loading">
+        Delete Event
+        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">Keep Event</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_copy_invite let-modal let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Invitation</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_link">
+      <h5>{{fanspace_name}} is inviting you to a scheduled event on Billions:</h5>
+      <ul>
+        <li>{{event?.eventName}}</li>
+        <li>{{event?.scheduleStartTime | date:'MMMM d'}} {{event?.scheduleStartTime | date:'h:mm a'}}</li>
+      </ul>
+      <p>Join on your computer</p>
+      <p>link : {{invite_link}}</p>
+    </div>
+    <div class="block_btn">
+      <button (click)="copyInvitation()" type="button" class="btn btn-main">Copy</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modelcopyEvent  aria-labelledby="exampleModalCenterTitle" aria-hidden="true" class="modal-dialog-centered" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLongTitle">Copy event?</h4>
+      <button type="button" class="close" (click)="d('Cross click')" [disabled]="loading">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <div class="block_event_lock_txt">
+          <ul>
+              <li>Copy event will duplicate the whole event as it is, except the guest list.</li>
+          </ul>
+          <div class="block_btn">
+            <button type="button" class="btn btn-prime" [disabled]="loading" (click)="copyEvent()">
+              Copy
+              <img *ngIf="loading" style="height: 20px; width: 20px; margin-left: 3px" src="/assets/image/button_loader.svg" alt="Loader" />
+            </button>
+          </div>
+      </div>
+  </div>
+</ng-template>
+
+<ng-template #modalHeroImageChange  aria-labelledby="exampleModalCenterTitle" aria-hidden="true" class="modal-dialog-centered">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Change hero image for join event pages</h4>
+    <button type="button" class="close" (click)="closeModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-drag-tab" data-toggle="tab" href="#nav-drag" role="tab" aria-controls="nav-drag" aria-selected="false">Upload a file</a>
+      </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-drag" role="tabpanel" aria-labelledby="nav-drag-tab">
+        <div class="block_dreg">
+          <ngx-dropzone class="block_browse_im" (change)="onHeroImageSelect($event)" [multiple]="false"[accept]="'image/*'" [maxFileSize]="5000000">
+            <ngx-dropzone-label class="block_im_label">
+              <h5>Drag img file here</h5>
+              <div>
+              or <span>browse</span> to choose a file 
+              </div>
+              <p>(Max file size : 5 MB | Recommended size *** x ***)</p>
+            </ngx-dropzone-label>
+            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of hero_image" [file]="f" [removable]="true" (removed)="onRemove(f)">
+            </ngx-dropzone-image-preview>
+          </ngx-dropzone>
+        </div>
+      </div>
+    </div>
+
+    <span style="color:red;" *ngIf="errorMessage">{{errorMessage}}</span>
+    <button (click)="saveHeroImage()" class="btn btn-prime w-100 mt-4" [disabled]="loading">Save
+    <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+    </button>
+  </div>
+</ng-template>

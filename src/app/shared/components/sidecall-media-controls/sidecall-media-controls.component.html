@@ -1,0 +1,135 @@
+<div class="sidecall-buttons">
+    <li *ngIf="
+      is_allow_sidechat_audio &&
+      !sideChatCall &&
+      !isSelectedProfileOnAir &&
+      !isLoggedInUserOnAir &&
+      sideCallRoom?.callType !== 2 &&
+      !isRoomLocked
+    ">
+      <a *ngIf="(!isAvailableForSidechatProfile && !callLoading) || isBlock" class="link_cusor tooltip">
+        <img src="/assets/image/icon/ic_call_off.svg" alt="Call" />
+        <span class="tooltiptext left_side">{{ userAvailabilityMsg }}</span>
+      </a>
+  
+      <a *ngIf="isAvailableForSidechatProfile && !callLoading && !isBlock" [ngClass]="{ disabled: noOfUserJoined >= 7 }"
+        class="link_cusor tooltip" (click)="callModal(participant, 1)">
+        <img src="/assets/image/icon/ic_call.svg" alt="Call" />
+        <span class="tooltiptext" [ngClass] = "messengerTab ? 'right_side' : 'left_side'">Audio Call</span>
+      </a>
+      <img *ngIf="callLoading" style="height: 20px; width: 20px; margin-left: 5px; margin-top: 5px"
+        src="/assets/image/button_loader.svg" alt="Loader" />
+    </li>
+  
+    <li *ngIf="
+    is_allow_sidechat_audio &&
+    sideChatCall &&
+    !isSelectedProfileOnAir &&
+    !isLoggedInUserOnAir &&
+    !sideCallRoom &&
+    sideChatCall?.callType !== 2 &&
+    !isRoomLocked
+  ">
+      <a *ngIf="
+      ((!isAvailableForSidechatProfile ||
+        sideChatCall.isLocked) &&
+        !callLoading) ||
+      isBlock
+    " class="link_cusor tooltip">
+        <img src="/assets/image/icon/ic_call_off.svg" alt="Call" />
+        <span class="tooltiptext left_side">{{
+          userAvailabilityMsg
+          }}</span>
+      </a>
+  
+      <a *ngIf="
+      isAvailableForSidechatProfile &&
+      !callLoading &&
+      !sideChatCall.isLocked &&
+      !isBlock
+    " [ngClass]="{disabled:noOfUserJoined>=7}" class="link_cusor tooltip" (click)="showJoinCallPopup(modalCalling, 1)">
+        <img src="/assets/image/icon/add_to_audio.svg" alt="Call" />
+        <span class="tooltiptext" [ngClass] = "messengerTab ? 'right_side' : 'left_side'">Audio Call</span>
+      </a>
+      <img *ngIf="callLoading" style="
+      height: 20px;
+      width: 20px;
+      margin-left: 5px;
+      margin-top: 5px;
+    " src="/assets/image/button_loader.svg" alt="Loader" />
+    </li>
+  
+    <li *ngIf="
+    is_allow_sidechat_video &&
+    !sideChatCall &&
+    !isSelectedProfileOnAir &&
+    !isLoggedInUserOnAir &&
+    sideCallRoom?.callType !== 1 &&
+    !isRoomLocked
+  ">
+      <a *ngIf="
+      (!isAvailableForSidechatProfile && !callLoading) ||
+      isBlock
+    " class="link_cusor tooltip">
+        <img src="/assets/image/icon/ic_video_chat_off.svg" alt="Call" />
+        <span class="tooltiptext" [ngClass] = "messengerTab ? 'right_side' : 'left_side'">{{
+          userAvailabilityMsg
+          }}</span>
+      </a>
+  
+      <a *ngIf="
+      isAvailableForSidechatProfile &&
+      !callLoading &&
+      !isBlock
+    " [ngClass]="{disabled:noOfUserJoined>=7}" class="link_cusor tooltip" (click)="callModal(participant, 2)">
+        <img src="/assets/image/icon/ic_video_chat_on.svg" alt="Call" />
+        <span class="tooltiptext" [ngClass] = "messengerTab ? 'right_side' : 'left_side'">Video Call</span>
+      </a>
+      <img *ngIf="callLoading" style="
+      height: 20px;
+      width: 20px;
+      margin-left: 5px;
+      margin-top: 5px;
+    " src="/assets/image/button_loader.svg" alt="Loader" />
+    </li>
+  
+    <li *ngIf="
+    is_allow_sidechat_video &&
+    sideChatCall &&
+    !isSelectedProfileOnAir &&
+    !isLoggedInUserOnAir &&
+    !sideCallRoom &&
+    sideChatCall?.callType !== 1 &&
+    !isRoomLocked
+  ">
+      <a *ngIf="
+      ((!isAvailableForSidechatProfile ||
+        sideChatCall.isLocked) &&
+        !callLoading) ||
+      isBlock" 
+      class="link_cusor tooltip">
+        <img src="/assets/image/icon/ic_video_chat_off.svg" alt="Video Call" />
+        <span class="tooltiptext" [ngClass] = "messengerTab ? 'right_side' : 'left_side'">{{
+          userAvailabilityMsg
+          }}</span>
+      </a>
+  
+      <a *ngIf="
+      isAvailableForSidechatProfile &&
+      !callLoading &&
+      !sideChatCall.isLocked &&
+      !isBlock"
+      [ngClass]="{disabled:noOfUserJoined>=7}"
+      class="link_cusor tooltip" (click)="showJoinCallPopup(modalCalling, 2)">
+        <img src="/assets/image/icon/add_to_video.svg" alt="Call" />
+        <span class="tooltiptext" [ngClass] = "messengerTab ? 'right_side' : 'left_side'">Video Call</span>
+      </a>
+      <img *ngIf="callLoading" style="
+      height: 20px;
+      width: 20px;
+      margin-left: 5px;
+      margin-top: 5px;
+    " src="/assets/image/button_loader.svg" alt="Loader" />
+    </li>
+  
+  </div>

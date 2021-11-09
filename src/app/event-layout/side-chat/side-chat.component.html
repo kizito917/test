@@ -1,0 +1,637 @@
+<ul
+  ngbNav
+  #nav="ngbNav"
+  [(activeId)]="ngbActiveTab"
+  (navChange)="onNavChange($event)"
+  class="nav-tabs sidechat-tabs"
+>
+  <li [ngbNavItem]="ngb_tabs.live_chat" *ngIf="is_allow_livechat">
+    <a ngbNavLink
+      >Live Chat<span *ngIf="livechat_indicator > 0">{{
+        livechat_indicator
+      }}</span></a
+    >
+    <ng-template ngbNavContent>
+      <!--<app-live-chat [user_id]="user_id" [event_id]="event_id" [event_status]="event_status"></app-live-chat>-->
+
+      <div class="block_chat_main">
+        <div class="block_msg">
+          <div
+            class="block_nomsg"
+            *ngIf="livechat_messages.length < 1 && !conversation_loading"
+          >
+            Share your thoughts with the group
+          </div>
+          <div
+            class="messages_block_main"
+            *ngIf="livechat_messages.length > 0"
+            id="livechat_container"
+          >
+            <div class="message-row" *ngFor="let message of livechat_messages">
+              <div
+                class="message_text"
+                [ngClass]="{
+                  'message-recieved': message.user.userId !== user_id,
+                  'message-sent': message.user.userId === user_id,
+                  message_moderator: message.isModerator
+                }"
+              >
+                <div class="message-avatar">
+                  <span *ngIf="!message.user.profilePicture">{{
+                    message.user.displayName | firstLetter
+                  }}</span>
+                  <img
+                    *ngIf="message.user.profilePicture"
+                    [src]="message.user.profilePicture"
+                    alt=""
+                  />
+                </div>
+                <div class="message-bubble">
+                  <span>{{ message.user.displayName }}</span>
+                  {{ message.message }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="block_loading"
+            *ngIf="conversation_loading"
+            loadinga
+          ></div>
+        </div>
+        <div class="block_typ_msg">
+          <form
+            [formGroup]="sendMessageFG"
+            (ngSubmit)="sendLiveChatMessage()"
+            novalidate
+          >
+            <div class="input-group">
+              <input
+                type="text"
+                formControlName="message"
+                id="inputMessage"
+                placeholder="Type a message..."
+                autocomplete="off"
+                maxlength="255"
+              />
+
+              <button
+                type="submit"
+                class="block_icon link_cusor"
+                [disabled]="loading"
+              >
+                <img
+                  *ngIf="!loading"
+                  src="/assets/image/icon/ic_send.svg"
+                  alt="Send"
+                />
+                <img
+                  *ngIf="loading"
+                  style="height: 20px; width: 20px; margin-left: 3px"
+                  src="/assets/image/button_loader.svg"
+                  alt="Loader"
+                />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+
+  <li [ngbNavItem]="ngb_tabs.messenger">
+    <a ngbNavLink
+      >Messenger<span *ngIf="messenger_indicator > 0">{{
+        messenger_indicator
+      }}</span></a
+    >
+    <ng-template ngbNavContent>
+      <!--<app-messenger [sender_id]="user_id" [chosen_recipient]="messageRecipient" (messageIndicator)="messageIndicatorHandler($event)"></app-messenger>-->
+      <div class="block_messenger_main">
+        <div
+          class="block_msg"
+          *ngIf="islisting && messengers.length < 1 && !conversation_loading"
+        >
+          <div class="block_nomsg">
+            Open a fellow participant's profile and click on the messenger icon
+            to start chatting.
+          </div>
+        </div>
+        <div
+          class="block_message_list"
+          *ngIf="islisting && messengers.length > 0"
+          id="messengers_container"
+        >
+          <ul>
+            <li *ngFor="let messenger of messengers">
+              <a
+                class="link_cusor"
+                (click)="openMessageHistory(messenger.receiver.userId)"
+              >
+                <div class="block_message_avatar">
+                  <img
+                    *ngIf="messenger.receiver.profilePicture"
+                    [src]="messenger.receiver.profilePicture"
+                    alt="profile picture"
+                  />
+                  <img
+                    *ngIf="!messenger.receiver.profilePicture"
+                    src="/assets/image/user.svg"
+                    alt="profile picture"
+                  />
+                </div>
+                <div class="block_message_cnt">
+                  <div class="block_cnt_left">
+                    <span>{{ messenger.receiver.displayName }}</span>
+                    <p>{{ messenger.latestMessage?.message }}</p>
+                  </div>
+                  <div class="block_cnt_right">
+                    <div class="block_time">
+                      <span
+                        *ngIf="
+                          (messenger.latestMessage?.createdDate
+                            | date: 'ddMMyyyy') === (today | date: 'ddMMyyyy')
+                        "
+                        >{{
+                          messenger.latestMessage?.createdDate | date: "hh:mm a"
+                        }}</span
+                      >
+                      <span
+                        *ngIf="
+                          (messenger.latestMessage?.createdDate
+                            | date: 'ddMMyyyy') !== (today | date: 'ddMMyyyy')
+                        "
+                        >{{
+                          messenger.latestMessage?.createdDate
+                            | date: "dd/MM/yyyy"
+                        }}</span
+                      >
+                    </div>
+                    <div
+                      *ngIf="messenger.unseenCount && messenger.unseenCount > 0"
+                      class="block_count"
+                    >
+                      <span>{{ messenger.unseenCount }}</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="!islisting" class="block_messenger_chat">
+          <div class="block_messenger_chat_head" *ngIf="!conversation_loading">
+            <div class="block_messenger_chat_left">
+              <a (click)="back()" class="link_cusor"
+                ><img src="/assets/image/icon/ic_back.svg" alt="Back"
+              /></a>
+              <div class="block_messenger_im">
+                <img
+                  *ngIf="chosenRecipient.profile_picture"
+                  [src]="chosenRecipient.profile_picture"
+                  alt="profile picture"
+                />
+                <img
+                  *ngIf="!chosenRecipient.profile_picture"
+                  src="/assets/image/user.svg"
+                  alt="profile picture"
+                />
+              </div>
+              <div class="block_messenger_name">
+                {{ chosenRecipient.display_name }}
+              </div>
+            </div>
+            <div class="block_messenger_chat_right">
+              <ul>
+                <!-- Call buttons from messenger -->
+                <!-- <app-sidecall-media-controls
+                [is_allow_sidechat_audio]="is_allow_sidechat_audio"
+                [sideChatCall]="sideChatCall"
+                [isSelectedProfileOnAir]="isSelectedProfileOnAir"
+                [isLoggedInUserOnAir]="isLoggedInUserOnAir"
+                [sideCallRoom]="sideCallRoom"
+                [isRoomLocked]="isRoomLocked"
+                [isAvailableForSidechatProfile]="isAvailableForSidechatProfile"
+                [callLoading]="callLoading"
+                [userAvailabilityMsg]="userAvailabilityMsg"
+                [isBlock]="isBlock"
+                [participant]="participant"
+                [noOfUserJoined]="noOfUserJoined"
+                [modalCalling] = "modalCalling"
+                [is_allow_sidechat_video] = "is_allow_sidechat_video"
+                [messengerTab] = "ngbActiveTab === 2"
+                (callmodal)="callModal($event)"
+                (showPopup) = "showJoinCallPopup($event)"
+                >
+                </app-sidecall-media-controls> -->
+                <li>
+                  <a class="link_cusor tooltip">
+                    <img
+                      src="/assets/image/icon/ic_tooltip_active.svg"
+                      alt="Info"
+                      (click)="navigateToProfile(chosenRecipient.user_id)"
+                    />
+                    <span class="tooltiptext right_side">See profile</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="block_messenger_chat_body">
+            <div class="block_chat_main" *ngIf="!conversation_loading">
+              <div class="messenger_chat_list" id="conversation_container">
+                <div class="message-row" *ngFor="let chat of conversation">
+                  <div
+                    class="message_text"
+                    [ngClass]="{
+                      'message-recieved': chat.sender.userId !== user_id,
+                      'message-sent': chat.sender.userId === user_id
+                    }"
+                  >
+                    <div class="message-avatar">
+                      <img
+                        *ngIf="chat.sender.profilePicture"
+                        [src]="chat.sender.profilePicture"
+                        alt="profile picture"
+                      />
+                      <img
+                        *ngIf="!chat.sender.profilePicture"
+                        src="/assets/image/user.svg"
+                        alt="profile picture"
+                      />
+                    </div>
+                    <div class="message-bubble">
+                      {{ chat.message }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="block_typ_msg">
+                <form
+                  [formGroup]="sendMessageFG"
+                  (ngSubmit)="sendMessage()"
+                  novalidate
+                >
+                  <div class="input-group" *ngIf="!isBlockMessanger">
+                    <input
+                      type="text"
+                      formControlName="message"
+                      id="inputMessage"
+                      placeholder="Type a message..."
+                      autocomplete="off"
+                      maxlength="255"
+                    />
+
+                    <button
+                      type="submit"
+                      class="block_icon link_cusor"
+                      [disabled]="loading"
+                    >
+                      <img
+                        *ngIf="!loading"
+                        src="/assets/image/icon/ic_send.svg"
+                        alt="Send"
+                      />
+                      <img
+                        *ngIf="loading"
+                        style="height: 20px; width: 20px; margin-left: 3px"
+                        src="/assets/image/button_loader.svg"
+                        alt="Loader"
+                      />
+                    </button>
+                  </div>
+                  <div class="div_position" *ngIf="isBlockMessanger">
+                    <span>{{ chatBlockMsg }}</span>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div
+              class="block_loading"
+              *ngIf="conversation_loading"
+              loadinga
+            ></div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+
+  <li [ngbNavItem]="ngb_tabs.calls" *ngIf="timer >= 0 && isIncomingCall">
+    <a ngbNavLink>Calls</a>
+    <ng-template ngbNavContent>
+      <app-call-history
+        [callType]="callType"
+        [is_incoming_call]="isIncomingCall"
+        [caller_info]="callerInfo"
+        [caller_loading]="caller_loading"
+        (navigateToMessenger)="navigateToMessengerFromCall()"
+        (acceptSideCall)="acceptSideCallHandler()"
+        (declineSideCall)="declineSideCallHandler()"
+        [timer]="timer"
+        [callButtonLoader]="callButtonLoader"
+      >
+      </app-call-history>
+    </ng-template>
+  </li>
+
+  <li [ngbNavItem]="ngb_tabs.profile">
+    <a ngbNavLink>Profile</a>
+    <ng-template ngbNavContent>
+      <!--<app-profile [participant_id]="participant_id" (navigateTo)="navigateToHandler($event)" (messageRecipient)="messageRecipientHandler($event)"></app-profile>-->
+
+      <div class="block_profile_main">
+        <div class="block_profile_top" *ngIf="!conversation_loading">
+          <div class="block_profile_cnt">
+            <div *ngIf="!participant" class="block_msg">
+              <div class="block_nomsg">
+                Click on a fellow participant's profile image to view details
+              </div>
+            </div>
+            <div class="block_profile_info_top" *ngIf="participant">
+              <div class="block_info_in_top">
+                <div class="block_profile_avatar">
+                  <div class="profile_avatar">
+                    <img
+                      *ngIf="participant.profilePicture"
+                      [src]="participant.profilePicture"
+                      alt="profile pic"
+                    />
+                    <span *ngIf="!participant.profilePicture">{{
+                      participant.displayName | firstLetter
+                    }}</span>
+                  </div>
+                  <div class="block_calling_status">
+                    <span
+                      *ngIf="
+                        isAvailableForSidechatProfile && !isSelectedProfileOnAir
+                      "
+                      [ngClass]="{
+                        online: !sideChatCall,
+                        oncall: sideChatCall
+                      }"
+                    ></span>
+                  </div>
+                </div>
+                <div class="profile_cnt">
+                  <h6>{{ participant.displayName }}</h6>
+                  <p>{{ participant.tagLine }}</p>
+                  <span *ngIf="participant.city.trim()">{{
+                    participant.city
+                  }}</span>
+                  <span
+                    *ngIf="participant.city.trim() && participant.country?.name"
+                    >,</span
+                  >
+                  <span *ngIf="participant.country?.name">{{
+                    participant.country?.name
+                  }}</span>
+                </div>
+              </div>
+              <div
+                class="block_profile_edit"
+                *ngIf="participant.userId === user_id"
+              >
+                <a class="link_cusor" (click)="openEditProfileModal()"
+                  >Edit Profile</a
+                >
+              </div>
+              <div
+                class="block_profile_action"
+                *ngIf="!(participant.userId === user_id) && isEventJoined"
+              >
+                <ul>
+                  <li>
+                    <a
+                      class="link_cusor tooltip"
+                      (click)="navigateToMessenger()"
+                    >
+                      <img
+                        src="/assets/image/icon/ic_message.svg"
+                        alt="Message"
+                      />
+                      <span class="tooltiptext left_side"
+                        >Open in messenger</span
+                      >
+                    </a>
+                  </li>
+
+                  <app-sidecall-media-controls
+                    [is_allow_sidechat_audio]="is_allow_sidechat_audio"
+                    [sideChatCall]="sideChatCall"
+                    [isSelectedProfileOnAir]="isSelectedProfileOnAir"
+                    [isLoggedInUserOnAir]="isLoggedInUserOnAir"
+                    [sideCallRoom]="sideCallRoom"
+                    [isRoomLocked]="isRoomLocked"
+                    [isAvailableForSidechatProfile]="
+                      isAvailableForSidechatProfile
+                    "
+                    [callLoading]="callLoading"
+                    [userAvailabilityMsg]="userAvailabilityMsg"
+                    [isBlock]="isBlock"
+                    [participant]="participant"
+                    [noOfUserJoined]="noOfUserJoined"
+                    [modalCalling]="modalCalling"
+                    [is_allow_sidechat_video]="is_allow_sidechat_video"
+                    (callmodal)="callModal($event)"
+                    (showPopup)="showJoinCallPopup($event)"
+                  >
+                  </app-sidecall-media-controls>
+
+                  <li>
+                    <a class="link_cusor clicked tooltip">
+                      <img
+                        *ngIf="!participant.bookmarkId && !loading"
+                        src="/assets/image/icon/ic_bookmarked.svg"
+                        alt="Bookmark"
+                        (click)="addBookmark()"
+                      />
+                      <img
+                        *ngIf="participant.bookmarkId && !loading"
+                        src="/assets/image/icon/ic_bookmarked_active.svg"
+                        alt="Bookmark"
+                        (click)="removeBookmark()"
+                      />
+                      <span class="tooltiptext left_side">Bookmark</span>
+
+                      <img
+                        *ngIf="loading"
+                        style="
+                          height: 20px;
+                          width: 20px;
+                          margin-left: 5px;
+                          margin-top: 5px;
+                        "
+                        src="/assets/image/button_loader.svg"
+                        alt="Loader"
+                      />
+                    </a>
+                  </li>
+                  <!-- <li>
+                    <a class="link_cusor tooltip">
+                      <img
+                        class="ic_unclick"
+                        src="/assets/image/icon/ic_pin.svg"
+                        alt="Pin"
+                      />
+                      <img
+                        class="ic_click"
+                        src="/assets/image/icon/ic_pin_active.svg"
+                        alt="Pin"
+                      />
+                      <span class="tooltiptext right_side">Pin</span>
+                    </a>
+                  </li> -->
+                </ul>
+              </div>
+            </div>
+            <div class="block_notification" *ngIf="(isLoggedInUserOnAir || isSelectedProfileOnAir ||sideChatCall?.isLocked
+            || noOfUserJoined>=7) && participant?.userId!=user_id">
+              <span class="block_notification_text">Call options may be limited while users are live or in a call</span>
+            </div>
+            <div class="block_profile_info_btm" *ngIf="participant">
+              <div class="block_profile_info_cnt">
+                <span>About</span>
+                <p [innerHTML]="participant.biography | breckLine"></p>
+              </div>
+              <ul *ngIf="!(participant.userId === user_id)">
+                <li *ngIf="!participant.isModerator">
+                  <a
+                    *ngIf="!loadingBlocked"
+                    class="link_cusor"
+                    (click)="blockUnblockUser()"
+                    ><img src="/assets/image/icon/ic_block.svg" alt="Block" />
+                    {{ blockLable }}</a
+                  >
+
+                  <img
+                    *ngIf="loadingBlocked"
+                    style="
+                      height: 20px;
+                      width: 20px;
+                      margin-left: 5px;
+                      margin-top: 0px;
+                    "
+                    src="/assets/image/button_loader.svg"
+                    alt="Loader"
+                  />
+                </li>
+
+                <li *ngIf="is_moderator">
+                  <a
+                    *ngIf="!loadingDeactive"
+                    class="link_cusor"
+                    (click)="deactivateUser()"
+                    ><img
+                      src="/assets/image/icon/ic_deactive.svg"
+                      alt="Deactive"
+                    />
+                    Remove from event</a
+                  >
+
+                  <img
+                    *ngIf="loadingDeactive"
+                    style="
+                      height: 20px;
+                      width: 20px;
+                      margin-left: 5px;
+                      margin-top: 0px;
+                    "
+                    src="/assets/image/button_loader.svg"
+                    alt="Loader"
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="block_profile_btm" *ngIf="!conversation_loading">
+          <div class="block_pre_next">
+            <a class="link_cusor previous" (click)="navigateToNextPreviousProfile(1)">
+              <img src="/assets/image/icon/ic_previous.svg" alt="Previous" />
+              Previous Profile</a
+            >
+            <a class="link_cusor next" (click)="navigateToNextPreviousProfile(2)"
+              >Next Profile
+              <img src="/assets/image/icon/ic_next.svg" alt="Next"
+            /></a>
+          </div>
+        </div>
+
+        <div class="block_loading" *ngIf="conversation_loading" loadinga></div>
+      </div>
+    </ng-template>
+  </li>
+</ul>
+<div [ngbNavOutlet]="nav" class=""></div>
+
+<ng-template
+  #modalCalling
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">
+      Join the existing call?
+    </h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_call_info">
+      <div class="block_call_top">
+        <div class="block_call_avatar">
+          <img
+            [src]="participant.profilePicture || 'assets/image/user.svg'"
+            alt=""
+          />
+        </div>
+        <div class="block_call_cnt">
+          <h6>{{ participant.displayName }}</h6>
+          <p>{{ participant.tagLine }}</p>
+          <span>{{ participant.city }}, {{ participant.country?.name }}</span>
+        </div>
+      </div>
+      <div class="block_currently_call">
+        <div class="block_tit">Currently in a call with :</div>
+        <div
+          class="block_call_with"
+          *ngFor="let data of detailOfJoinExistingCall"
+        >
+          <div class="block_call_avatar">
+            <img
+              [src]="data.user.profilePicture || 'assets/image/user.svg'"
+              alt=""
+            />
+          </div>
+          <div class="block_call_cnt">
+            <h6>{{ data.user.displayName }}</h6>
+            <p>{{ data.user.tagLine }}</p>
+            <span>{{ data.user.city }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="block_call_info">
+        <ul>
+          <li>
+            If you confirm to join the call, you will be added to the call after
+            a 8 seconds heads up.
+          </li>
+        </ul>
+      </div>
+      <div class="block_btn">
+        <button
+          type="button"
+          class="btn btn-prime"
+          (click)="callModal({ receiver: participant, callType: callType })"
+        >
+          join the call
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,28 @@
+@import "../../../../styles/scss/_variable.scss";
+.alert {
+    display:none;
+    &.active{
+      display:block;
+      padding: 20px;
+      background-color: color(primary-bg);
+      color: white;
+      height: 60px;
+      position:absolute;
+      z-index: 1;
+      right: 0;
+      top: 0;
+  }
+  }
+  
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .closebtn:hover {
+    color: color(primary-btn);
+  }

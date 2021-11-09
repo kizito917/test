@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_523" data-name="Group 523" transform="translate(-3931 -2969)">
+    <g id="Rectangle_293" data-name="Rectangle 293" transform="translate(3931 2969)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="bxs-camera" transform="translate(3931 2970)">
+      <path id="Path_793" data-name="Path 793" d="M12,9a3,3,0,1,0,3,3A3.04,3.04,0,0,0,12,9Z" fill="#fff"/>
+      <path id="Path_794" data-name="Path 794" d="M20,5H17.414L14.707,2.293A1,1,0,0,0,14,2H10a1,1,0,0,0-.707.293L6.586,5H4A2,2,0,0,0,2,7V18a2,2,0,0,0,2,2H20a2,2,0,0,0,2-2V7A2,2,0,0,0,20,5ZM12,17a5.067,5.067,0,0,1-5-5,5.067,5.067,0,0,1,5-5,5.067,5.067,0,0,1,5,5A5.067,5.067,0,0,1,12,17Z" fill="#fff"/>
+    </g>
+  </g>
+</svg>

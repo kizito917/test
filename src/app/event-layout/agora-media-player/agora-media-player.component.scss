@@ -1,0 +1,236 @@
+@import "../../../styles/scss/variable";
+.agora-streaming-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  .agora-primary-container {
+    width: 100%;
+    border: 4px solid color(primary-bg);
+    .remote-stream {
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      .video-container {
+        width: 100%;
+        height: 100%;
+      }
+
+      .block_overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    .no-stream {
+      width: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .agora-secondary-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1;
+    .remote-stream {
+      width: 150px;
+      height: 150px;
+      position: absolute;
+      .video-container {
+        width: 100%;
+        height: 100%;
+        & > div {
+          border-radius: 50% !important;
+        }
+      }
+    }
+  }
+
+  .profile_img {
+    position: absolute;
+    &.active-main {
+      width: 150px;
+      height: 150px;
+    }
+    &.active-left {
+      width: 75px;
+      height: 75px;
+    }
+    &.active-full {
+      width: 250px;
+      height: 250px;
+    }
+    @media only screen and (max-width: 1400px) {
+      &.active-main {
+        width: 100px;
+        height: 100px;
+      }
+      &.active-left {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &.agora-media {
+    position: absolute;
+    z-index: 2;
+    width: auto;
+    height: auto;
+    right: 0;
+    .agora-primary-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 20px;
+      margin-top: 15px;
+      border: none;
+      gap: 10px;
+    }
+  }
+  &.agora-media-screen {
+    .agora-secondary-container {
+      justify-content: flex-end;
+      align-items: unset;
+      margin-right: 40px;
+      margin-top: 15px;
+      border: none;
+      gap: 10px;
+      z-index: 2;
+      .remote-stream {
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        .video-container {
+          width: 100%;
+          height: 100%;
+        }
+
+        .block_overlay {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+  &.agora {
+    .left-panel {
+      margin-top: 15px;
+      margin-right: 15px;
+      .remote-stream,
+      .remote-stream > .profile_img {
+        width: 8vh;
+        height: 8vh;
+        border-radius: 50%;
+        -khtml-border-radius: 50%;
+        border: 3px solid color(txt_status);
+      }
+    }
+    .left-panel-Users {
+      margin-top: 15px;
+      margin-right: 15px;
+      gap: 5px;
+      .remote-stream,
+      .remote-stream > .profile_img {
+        width: 5vh;
+        height: 5vh;
+        border-radius: 50%;
+        -khtml-border-radius: 50%;
+        border: 3px solid color(txt_status);
+      }
+    }
+    .left-panel-User {
+      .remote-stream,
+      .remote-stream > .profile_img {
+        width: 4vh;
+        height: 4vh;
+      }
+    }
+    .middle-panel {
+      .remote-stream,
+      .remote-stream > .profile_img {
+        width: 14vh;
+        height: 14vh;
+        border-radius: 50%;
+        -khtml-border-radius: 50%;
+        border: 5px solid color(txt_status);
+      }
+    }
+    .middle-panel-Users {
+      .remote-stream,
+      .remote-stream > .profile_img {
+        width: 12vh;
+        height: 12vh;
+        border-radius: 50%;
+        -khtml-border-radius: 50%;
+        border: 5px solid color(txt_status);
+      }
+    }
+    .full-screen {
+      .remote-stream,
+      .remote-stream > .profile_img {
+        width: 18vh;
+        height: 18vh;
+        border-radius: 50%;
+        -khtml-border-radius: 50%;
+        border: 5px solid color(txt_status);
+      }
+    }
+    .video-container {
+      > div {
+        border-radius: 50%;
+        -khtml-border-radius: 50%;
+      }
+      .agora_video_player {
+        top: -60% !important;
+        height: 200% !important;
+      }
+    }
+    @media only screen and (max-width: 1400px) {
+      .left-panel-User {
+        .remote-stream,
+        .remote-stream > .profile_img {
+          width: 6vh;
+          height: 6vh;
+        }
+      }
+      .middle-panel-Users {
+        gap: 5px;
+        margin-right: 10px;
+        .remote-stream,
+        .remote-stream > .profile_img {
+          width: 8vh;
+          height: 8vh;
+          border-radius: 50%;
+          -khtml-border-radius: 50%;
+          border: 4px solid color(txt_status);
+        }
+      }
+    }
+  }
+}

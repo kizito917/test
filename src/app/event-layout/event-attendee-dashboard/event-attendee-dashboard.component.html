@@ -1,0 +1,328 @@
+<div
+  class="event_dashboard_main"
+  [ngClass]="{
+    said_bar_off_withourt_bnr: view_state == views.NONE,
+    chat_media_on: view_state == views.ALL,
+    said_bar_off_withourt_bnr_and_media: view_state == views.MEDIA_ONLY,
+    block_chat_on: view_state == views.CHAT_ONLY
+  }"
+>
+  <app-ask-user-guesture
+    [audioPlayFailed]="audioPlayFailed"
+  ></app-ask-user-guesture>  
+  <app-notification-tooltip></app-notification-tooltip>
+
+  <div class="saidbar_main">
+    <div class="block_left_saidbar">
+      <!--<app-control-sidebar (viewChanged)="viewChangedHandler($event)"></app-control-sidebar>-->
+      <app-left-menu-sidebar
+        [view_state]="view_state"
+        [event_id]="event?.eventId"
+        [event_status]="event?.eventStatus"
+        [is_available_sidechat]="isAvailableForSidechat && !agoraRTCStreamHandler.checkParticipantOnAir(user.user_id)"
+        (viewChanged)="viewChangedHandler($event)"
+        (leaveEvent)="leaveEventHandler($event)"
+        [messenger_indicator]="messenger_indicator"
+        [handlerRole]="handlerRole"
+        [isRaisedHand]="isRaisedHand"
+        [isFullScreenActive]="agoraRTCStreamHandler.isFullScreenActive"
+        [isUserOnAir]="isOnAir"
+      >
+      </app-left-menu-sidebar>
+    </div>
+    <div class="block_right_saidbar">
+      <div class="block_top_banner">
+        <app-advertise-carousel
+          [advertise_banners]="advertise_carousel_banners"
+          [interval]="carousel_setting.ad_carousel_interval"
+          [is_active]="carousel_setting.is_ad_carousel_active"
+          [active_advertise_banner]="advertise_carousel_banner"
+          [advertise_banner_url]="advertisecarouselBannerRedirectUrl"
+          *ngIf="!agoraRTCStreamHandler.isFullScreenActive"
+        ></app-advertise-carousel>
+      </div>
+      <div class="block_video_main">
+        <div class="block_video">
+          <app-live-media-renderer
+            [handlerRole]="handlerRole"
+            [eventId]="event?.eventId"
+            [hidden]="view_state !== views.ALL"
+            (onMediaClick)="broadcastLiveEventState($event)"
+            [viewState]="view_state"
+            [renderPos]="views.ALL"
+          ></app-live-media-renderer>
+        </div>
+      </div>
+      <div class="block_btm_bar" [ngClass]="{hide:agoraRTCStreamHandler.isFullScreenActive}">
+        <div class="block_searchbar" 
+        *ngIf="!agoraRTCStreamHandler.isFullScreenActive">
+          <div class="input-group">
+            <div class="block_icon">
+              <img src="/assets/image/icon/ic_search.svg" alt="Search" />
+            </div>
+            <input
+              #searchInput
+              type="text"
+              maxlength="100"
+              (input)="onSearchChange($event.target.value)"
+            />
+          </div>
+          <div
+            class="block_clear_filter tooltip"
+            *ngIf="isBookmark || isSidechat || searchInput.value"
+          >
+            <a
+              class="link_cusor"
+              (click)="clearFilter(); searchInput.value = ''"
+            >
+              Clear Filter</a
+            >
+            <span class="tooltiptext right_side">Clear selection</span>
+          </div>
+          <div class="block_right">
+            <span data-toggle="dropdown" class="tooltip" #filterShow>
+              <img
+                *ngIf="!isBookmark && !isSidechat"
+                src="/assets/image/icon/ic_filter_off.svg"
+                alt="Filter"
+              />
+              <img
+                *ngIf="isBookmark || isSidechat"
+                src="/assets/image/icon/ic_filter_on.svg"
+                alt="Filter"
+              />
+              <span class="tooltiptext right_side">Filter</span>
+            </span>
+
+            <div
+              class="dropdown-menu dropdown-menu-right custom_dropdownbg"
+              id="filterPopup"
+            >
+              <div class="filter_option">
+                <ul>
+                  <li
+                    class="link_cusor"
+                    [ngClass]="{ selected: isBookmark }"
+                    (click)="bookmarkFilter(searchInput.value)"
+                  >
+                    Bookmarked
+                  </li>
+                  <li
+                    class="link_cusor"
+                    [ngClass]="{ selected: isSidechat }"
+                    (click)="availableSideChatFilter(searchInput.value)"
+                  >
+                    Available for Sidechat
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block_tabbar">
+          <app-side-chat [view_state]="view_state"
+                         [user_id]="user?.user_id"
+                         [event_id]="event?.eventId"
+                         [event_status]="event?.eventStatus"
+                         [is_moderator]="isModerator"
+                         [participant_user_id]="selectedAttendeeProfileId"
+                         [navigate_to_profile]="navigateToProfile"
+                         [is_allow_livechat]="event?.eventSetting?.allowLiveChat"
+                         [is_allow_sidechat_audio]="
+              event?.eventSetting?.allowParticipantSidechat
+            "
+                         [is_allow_sidechat_video]="
+              event?.eventSetting?.allowParticipantSidechatVideo
+            "
+                         (messengerIndicator)="messengerIndicatorHandler($event)"
+                         (moveNextPreviousProfile)="moveNextPreviousProfileHandler($event)"
+                         [sideCallRoom]="sideCallRoom"></app-side-chat>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="block_attendee_cart"
+    [ngClass]="{ active: agoraRTCStreamHandler.isFullScreenActive }"
+  >
+    <div class="block_bnr_main" *ngIf="view_state === views.NONE">
+      <app-advertise-carousel
+        class="bnr_height"
+        [advertise_banners]="advertise_carousel_banners"
+        [interval]="carousel_setting.ad_carousel_interval"
+        [is_active]="carousel_setting.is_ad_carousel_active"
+        [active_advertise_banner]="advertise_carousel_banner"
+        [advertise_banner_url]="advertisecarouselBannerRedirectUrl"
+      ></app-advertise-carousel>
+    </div>
+
+    <div
+      class="block_sidecall"
+      [ngClass]="{
+        attendee_cart_detail_hide:
+          view_state === views.NONE || view_state === views.CHAT_ONLY
+      }"
+      *ngIf="isSidePanelRoom"
+    >
+      <app-sidecall-panel
+        [user_id]="user?.user_id"
+        [calleInfo]="calleInfo"
+        [event_id]="event?.eventId"
+        [room]="sideCallRoom"
+        [eventParticipants]="participants"
+      >
+      </app-sidecall-panel>
+    </div>
+
+    <!-- bric structure view html -->
+    <div
+      class="block_center attendee_cart_detail_hide"
+      [hidden]="view_state !== views.NONE && view_state !== views.CHAT_ONLY"
+    >
+      <div *ngIf="view_state === views.NONE || view_state === views.CHAT_ONLY">
+        <div
+          *ngFor="let participant of all_participants; index as idx"
+          [ngClass]="{
+            block_odd: participant.row == 1,
+            block_even: participant.row == 2
+          }"
+        >
+        <ul id = "attendeeCards">
+            <li *ngFor="let attendee of participant.users">
+              <app-attendee-cart
+                [profile_card_banner]="profile_card_banner"
+                [view_state]="view_state"
+                [attendee_Profile_picture]="attendee?.user?.profilePicture"
+                [attendee_name]="attendee?.user?.displayName"
+                [attendee_tagline]="attendee?.user?.tagLine"
+                [participant_id]="attendee.eventParticipantId"
+                [participant_user_id]="attendee?.user?.userId"
+                [is_moderator]="attendee.isModerator"
+                [is_fake]="is_fake"
+                [text_limit]="cardTextLimit"
+                (attendeeSelected)="attendeeSelectedHandler($event)"
+                [selected_participant_user_id]="selectedAttendeeProfileId"
+                [is_available_for_sidechat]="attendee.isAvailableForSidechat && 
+                !(agoraRTCStreamHandler.checkParticipantOnAir(attendee.user.userId))"
+                [sidechat_call]="attendee.sidechatCall"
+              ></app-attendee-cart>
+            </li>
+
+            <li *ngFor="let item of participant.fakes">
+              <app-attendee-cart
+                [profile_card_banner]="profile_card_banner"
+                [view_state]="view_state"
+              ></app-attendee-cart>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="block_striming"
+        [hidden]="view_state === views.ALL"
+        [ngClass]="{
+          fullscreen: !!agoraRTCStreamHandler.isFullScreenActive,
+          callActive: isSidePanelRoom,
+          callandFullScreen:isSidePanelRoom && agoraRTCStreamHandler.isFullScreenActive
+        }"
+      >
+        <app-live-media-renderer
+          [handlerRole]="handlerRole"
+          [eventId]="event?.eventId"
+          [viewState]="view_state"
+          [renderPos]="views.CHAT_ONLY"
+        ></app-live-media-renderer>
+      </div>
+    </div>
+
+    <!-- normal structure view html -->
+    <div
+      class="block_center"
+      *ngIf="view_state === views.MEDIA_ONLY || view_state === views.ALL"
+    >
+    <ul id = "attendeeCards">
+        <li [hidden]="view_state !== views.MEDIA_ONLY">
+          <div class="block_bnr_main">
+            <app-advertise-carousel
+              class="bnr_height"
+              [advertise_banners]="advertise_carousel_banners"
+              [interval]="carousel_setting.ad_carousel_interval"
+              [is_active]="carousel_setting.is_ad_carousel_active"
+              [active_advertise_banner]="advertise_carousel_banner"
+              [advertise_banner_url]="advertisecarouselBannerRedirectUrl"
+            ></app-advertise-carousel>
+          </div>
+        </li>
+
+        <li *ngFor="let participant of participants">
+          <app-attendee-cart
+            [profile_card_banner]="profile_card_banner"
+            [view_state]="view_state"
+            [attendee_Profile_picture]="participant.user.profilePicture"
+            [attendee_name]="participant.user.displayName"
+            [attendee_tagline]="participant.user.tagLine"
+            [participant_id]="participant.eventParticipantId"
+            [participant_user_id]="participant.user.userId"
+            [is_moderator]="participant.isModerator"
+            [is_fake]="is_fake"
+            [text_limit]="cardTextLimit"
+            (attendeeSelected)="attendeeSelectedHandler($event)"
+            [selected_participant_user_id]="selectedAttendeeProfileId"
+            [is_available_for_sidechat]="participant.isAvailableForSidechat && 
+            !(agoraRTCStreamHandler.checkParticipantOnAir(participant.user.userId))"
+            [sidechat_call]="participant.sidechatCall"
+          ></app-attendee-cart>
+        </li>
+
+        <li *ngFor="let item of fake_array">
+          <app-attendee-cart
+            [profile_card_banner]="profile_card_banner"
+            [view_state]="view_state"
+          ></app-attendee-cart>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<ng-template
+  #modelLeaveEvent
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Leave the event?</h4>
+    <button
+      type="button"
+      [disabled]="loading"
+      class="close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_btn">
+      <button
+        type="button"
+        [disabled]="loading"
+        class="btn btn_unpublish"
+        (click)="leaveEvent()"
+      >
+        Yes, leave event
+      </button>
+      <button
+        type="button"
+        [disabled]="loading"
+        class="btn btn-main"
+        (click)="d('Cross click')"
+      >
+        Continue event
+      </button>
+    </div>
+  </div>
+</ng-template>

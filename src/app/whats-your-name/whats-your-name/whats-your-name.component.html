@@ -1,0 +1,49 @@
+<div class="col-12">
+    <div class="container">
+        <div class="block_top_logo">
+          <img src="/assets/image/billions-text-logo.svg" alt="billions logo">
+        </div>
+    </div>
+</div>
+
+<section class="signup-section py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <div class="brand_logo_login text-center text-md-right mb-5 mb-md-0">
+                    <img src="/assets/image/logo-white.png" class="img-fluid" alt="white-logo">
+                </div>
+            </div>
+            <div class="offset-md-1 col-md-6">
+
+                <div class="signup-right w-100">
+                    <div class="signup-form d-flex align-items-center justify-content-center text-left">
+                        <form [formGroup]="FG" (ngSubmit)="onSubmit(FG.valid, FG.value)" novalidate>
+                          <h4 class="box_title" *ngIf=is3step>
+                            <!--<a href="javascript:;"><i class="fas fa-arrow-left"></i></a>-->
+                            What's your name? (2/3)
+                          </h4>
+                          <h4 class="box_title" *ngIf=!is3step>
+                            <!--<a href="javascript:;"><i class="fas fa-arrow-left"></i></a>-->
+                            What's your name? (2/2)
+                          </h4>
+                          <div class="block_fanspace">
+                            <app-control-container label="Full Name" isRequired="true">
+                                <input type="text" formControlName="full_name" class="input-field" placeholder="Enter Your Full Name" maxlength="100">
+                            </app-control-container>
+
+                            <div>
+                                <button type="submit" class="btn btn-prime w-100 mt-2" [disabled]="loading">
+                                    Continue
+                                    <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                                </button>
+                            </div>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

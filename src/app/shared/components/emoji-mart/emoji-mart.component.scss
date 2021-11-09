@@ -1,0 +1,61 @@
+@import "../../../../styles/scss/_variable.scss";
+.emoji_dropdown {
+    position: absolute;
+    // top: 100%;
+    // right: 0;
+    z-index: 9;
+     ::ng-deep.emoji-mart {
+        background: color(secondary-color) !important;
+        border-color: color(input-color) !important;
+        width: 100% !important;
+        .emoji-mart-bar {
+            border-color: color(input-color) !important;
+            .emoji-mart-anchors {
+                .emoji-mart-anchor {
+                    svg {
+                        fill: color(white-text);
+                    }
+                    .emoji-mart-anchor-bar {
+                        background-color: color(white-text) !important;
+                    }
+                }
+            }
+        }
+        .emoji-mart-search {
+            input {
+                background: color(input-color);
+                border-color: color(input-color);
+                color: color(white-text);
+            }
+            .emoji-mart-search-icon {
+                svg {
+                    fill: color(white-text);
+                    opacity: 1;
+                }
+            }
+        }
+        .emoji-mart-category-label {
+            span {
+                background: color(primary-bg);
+                color: color(white-text);
+            }
+        }
+        .emoji-mart-category {
+            .emoji-mart-emoji {
+                &:hover {
+                    &::before {
+                        background: color(input-color);
+                    }
+                }
+            }
+        }
+        .emoji-mart-bar {
+            .emoji-mart-preview-data {
+                display : none;
+                .emoji-mart-title-label {
+                    color: color(white-text);
+                }
+            }
+        }
+    }
+}

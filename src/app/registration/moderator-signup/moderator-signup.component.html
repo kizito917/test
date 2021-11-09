@@ -1,0 +1,69 @@
+<div class="col-12">
+    <div class="container">
+        <div class="block_top_logo">
+          <img src="/assets/image/billions-text-logo.svg" alt="billions logo">
+        </div>
+    </div>
+</div>
+
+<section class="signup-section py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <div class="brand_logo_login text-center text-md-right mb-5 mb-md-0">
+                    <img src="/assets/image/logo-white.png" class="img-fluid" alt="white-logo">
+                </div>
+            </div>
+            <div class="offset-md-1 col-md-6">
+                <div class="signup-right w-100" *ngIf="showEmailBox">
+                    <div class="signup-form d-flex align-items-center justify-content-center text-left">
+                        <form [formGroup]="signupFG" (ngSubmit)="submitSignupForm(signupFG.valid, signupFG.value)" novalidate>
+                            <h4 class="box_title">
+                                <a [routerLink]="['/login']" class="link_cusor" ><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+                                Create a fanspace (1/3)
+                            </h4>
+                            <div class="block_reg">
+                                <app-control-container label="Email Address" isRequired="true">
+                                    <input type="email" formControlName="email" id="inputEmail" class="input-field" placeholder="Your Email Address" maxlength="150">
+                                </app-control-container>
+
+                                <div>
+                                    <button type="submit" class="btn btn-prime w-100 mt-1" [disabled]="loading">
+                                        Continue
+                                        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="signup-right w-100" *ngIf="showPasscodeBox">
+                    <div class="signup-form d-flex align-items-center justify-content-center text-left">
+                        <form>
+                          <h4 class="box_title">
+                            <!--<a href="javascript:;"><i class="fas fa-arrow-left"></i></a>-->
+                            Check your email for a code
+                          </h4>
+                            <div class="enter-code">
+                                <p class="top_msg">
+                                    We've sent a 6-digit code to <a href="javascript:;">{{email}}</a>, The code
+                                    expires shortly,
+                                    So please enter it soon.
+                                </p>
+                                <div class="block_post_code">
+                                    <ng-otp-input class="block_opt_enter" #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config">
+                                    </ng-otp-input>
+                                </div>
+                                <button type="button" class="btn btn-prime w-100 mb-0" [disabled]="inValidPasscode" (click)="submitOTP()">
+                                    Continue
+                                    <img *ngIf=" loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader" />
+                                </button>
+                                <p class="modal-msg">Can't find your code? Check your spam folder!</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

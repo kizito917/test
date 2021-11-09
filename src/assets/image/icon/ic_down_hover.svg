@@ -1,0 +1,10 @@
+<svg id="Group_1356" data-name="Group 1356" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <path id="Path_1235" data-name="Path 1235" d="M16,0A16,16,0,1,1,0,16,16,16,0,0,1,16,0Z" fill="#5b55ff"/>
+  <g id="down" transform="translate(4 4)">
+    <g id="Rectangle_120" data-name="Rectangle 120" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bx-chevron-down" d="M9.637,0,5.5,4.22,1.363,0,0,1.39,5.5,7,11,1.39Z" transform="translate(6.5 9)" fill="#fff"/>
+  </g>
+</svg>

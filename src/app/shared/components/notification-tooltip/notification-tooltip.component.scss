@@ -1,0 +1,33 @@
+@import "../../../../styles/scss/_variable.scss";
+
+.tooltipDecor{
+  background-color: color(black-text);
+  border-radius: 25px;
+  width:39vw;
+  height:15vh;
+  position: absolute;
+  bottom: 2%;
+  left:43vw;
+  z-index: 333;
+}
+.decoForModerator{
+  left:34vw;
+}
+.tooltiptext{
+  color: color(white-text);
+  font-size: 2vh;
+  text-align: center;
+}
+.tooltipheader{
+  margin-top: 3px;
+  color:color(on_call);
+  font-size: 3vh;
+  text-align: center;
+}
+span{
+    position: absolute;
+    right: 3%;
+    font-size: 3vh;
+    top: 0%;
+    cursor:pointer;
+}

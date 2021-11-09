@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Check" transform="translate(2874 -3400)">
+    <g id="Rectangle_1291" data-name="Rectangle 1291" transform="translate(-2874 3400)" fill="#5e6287" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bx-check" d="M10.191,16.241,6.764,12.688,5.293,14.214l4.9,5.079,10.1-10.474L18.822,7.293Z" transform="translate(-2874.793 3398.707)" fill="#5e6287"/>
+  </g>
+</svg>

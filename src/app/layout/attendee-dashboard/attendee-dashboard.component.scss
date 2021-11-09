@@ -1,0 +1,89 @@
+@import "../../../styles/scss/_variable.scss";
+
+.main-section {
+  padding: 24px;
+  min-height: 100vh;
+  overflow: auto;
+
+  .description {
+    background-color: color(secondary-color);
+    border-radius: 12px;
+    margin-top: 16px;
+
+    .d-content {
+      padding: 0;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+
+      .content_top {
+        padding: 30px;
+        height: 245px;
+
+        .block_avatar_im {
+          max-width: 124px;
+          margin: 0px auto 0;
+
+          img {
+            width: 124px;
+            height: 124px;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+          .block_round {
+            width: 124px;
+            height: 124px;
+            border-radius: 50%;
+            background: color(input-color);
+            position: relative;
+
+            span {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              font-size: 80px;
+              color: color(border_clr);
+              font-family: $font-Medium;
+              text-transform: uppercase;
+            }
+          }
+        }
+
+        .d-fanspace {
+          padding-top: 25px;
+          text-align: center;
+          margin: 0;
+          color: color(white-text);
+          font-family: $font-Medium;
+        }
+      }
+
+      .block_cnt_text {
+        padding: 30px;
+        border-top: 1px solid color(input-color);
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+        @include tab-view {
+          padding: 20px 15px;
+        }
+
+        .block_txt {
+          width: 100%;
+
+          p {
+            font-size: 14px;
+            line-height: 16px;
+            color: color(placeholder-text);
+            margin: 0 0 15px;
+
+            &:last-child {
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

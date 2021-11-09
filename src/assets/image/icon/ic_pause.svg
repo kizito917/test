@@ -1,0 +1,10 @@
+<svg id="pause" xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+  <path id="Path_1236" data-name="Path 1236" d="M21,0A21,21,0,1,1,0,21,21,21,0,0,1,21,0Z" fill="#5b55ff"/>
+  <g id="Group_1043" data-name="Group 1043" transform="translate(5.5 5)">
+    <g id="Rectangle_153" data-name="Rectangle 153" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="32" height="32" stroke="none"/>
+      <rect x="0.5" y="0.5" width="31" height="31" fill="none"/>
+    </g>
+    <path id="bx-pause" d="M8,7h5V23H8Zm8.333,0h5V23h-5Z" transform="translate(0.833 1)" fill="#fff"/>
+  </g>
+</svg>

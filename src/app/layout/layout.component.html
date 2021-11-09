@@ -1,0 +1,19 @@
+<section class="user-home h-100">
+  <app-loader></app-loader>
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+      <div class="col-md-4 col-lg-3 p-0">
+        <div class="e-menu-section">
+          <app-left-menu-sidebar></app-left-menu-sidebar>
+          <app-event-sidebar class="event_sidebar"></app-event-sidebar>
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-6 p-0 ">
+        <router-outlet></router-outlet>
+      </div>
+      <div class="col-md-3 col-lg-3 p-0 ">
+        <app-profile-sidebar></app-profile-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

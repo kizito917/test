@@ -1,0 +1,50 @@
+<div class="col-12">
+    <div class="container">
+        <div class="block_top_logo">
+          <img src="/assets/image/billions-text-logo.svg" alt="billions logo">
+        </div>
+    </div>
+</div>
+<section class="signup-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="brand_logo_login text-center mb-5 mb-md-0">
+          <img src="/assets/image/logo-white.png" class="img-fluid" alt="white-logo">
+        </div>
+      </div>
+      <div class="col-md-6 d-flex align-items-center justify-content-center">
+
+        <div class="signup-right text-center">
+          <div class="signup-form d-flex align-items-center justify-content-center text-left">
+            <form [formGroup]="FG" (ngSubmit)="onSubmit(FG.valid, FG.value)" novalidate>
+              <div class="d-flex block_main">
+                <a class="link_cusor" (click)="back()"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+                <h4 class="box_title" *ngIf="allow_back">
+                  
+                  What shall we call your fanspace?
+                </h4>
+                <h4 class="box_title" *ngIf="!allow_back">
+                  What shall we call your fanspace? (3/3)
+                </h4>
+              </div>
+              
+              <div class="block_fanspace">
+                <app-control-container label="Fanspace Name" isRequired="true">
+                  <input type="text" formControlName="fanspace_name" class="input-field" placeholder="Enter Your Fanspace Name" maxlength="100">
+                </app-control-container>
+
+                <div>
+                  <button type="submit" class="btn btn-prime w-100 mt-1" [disabled]="loading">
+                    Create
+                    <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

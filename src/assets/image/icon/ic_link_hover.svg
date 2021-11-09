@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="link_hover" data-name="link hover" transform="translate(-1308 -500)">
+    <g id="Rectangle_113" data-name="Rectangle 113" transform="translate(1308 500)" fill="#8284a8" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="bx-link-alt" transform="translate(1307.24 499.24)">
+      <path id="Path_510" data-name="Path 510" d="M4.342,21.178a5.418,5.418,0,0,0,7.653,0l3.061-3.062-1.53-1.53-3.061,3.062a3.247,3.247,0,0,1-4.592-4.592l3.062-3.061L7.4,10.465,4.342,13.525A5.418,5.418,0,0,0,4.342,21.178Zm16.836-9.183a5.411,5.411,0,0,0-7.653-7.653L10.465,7.4l1.53,1.53,3.061-3.062a3.247,3.247,0,1,1,4.592,4.592l-3.062,3.061,1.53,1.53Z" transform="translate(0 0)" fill="#8284a8"/>
+      <path id="Path_511" data-name="Path 511" d="M0,0H2.165V12.988H0Z" transform="matrix(-0.707, -0.707, 0.707, -0.707, 8.933, 18.118)" fill="#8284a8"/>
+    </g>
+  </g>
+</svg>

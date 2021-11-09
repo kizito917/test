@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="ic_calender" transform="translate(-441 -166)">
+    <g id="Rectangle_60" data-name="Rectangle 60" transform="translate(441 166)" fill="#5e6287" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bxs-calendar-event" d="M19,4H17V2H15V4H9V2H7V4H5A2,2,0,0,0,3,6V20a2,2,0,0,0,2,2H19a2,2,0,0,0,2-2V6A2,2,0,0,0,19,4ZM18,19H12V13h6ZM19,9H5V7H19Z" transform="translate(441 165)" fill="#5e6287"/>
+  </g>
+</svg>

@@ -1,0 +1,98 @@
+<div class="main-section" *ngIf="!page_loader" >
+  <div class="create-event-top">
+    <div class="add-event-plus link_cusor" (click)="createNewEvent(modalCreateEvent)">
+      <img src="/assets/image/bx-plus-white.svg" alt="plus white">
+    </div>
+    <div>
+      <h4 class="text-white link_cusor" (click)="createNewEvent(modalCreateEvent)">Create an event</h4>
+    </div>
+  </div>
+  <div class="description">
+    <div class="d-content">
+      <div class="content_top">
+        <div class="avatar-upload">
+          <div class="block_avatar_top link_cusor" (click)="openFanspaceLogoChangeModal(modalFanspaceLogoChange)">
+            <img *ngIf="fanspaceData && fanspaceData.logo" class="profile-user-img img-responsive img-circle" id="imagePreview" [src]="fanspaceData.logo" alt="Fanspace Image">
+            <div class="block_round" *ngIf="!(fanspaceData && fanspaceData.logo)">
+              <span>{{fanspaceData.fanspaceName | firstLetter}}</span>
+            </div>
+          </div>
+        </div>
+        <h2 class="d-fanspace">
+          {{fanspaceData?.fanspaceName}}
+        </h2>
+      </div>
+      <div class="block_cnt_text">
+        <div class="input-group mb-3">
+          <p [innerHTML]="fanspaceData?.description | breckLine"></p>
+        </div>
+        <button (click)="editFanspace()" type="button" class="btn btn-prime w-100 mt-4"><img src="/assets/image/bxs-edit-alt.svg" alt="edit icon"> Edit Fanspace</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="center" *ngIf="page_loader" loadinga></div>
+
+<ng-template #modalCreateEvent let-c="close" let-d="dismiss" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" class="modal-dialog-centered">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Create Event</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="eventFG" (ngSubmit)="submitEventForm(eventFG.valid, eventFG.value)" novalidate>
+      <app-control-container label="Event Name" isRequired="true">
+        <input type="text" formControlName="event_name" id="event_name" class="input-field" placeholder="Enter Event Name" maxlength="255">
+      </app-control-container>
+      <button type="submit" class="btn btn-prime w-100 mt-2" [disabled]="loading">
+        Create
+        <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+      </button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #modalFanspaceLogoChange  aria-labelledby="exampleModalCenterTitle" aria-hidden="true" class="modal-dialog-centered">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Change fanspace profile picture</h4>
+    <button type="button" class="close" (click)="closeModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <!--<a class="nav-item nav-link active" id="nav-url-tab" data-toggle="tab" href="#nav-url" role="tab" aria-controls="nav-url" aria-selected="true">Paste URL</a>-->
+        <a class="nav-item nav-link active" id="nav-drag-tab" data-toggle="tab" href="#nav-drag" role="tab" aria-controls="nav-drag" aria-selected="false">Upload a file</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <!--<div class="tab-pane fade show active" id="nav-url" role="tabpanel" aria-labelledby="nav-url-tab">
+        <div class="block_url">
+          <input type="text" [(ngModel)]="past_url"  placeholder="Paste image URL here">
+        </div> 
+      </div>-->
+      <div class="tab-pane fade show active" id="nav-drag" role="tabpanel" aria-labelledby="nav-drag-tab">
+        <div class="block_dreg">
+          <ngx-dropzone class="block_browse_im" (change)="onSelect($event)" [multiple]="false"[accept]="'image/*'" [maxFileSize]="5000000">
+            <ngx-dropzone-label class="block_im_label">
+              <h5>Drag img file here</h5>
+              <div>
+              or <span>browse</span> to choose a file 
+              </div>
+              <p>(Max file size : 5 MB | Recommended size *** x ***)</p>
+            </ngx-dropzone-label>
+            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+            </ngx-dropzone-image-preview>
+          </ngx-dropzone>
+        </div>
+      </div>
+    </div>
+    <span style="color:red;" *ngIf="error_message">{{error_message}}</span>
+    <button (click)="saveLogo(past_url)" class="btn btn-prime w-100 mt-4" [disabled]="loading">Save
+    <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+    </button>
+  </div>
+</ng-template>

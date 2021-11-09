@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="ic_filter_active" transform="translate(-686 -419)">
+    <rect id="Rectangle_1" data-name="Rectangle 1" width="32" height="32" rx="6" transform="translate(686 419)" fill="#5b55ff"/>
+    <g id="filter" transform="translate(378 102)">
+      <g id="Rectangle_92" data-name="Rectangle 92" transform="translate(312 321)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+        <rect width="24" height="24" stroke="none"/>
+        <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+      </g>
+      <path id="bx-filter" d="M7,11H17v2H7ZM4,7H20V9H4Zm6,8h4v2H10Z" transform="translate(312 321)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg id="ic_edit" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Rectangle_42" data-name="Rectangle 42" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+    <rect width="24" height="24" stroke="none"/>
+    <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+  </g>
+  <g id="bxs-edit-alt" transform="translate(5.5 3.962)">
+    <path id="Path_488" data-name="Path 488" d="M.023.03,3.44,0,3.417,2.6,0,2.635Z" transform="matrix(0.707, 0.707, -0.707, 0.707, 9.755, 0)" fill="#fff"/>
+    <path id="Path_489" data-name="Path 489" d="M4,12.334v2.4H6.438L13.18,8.11l-2.437-2.4Zm0,4.794H17v1.6H4Z" transform="translate(-4 -2.721)" fill="#fff"/>
+  </g>
+</svg>

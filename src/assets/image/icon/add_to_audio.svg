@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="add_to_call" data-name="add to call" transform="translate(-282 -516)">
+    <circle id="Ellipse_76" data-name="Ellipse 76" cx="16" cy="16" r="16" transform="translate(282 516)" fill="#3c4066"/>
+    <g id="Group_493" data-name="Group 493" transform="translate(-1 4)">
+      <g id="Rectangle_287" data-name="Rectangle 287" transform="translate(291 520)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+        <rect width="16" height="16" stroke="none"/>
+        <rect x="0.5" y="0.5" width="15" height="15" fill="none"/>
+      </g>
+      <path id="bxs-phone" d="M12.816,11.019,10.534,8.944a.562.562,0,0,0-.781.024L8.41,10.349a3.223,3.223,0,0,1-1.642-.932,3.207,3.207,0,0,1-.932-1.642l1.38-1.344A.561.561,0,0,0,7.24,5.65L5.166,3.369a.561.561,0,0,0-.781-.049L3.167,4.365A.561.561,0,0,0,3,4.729a8.478,8.478,0,0,0,2.409,6.043,8.5,8.5,0,0,0,5.841,2.413c.113,0,.183,0,.2,0a.557.557,0,0,0,.364-.163L12.864,11.8A.56.56,0,0,0,12.816,11.019Z" transform="translate(289 521.814)" fill="#fff"/>
+      <path id="Union_7" data-name="Union 7" d="M-8555.428-19128.43v-2.143h-2.142a.428.428,0,0,1-.432-.428.431.431,0,0,1,.432-.432h2.142v-2.141a.428.428,0,0,1,.428-.428.428.428,0,0,1,.428.428v2.141h2.142a.431.431,0,0,1,.432.432.428.428,0,0,1-.432.428h-2.142v2.143a.433.433,0,0,1-.428.432A.433.433,0,0,1-8555.428-19128.43Z" transform="translate(8857 19656)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

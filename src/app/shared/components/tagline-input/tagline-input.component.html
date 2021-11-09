@@ -1,0 +1,32 @@
+<div class="input-group block_emoji">
+  <div class="input-group-prepend" (click)="toggleEmojiMart()">
+    <span class="input-group-text">
+      <img
+        *ngIf="!isEmojiMartOpen"
+        _ngcontent-pda-c120=""
+        src="/assets/image/bxs-smile.svg"
+        alt="smile"
+      />
+      <img
+        *ngIf="isEmojiMartOpen"
+        _ngcontent-pda-c120=""
+        src="/assets/image/ic_up_arrow.svg"
+        alt="up arrow"
+      />
+    </span>
+  </div>
+  <app-emoji-mart
+    class="emoji_dropdown_leftmenu"
+    *ngIf="isEmojiMartOpen"
+    (onEmojiSelect)="emojiSelected($event)"
+  ></app-emoji-mart>
+
+  <input
+    #tagline_input
+    [(ngModel)]="value"
+    type="text"
+    class="form-control"
+    placeholder="Add Tagline"
+  />
+  <!--<input type="text" placeholder="Add Tagline" class="">-->
+</div>

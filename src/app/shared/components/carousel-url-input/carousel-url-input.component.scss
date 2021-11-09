@@ -1,0 +1,30 @@
+@import "../../../../styles/scss/_variable.scss";
+
+.block_emoji {
+  height: 30px;
+  background: color(input-color);
+  border-radius: 6px;
+
+  .input-group-text {
+    background: none;
+    border: none;
+  }
+
+  input {
+    height: 35px;
+    background: color(input-color);
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    font-size: 14px;
+    color: color(white-text);
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &:placeholder {
+      color: color(placeholder-text);
+    }
+  }
+}

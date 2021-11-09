@@ -1,0 +1,70 @@
+<div
+  class="video_striming"
+  [ngStyle]="{
+    'background-image': 'url(' + getOnAirBG() + ')'
+  }"
+  (mousemove)="handleHOVER()"
+>
+  <!-- 'background-image': 'url(../../../assets/image/BillionsIntro.gif)' -->
+  <!-- // to play default background image -->
+  <!-- <img [src]="media" alt="Media" *ngIf="(media && mediaType === 'default')"> -->
+  <!-- // to play agora video streaming -->
+
+  <app-agora-media-player
+    [mediaType]="mediaType"
+    [eventId]="eventId"
+    [viewState]="viewState"
+    [renderPos]="renderPos"
+    [moderatorWithCommentry]="moderatorWithCommentry"
+    [attendeeWithCommentry]="attendeeWithCommentry"
+    [ngClass]="{ 'agora-externalMedia': mediaType === 'externalMedia'}"
+  ></app-agora-media-player>
+  <!-- // to play youtube live video streaming -->
+  <app-youtube-player
+    [youtubePlayerConfig]="youtubePlayerConfig"
+    (onYoutubeMediaClick)="handleYoutubeMediaClick($event)"
+    [renderPos]="renderPos"
+    [viewState]="viewState"
+    *ngIf=" youtubeMediaType === media && mediaType === 'externalMedia'"
+  ></app-youtube-player>
+
+  <!-- // to show overlay image -->
+  <img
+    *ngIf="selectedOverlay"
+    class="block_overlay"
+    [ngClass]="{blockOverlay: handlerRole===3 && showHover}"
+    [src]="selectedOverlay"
+    alt="media"
+  />
+  <!-- <div class="video_striming_hover" *ngIf="youtubeMediaType === media + '-' + mediaType">
+    
+    <div class="video_striming_hover_inner onpause">
+      <span class="hover_icon_block play">
+        <i class="fas fa-play" style="color: #fff"></i>
+      </span>
+      <span class="hover_icon_block live">
+        <i class="fas fa-bullseye" style="color: #fff"></i>
+      </span>
+    </div>
+  </div> -->
+  <div class="block_hover_top" *ngIf="showHover">
+    <img
+      src="/assets/image/{{
+        agoraRTCStreamHandler.isFullScreenActive
+          ? 'ic_fullscreen_exit'
+          : 'ic_fullscreen'
+      }}.svg"
+      alt="Full Screen"
+      (click)="fullScreenHandler()"
+      title="{{
+        agoraRTCStreamHandler.isFullScreenActive
+          ? 'Exit Fullscreen'
+          : 'Fullscreen'
+      }}"
+    />
+    <!-- {{agoraRTCStreamHandler.isFullScreenActive ? 'Exit Fullscreen' : 'Fullscreen'}} -->
+  </div>
+  <div class="block_hover_btm" *ngIf="showHover">
+    Total Watching : {{ agoraRTCStreamHandler.eventParticipants.length }}
+  </div>
+</div>

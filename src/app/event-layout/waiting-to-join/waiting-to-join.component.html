@@ -1,0 +1,184 @@
+<div class="col-12">
+  <div class="container">
+    <div class="block_top_logo">
+      <img src="/assets/image/billions-text-logo.svg" alt="billions logo" />
+    </div>
+  </div>
+</div>
+
+<section class="signup-section py-4" *ngIf="!page_loader">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-4">
+        <div class="block_event_left mb-5 mb-md-0">
+          <div class="block_event_logo" *ngIf="!fanspace?.logo">
+            <img src="/assets/image/logo-white.png" class="d-none" alt="white-logo" />
+            <span>{{ fanspace?.fanspaceName | firstLetter }}</span>
+          </div>
+          <div class="block_event_logo" *ngIf="fanspace && fanspace.logo">
+            <img [src]="fanspace?.logo" alt="fanspace-logo" />
+          </div>
+          <div class="block_event_name">
+            {{ event?.eventName }}
+          </div>
+          <div class="block_event_info">
+            <ul class="block_title_btm">
+              <li *ngIf="event && event.scheduleStartTime">
+                <span><img src="/assets/image/ic_calender.svg" alt="Calender" /></span>
+                <span>{{ event?.scheduleStartTime | date: "MMMM d" }} at
+                  {{ event?.scheduleStartTime | date: "h:mm a" }}</span>
+              </li>
+              <li *ngIf="event && event.duration">
+                <span><img src="/assets/image/ic_clock.svg" alt="Clock" /></span>Duration : <span>{{ event?.duration }}
+                  Min</span>
+              </li>
+            </ul>
+            <p *ngIf="isReadMore" [innerHTML]="event?.description | breckLine | limit: 100"></p>
+            <a *ngIf="event?.description.length > 100 && isReadMore" class="link_cusor"
+              (click)="readMoreLesstoggle()">READ MORE</a>
+            <p *ngIf="!isReadMore" class="block_more_cnt" [innerHTML]="event?.description | breckLine"></p>
+            <a *ngIf="!isReadMore" class="link_cusor" (click)="readMoreLesstoggle()">READ LESS</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+      <div class="col-md-5">
+        <div class="block_event_right w-100" *ngIf="activeBox == boxes.waiting_box">
+          <div class="block_top_head">The event hasn't started yet</div>
+          <div class="block_cnt_body">
+            <a [ngClass]="{ block_disabled: loading }" (click)="checkEventStatus()" class="link_cusor">
+              <img *ngIf="!loading" src="/assets/image/icon/ic_refresh.svg" alt="Refresh" />
+              <img *ngIf="loading" style="height: 20px; width: 20px" src="/assets/image/button_loader.svg"
+                   alt="Loader" />
+            </a>
+            <span>Try to Refresh</span>
+          </div>
+          <div class="block_cnt_ftr">
+            In the meantime, take a moment to
+            <a class="link_cusor" (click)="openEditProfileModal()">update your profile</a>
+          </div>
+        </div>
+        <div class="block_event_right w-100" *ngIf="activeBox == boxes.join_event_step1_box">
+          <div class="block_top_head">
+            <a class="link_cusor">
+              <!--<span class="fas fa-arrow-left"></span>-->
+            </a>
+            Enter event (1/2)
+          </div>
+          <div class="block_event_field">
+            <form class="w-100" [formGroup]="joinEventFG" (ngSubmit)="submitJoinEventForm()" novalidate>
+              <div class="block_field">
+                <div class="avatar-upload">
+                  <div class="avatar-edit invisible avtar_top"></div>
+                  <div class="avatar-preview link_cusor" (click)="openProfileImgModal()">
+                    <img class="profile-user-img img-responsive img-circle" id="imagePreview" [src]="profilePicture"
+                         *ngIf="profilePicture" alt="User profile picture" />
+
+                    <img class="profile-user-img img-responsive img-circle" *ngIf="!profilePicture" id="imagePreview"
+                         src="../../../assets/image/user.svg" alt="User profile picture" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="block_field">
+                <app-control-container label="Display Name" isRequired="true">
+                  <input type="text" formControlName="display_name" id="inputDisplayName" tabindex="1"
+                         class="input-field" placeholder="Enter Your Display Name" maxlength="100" />
+                </app-control-container>
+                <!--<div class="form-group">
+            <label>Display Name <img src="/assets/image/icon/ic_tooltip.svg" alt="Info"></label>
+            <input placeholder="Enter Your Full Name" type="text" tabindex="1" class="input-field">
+          </div>-->
+              </div>
+              <div class="block_field" *ngIf="event?.eventSetting?.allowGuestOnly">
+                <app-control-container label="Invited Email Address" isRequired="true">
+                  <input type="email" formControlName="invited_email" id="inputInvitedEmail" class="input-field"
+                         placeholder="Your Invited Email Address" maxlength="150" />
+                </app-control-container>
+              </div>
+              <div class="block_field">
+                <!--<div class="form-group">
+            <label>Update your tagline <img src="/assets/image/icon/ic_tooltip.svg" alt="Info"></label>
+            <div class="input-group block_emoji">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <img _ngcontent-pda-c120="" src="/assets/image/bxs-smile.svg" alt="smile">
+                </span>
+              </div>
+              <input type="text" placeholder="Add Tagline" class="">
+            </div>
+          </div>-->
+
+                <div class="form-group">
+                  <label>
+                    Update your tagline
+                    <span>
+                      <img src="/assets/image/icon/ic_tooltip.svg" alt="Info" style="cursor: pointer;"
+                           (mouseover)="updateTaglineTooltip=true" (mouseout)="updateTaglineTooltip=false" />
+                      <app-info-native-tooltip [hidden]="!updateTaglineTooltip" data='Share your mood, expectation, some inspiration, a networking teaser, or else'>
+                      </app-info-native-tooltip>
+                    </span>
+                  </label>
+                  <app-tagline-input formControlName="tag_line"></app-tagline-input>
+                </div>
+              </div>
+              <div class="block_switch">
+                <span>
+                  Other participants can call me on Billions.
+                  <span>
+                    <img src="/assets/image/icon/ic_tooltip.svg" alt="Info" style="cursor: pointer;"
+                         (mouseover)="otherParticipantTooltip=true" (mouseout)="otherParticipantTooltip=false" />
+                    <app-info-native-tooltip [hidden]="!otherParticipantTooltip" data='You can change your availability at any time. Please remember that this is mutual. You can only call others if you allow others to call you.'>
+                    </app-info-native-tooltip>
+                  </span>
+                </span>
+                <div class="toggle_switch">
+                  <label class="switch">
+                    <input type="checkbox" formControlName="is_available_for_sidechat" />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="block_btn_event">
+                <button type="submit" class="link_cusor btn btn-prime" [disabled]="loading">
+                  Continue
+                  <img *ngIf="loading" style="height: 20px; width: 20px; margin-left: 3px"
+                       src="/assets/image/button_loader.svg" alt="Loader" />
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="block_event_right w-100" *ngIf="activeBox == boxes.join_event_step2_box">
+          <div class="block_top_head">
+            <button type="button" class="link_cusor" (click)="backToStep1()" [disabled]="loading">
+              <span class="fas fa-arrow-left"></span>
+            </button>
+            Enter event (2/2)
+          </div>
+          <app-media-input-output-check (submitClick)="joinEvent()" [loading]="loading" submitText="Join Event">
+          </app-media-input-output-check>
+        </div>
+        <div class="block_event_right w-100" *ngIf="activeBox == boxes.event_ended_box">
+          <div class="block_top_head">Event has been ended</div>
+          <div class="block_cnt_body">
+            <div class="event_ended_box">
+              <p>This event has already been ended...</p>
+              <button (click)="goToDashboard()" class="btn btn-prime w-100 mt-4">
+                Go To Dashboard
+              </button>
+            </div>
+            <!--<a class="link_cusor" (click)="goToDashboard()">Go To Dashboard</a>-->
+            
+          </div>
+          <div class="block_cnt_ftr">
+            In the meantime, take a moment to
+            <a class="link_cusor" (click)="openEditProfileModal()">update your profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="center" *ngIf="page_loader" loadinga></div>

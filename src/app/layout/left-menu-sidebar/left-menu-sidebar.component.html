@@ -1,0 +1,573 @@
+<div
+  class="e-menu-left"
+  [ngClass]="{ inner_link_deactive: !is_event_dashboard }"
+>
+  <div class="block_top_part">
+    <div class="dropdown dropright">
+      <a class="link_cusor" data-toggle="dropdown" #leftMenu>
+        <div class="block_images_profile">
+          <img
+            *ngIf="userData && userData.profile_picture"
+            [src]="userData.profile_picture"
+            alt="user-image"
+            class="img-fluid"
+          />
+          <img
+            *ngIf="!(userData && userData.profile_picture)"
+            src="/assets/image/user.svg"
+            alt="user-image"
+            class="img-fluid"
+          />
+          <div class="block_calling_status">
+            <span
+              *ngIf="is_available_sidechat"
+              [ngClass]="{
+                online: !sidecallService.sidecallRoom,
+                oncall: sidecallService.sidecallRoom
+              }"
+            ></span>
+          </div>
+        </div>
+      </a>
+      <div class="dropdown-menu custom_dropdownbg">
+        <div class="block_topbar">
+          <div class="block_im">
+            <img
+              *ngIf="userData && userData.profile_picture"
+              [src]="userData.profile_picture"
+              alt="user-image"
+            />
+            <img
+              *ngIf="!(userData && userData.profile_picture)"
+              src="/assets/image/user_saidbar.svg"
+              alt="user-image"
+            />
+          </div>
+          <span class="u_name" *ngIf="!userData.display_name">{{
+            userData.full_name
+          }}</span>
+          <span class="u_name" *ngIf="userData.display_name">{{
+            userData.display_name
+          }}</span>
+          <p class="u_code">{{ userData.tag_line }}</p>
+        </div>
+        <div
+          class="block_switchbar"
+          *ngIf="is_event_dashboard && isEventStarted"
+        >
+          <div class="block_text">Available for SideCall</div>
+          <div class="toggle_switch">
+            <label class="switch">
+              <input
+                type="checkbox"
+                [checked]="is_available_sidechat"
+                (change)="changeAvailableSidechatStatus($event)"
+                [disabled] = "sidecallService.sidecallRoom"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        <div class="block_midbar top_bar">
+          <ul>
+            <li *ngIf="is_event_dashboard">
+              <a class="link_cusor" [routerLink]="['/']" target="_blank"
+                >Dashboard</a
+              >
+            </li>
+            <li (click)="editProfile()">
+              <a class="link_cusor">Edit Profile</a>
+            </li>
+            <li (click)="switchFanspace(modalSelectFanspace)">
+              <a class="link_cusor">My Fanspaces</a>
+            </li>
+            <li (click)="checkoutAccountDetails(modalAccountDetails)">
+              <a class="link_cusor">Account</a>
+            </li>
+          </ul>
+        </div>
+        <div class="block_midbar">
+          <ul>
+            <li><a class="link_cusor link_inactive">FAQ</a></li>
+            <li><a class="link_cusor link_inactive">Support</a></li>
+            <li><a class="link_cusor link_inactive">Leave Feedback</a></li>
+          </ul>
+        </div>
+        <div class="block_btnbar">
+          <a
+            class="link_cusor"
+            (click)="
+              openModel(modelLogoutconformation, 'logout_conformation_window')
+            "
+            >Sign Out</a
+          >
+        </div>
+        <div class="block_link">
+          <ul>
+            <li>
+              <a (click)="redirectOnLegalPage('policy')" class="link_cusor"
+                >Privacy policy</a
+              >
+            </li>
+            <li>
+              <a (click)="redirectOnLegalPage('legal')" class="link_cusor"
+                >Terms of Service</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ul *ngIf="is_event_dashboard">
+      <li [ngClass]="{ icon: !isEmojiMartOpen }" class="disable">
+        <a
+          class="link_cusor"
+          (click)="toggleEmojiMart()"
+          [ngClass]="{ active: isEmojiMartOpen }"
+        >
+          <img src="/assets/image/clap_off.svg" alt="Clap" class="ic_normal" />
+          <img
+            src="/assets/image/clap_active.svg"
+            alt="Clap"
+            class="ic_active"
+          />
+        </a>
+        <span *ngIf="selectedEmoji">{{ selectedEmoji }}</span>
+        <app-emoji-mart
+          class="emoji_dropdown_leftmenu"
+          *ngIf="isEmojiMartOpen"
+          (onEmojiSelect)="emojiSelected($event)"
+        >
+        </app-emoji-mart>
+      </li>
+    </ul>
+    <ul *ngIf="is_event_dashboard">
+      <li *ngIf="isFullScreenActive" class="icon">
+        <a class="link_cusor" (click)="fullScreenHandler()">
+          <img
+            src="/assets/image/ic_fullscreen_exit.svg"
+            alt="FullScreen Exit"
+          />
+          <span *ngIf="messenger_indicator > 0">{{ messenger_indicator }}</span>
+        </a>
+      </li>
+
+      <li class="A_icon" *ngIf="!agoraRTCStreamHandler.isFullScreenActive">
+        <a
+          class="link_cusor"
+          [ngClass]="{ active: media_only || (media_only && chat_only) }"
+          (click)="mediaClicked()"
+        >
+          <img
+            src="/assets/image/icon/middle_screen.png"
+            alt="Video"
+            class="ic_active"
+          />
+          <img
+            src="/assets/image/icon/attendee.png"
+            alt="Video"
+            class="ic_normal ic"
+          />
+        </a>
+      </li>
+      <!-- <li>
+        <a
+          class="link_cusor"
+          [ngClass]="{ active: chat_only || (media_only && chat_only) }"
+          (click)="chatClicked()"
+        >
+          <img
+            src="/assets/image/icon/ic_side_chat.svg"
+            alt="Chat"
+            class="ic_normal"
+          />
+          <img
+            src="/assets/image/icon/ic_side_chat_active.svg"
+            alt="Chat"
+            class="ic_active"
+          />
+          <span *ngIf="messenger_indicator > 0">{{ messenger_indicator }}</span>
+        </a>
+      </li> -->
+    </ul>
+  </div>
+
+  <div class="block_btm_part">
+    <div class="block_middle_part">
+      <ul *ngIf="is_event_dashboard">
+        <li
+          [ngClass]="{ input_output_control_tooltip: !isRaisedHand }"
+          *ngIf="handlerRole === 4"
+        >
+        <div class="pulse_animation" *ngIf="isUserOnAir && isRaisedHand"></div>     
+          <a
+            class="link_cusor"
+            [ngClass]="{
+              disabledByPermission: !agoraRTCStreamHandler.isMicAndCameraBlocked() && !isRaisedHand,
+              active: isRaisedHand,
+              ready: (agoraRTCStreamHandler.isHoldState || agoraRTCStreamHandler.isSelectedInHoldState) && isRaisedHand,
+              disabled: isUserOnAir && isRaisedHand
+            }"
+            (click)="changeRaisedHandStatus()"
+          >
+            <img
+              src="/assets/image/icon/ic_raise_hand_disabled.svg"
+              alt="Chat"
+              class="ic_normal"
+              *ngIf="!raiseHandLoader"
+            />
+            <img
+              *ngIf="raiseHandLoader"
+              style="
+                height: 20px;
+                width: 20px;
+                margin-left: 5px;
+                margin-top: 5px;
+              "
+              src="/assets/image/button_loader.svg"
+              alt="Loader"
+            />
+            <img
+              src="/assets/image/icon/raise_hand_active.svg"
+              alt="Chat"
+              class="ic_active"
+              *ngIf="!raiseHandLoader"
+            />
+          </a>
+
+          <!-- Case 1: Raise hand false -->
+          <!-- Case 1.1: Raise hand false because user block the permissions -->
+          <div *ngIf="!agoraRTCStreamHandler.isMicAndCameraBlocked() && !isRaisedHand; else join">
+            <app-tooltip
+              class="tooltip_container"
+              [ngClass]="{ active: isRaisedHand }"
+              [hidden]="isRaisedHand"
+              pos="right"
+              type="alert"
+              heading="Unable to activate"
+              subHeading="Please go to your device settings to allows Billons to use your microphone and camera"
+            >
+            </app-tooltip>
+          </div>
+          <!-- Case 1.2: Raise hand false because user do it intentionally -->
+          <ng-template #join>
+            <app-tooltip
+              class="tooltip_container"
+              [hidden]="isRaisedHand"
+              pos="right"
+              type="info"
+              heading="Join the conversation"
+              subHeading="Indicate that you are interested in joining the conversation. If selected by your host, your audio and video may turn on automatically when added to the live stream"
+            >
+            </app-tooltip>
+          </ng-template>
+          <!-- Case 1 End -->
+
+          <!-- Case 2: Raise hand true & handle according to live qa section -->
+          <!-- Case 2.1 : Moderator takes to the hold state, display tooltip for 8 second -->
+          <!-- Case 2.2 : Selected in hold state handle too -->
+
+          <div *ngIf="agoraRTCStreamHandler.isHoldState && !isUserOnAir">
+            <app-tooltip
+              class="tooltip_container_hold"
+              [hidden]="!isRaisedHand"
+              pos="right"
+              type="ready"
+              heading="Get Ready"
+              subHeading="You have been selected. Your audio and video may turn on automatically when added to the live stream."
+              cross="true"
+            >
+            </app-tooltip>
+          </div>
+          <!-- Case 2.3 : When user is on Air -->
+          <div *ngIf="isUserOnAir" class="air">
+            <app-tooltip
+              class="tooltip_container_air"
+              [hidden]="!isRaisedHand"
+              pos="right"
+              type="ready"
+              heading="Unable to change while live"
+            >
+            </app-tooltip>
+          </div>
+        </li>
+        <li *ngIf="selected_fanspace_role_id == roles.ATTENDEE">
+          <a
+            class="link_cusor"
+            (click)="openModel(modelLeaveEvent, 'logout_conformation_window')"
+          >
+            <img
+              src="/assets/image/icon/ic_exit_on.svg"
+              alt="Exit"
+              class="ic_normal"
+            />
+            <img
+              src="/assets/image/icon/ic_exit_off.svg"
+              alt="Exit"
+              class="ic_active"
+            />
+          </a>
+        </li>
+        <li>
+          <div (click)="toggleDeviceSettingPopup($event)">
+            <a class="link_cusor">
+              <img
+                src="/assets/image/icon/ic_event_setting.svg"
+                alt="Setting"
+                *ngIf="!deviceSettingActive"
+              />
+              <img
+                src="/assets/image/icon/ic_event_setting_active.svg"
+                alt="Setting"
+                *ngIf="deviceSettingActive"
+              />
+            </a>
+          </div>
+          <app-media-input-output-check
+            class="media_input_output_container"
+            *ngIf="deviceSettingActive"
+            (submitClick)="toggleDeviceSettingPopup($event)"
+            submitText="Close"
+          ></app-media-input-output-check>
+          <!-- <app-tooltip
+          class="tooltip_container"
+          [hidden]="
+            !agoraRTCStreamHandler.isVideoEnabled &&
+            !sidecallService.isPublish
+          "
+          pos="right"
+          type="info"
+          heading="Unable to change while in use"
+          subHeading="Your microphone and camera settings cannot be changed while you are in a call or live on stage."
+        >
+        </app-tooltip> -->
+        </li>
+        <li *ngIf="agoraRTCStreamHandler.showVideoButton()">
+          <app-media-control
+            mediaType="video"
+            [isMuted]="agoraRTCStreamHandler.isCameraMuted"
+          ></app-media-control>
+        </li>
+        <li *ngIf="agoraRTCStreamHandler.showAudioButton()">
+          <app-media-control
+            mediaType="audio"
+            [isMuted]="agoraRTCStreamHandler.isMicMuted"
+          ></app-media-control>
+        </li>
+        <!-- <li (click)="toggleScreenShare()">
+        <a class="link_cusor ">
+          <img src="/assets/image/icon/ic_side_chat.svg" alt="Chat" *ngIf="!agoraRTCStreamHandler.isScreenSharing">
+          <img src="/assets/image/icon/ic_side_chat_active.svg" alt="Chat" *ngIf="agoraRTCStreamHandler.isScreenSharing">
+        </a>
+      </li> -->
+      </ul>
+    </div>
+    <a class="link_cusor" [routerLink]="['/']">
+      <img
+        src="/assets/image/logo-white.png"
+        *ngIf="!fanspaceLogo"
+        alt="fanspace-logo"
+        class="img-fluid"
+      />
+      <div
+        class="block_images_fanspace"
+        *ngIf="is_event_dashboard && fanspaceLogo"
+      >
+        <img src="{{ fanspaceLogo }}" alt="fanspace-logo" class="img-fluid" />
+      </div>
+    </a>
+  </div>
+</div>
+
+<ng-template
+  #modalSelectFanspace
+  let-c="close"
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title b-divider pr-3" id="exampleModalLongTitle">
+      My fanspaces
+    </h4>
+    <a (click)="createNewFanspace()" class="link_cusor divider pl-3"
+      >Create new fanspace</a
+    >
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="modal-inner-title">Select the one you would like to open.</p>
+    <div
+      *ngIf="!fanspaces || fanspaces.length < 1"
+      loadinga
+      class="block_loading"
+    ></div>
+    <div *ngIf="fanspaces && fanspaces.length > 0" class="block_fanspaceslist">
+      <ul class="list">
+        <li class="list-item" *ngFor="let fanspace of fanspaces">
+          <div
+            class="block_list"
+            (click)="
+              setSelectedFanspace(
+                fanspace.fanspaceId,
+                fanspace.roleId,
+                fanspace.fanspaceName,
+                fanspace.logo
+              )
+            "
+          >
+            <div class="item_im">
+              <img
+                *ngIf="fanspace.logo"
+                src="{{ fanspace.logo }}"
+                class="list-item-image"
+                alt="Logo"
+              />
+              <div class="block_round" *ngIf="!fanspace.logo">
+                <span>{{ fanspace.fanspaceName | firstLetter }}</span>
+              </div>
+            </div>
+            <div class="list-item-content">
+              <p>
+                <span>{{ fanspace.fanspaceName }}</span>
+                <!--bvb.billions.live-->
+              </p>
+              <div
+                class="block_role_user"
+                *ngIf="fanspace.roleId == roles.MODERATOR"
+              >
+                <span>Owner</span>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modalAccountDetails
+  let-c="close"
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Your Account</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="!accountData" loadinga class="block_loading"></div>
+
+    <div *ngIf="accountData">
+      <div class="block_top">
+        <div class="block_im">
+          <img
+            *ngIf="accountData && accountData.profilePicture"
+            [src]="accountData?.profilePicture"
+            alt="user-image"
+            class="img-fluid"
+          />
+          <img
+            *ngIf="!(accountData && accountData.profilePicture)"
+            src="/assets/image/user.svg"
+            alt="user-image"
+            class="img-fluid"
+          />
+        </div>
+        <div class="block_cnt">
+          <h5>{{ accountData?.fullName }}</h5>
+          <p>
+            {{ accountData?.city }}
+            <span>{{ accountData?.country?.name }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="block_btm">
+        <ul>
+          <li>
+            <img src="/assets/image/ic_email.svg" alt="Mail" />
+            {{ accountData?.email }}
+          </li>
+          <li>
+            <img src="/assets/image/ic_membership.svg" alt="Member" />
+            Member since {{ accountData?.createdDate | date: "MMM yyyy" }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelLogoutconformation
+  let-modal
+  let-c="close"
+  let-d="dismiss"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Sign out ?</h4>
+    <button type="button" class="close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_btn">
+      <button type="button" class="btn btn_unpublish" (click)="onLoggedout()">
+        Yes
+      </button>
+      <button type="button" class="btn btn-main" (click)="modal.close()">
+        No
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #modelLeaveEvent
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  class="modal-dialog-centered"
+  let-d="dismiss"
+>
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Leave the event?</h4>
+    <button
+      type="button"
+      [disabled]="loading"
+      class="close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="block_btn">
+      <button
+        type="button"
+        [disabled]="loading"
+        class="btn btn_unpublish"
+        (click)="attendeeLeaveEvent()"
+      >
+        Yes, leave event
+      </button>
+      <button
+        type="button"
+        [disabled]="loading"
+        class="btn btn-main"
+        (click)="d('Cross click')"
+      >
+        Continue event
+      </button>
+    </div>
+  </div>
+</ng-template>

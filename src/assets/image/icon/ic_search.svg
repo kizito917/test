@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="search" transform="translate(-206 -4387)">
+    <g id="Rectangle_90" data-name="Rectangle 90" transform="translate(206 4387)" fill="#5e6287" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="bx-search-alt-2" d="M16.289,14.571c-.431-.41-.843-.837-1.147-1.162s-.5-.548-.5-.548l-2.35-1.122a5.884,5.884,0,1,0-.551.552l1.122,2.35s.231.188.548.5.752.717,1.162,1.147l1.14,1.168.507.542L18,16.22l-.542-.507C17.138,15.4,16.713,14.986,16.289,14.571Zm-8.413-2.5a4.2,4.2,0,1,1,4.2-4.2A4.2,4.2,0,0,1,7.876,12.072Z" transform="translate(208 4389)" fill="#5e6287"/>
+  </g>
+</svg>

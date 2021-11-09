@@ -1,0 +1,129 @@
+<!-- If media is agora only -->
+<div
+  class="agora-streaming-container"
+  *ngIf="primaryLayoutStreams.length && (mediaType === 'agora' || mediaType === 'agorascreen')"
+>
+  <div class="agora-primary-container" [ngStyle]="getContainerStyle()">
+    <ng-container
+      *ngFor="
+        let stream of primaryLayoutStreams;
+        let i = index;
+        trackBy: identify
+      "
+    >
+      <app-play-media
+        [stream]="stream"
+        [totalStreams]="primaryLayoutStreams.length"
+        [streamIndex]="i"
+        [viewState]="viewState"
+        [primaryMedia]="true"
+        [ngStyle]="getPrimaryMediaStyle(i)"
+        [renderPos]="renderPos"
+      ></app-play-media>
+    </ng-container>
+  </div>
+
+  <div
+    class="agora-secondary-container"
+  >
+    <ng-container
+      *ngFor="
+        let stream of secondaryLayoutStreams;
+        let i = index;
+        trackBy: identify
+      "
+    >
+      <app-play-media
+        [stream]="stream"
+        [totalStreams]="channelUsers.length - commentryLayoutStreams.length"
+        [streamIndex]="i"
+        [viewState]="viewState"
+        [primaryMedia]="false"
+        [ngStyle]="{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          'justify-content': 'center',
+          'align-items': 'center'
+        }"
+        [renderPos]="renderPos"
+      ></app-play-media>
+    </ng-container>
+  </div>
+</div>
+
+<!-- If media is externalMedia -->
+
+<div
+  class="agora-streaming-container agora-media agora"
+  *ngIf="mediaType==='externalMedia'"
+>
+
+  <div
+  class="agora-primary-container"
+    [ngClass]="{
+      'left-panel': renderPos == '2' && secondaryLayoutStreams.length<5,
+      'left-panel-Users': renderPos == '2' && secondaryLayoutStreams.length>4,
+      'left-panel-User': renderPos == '2' && secondaryLayoutStreams.length>6,
+      'middle-panel': renderPos == '4' && secondaryLayoutStreams.length<5,
+      'middle-panel-Users': renderPos == '4' && secondaryLayoutStreams.length>4
+      && !agoraRTCStreamHandler.isFullScreenActive,
+      'full-screen': agoraRTCStreamHandler.isFullScreenActive
+    }"
+  >
+    <ng-container
+      *ngFor="
+        let stream of commentryLayoutStreams;
+        let i = index;
+        trackBy: identify
+      "
+    >
+      <app-play-media
+        [stream]="stream"
+        [totalStreams]="commentryLayoutStreams.length"
+        [streamIndex]="i"
+        [viewState]="viewState"
+        [primaryMedia]="true"
+        [ngStyle]="getPrimaryMediaStyle(i)"
+        [renderPos]="renderPos"
+      ></app-play-media>
+    </ng-container>
+  </div>
+</div>
+
+<div
+  class="agora-streaming-container agora-media-screen agora"
+  *ngIf="(mediaType === 'agorascreen' || moderatorWithCommentry || attendeeWithCommentry) && mediaType !== 'externalMedia'"
+>
+
+  <div
+  class="agora-secondary-container"
+    [ngClass]="{
+      'left-panel': renderPos == '2' && secondaryLayoutStreams.length<5,
+      'left-panel-Users': renderPos == '2' && secondaryLayoutStreams.length>4,
+      'left-panel-User': renderPos == '2' && secondaryLayoutStreams.length>6,
+      'middle-panel': renderPos == '4' && secondaryLayoutStreams.length<5,
+      'middle-panel-Users': renderPos == '4' && secondaryLayoutStreams.length>4
+      && !agoraRTCStreamHandler.isFullScreenActive,
+      'full-screen': agoraRTCStreamHandler.isFullScreenActive
+    }"
+  >
+    <ng-container
+      *ngFor="
+        let stream of commentryLayoutStreams;
+        let i = index;
+        trackBy: identify
+      "
+    >
+      <app-play-media
+        [stream]="stream"
+        [totalStreams]="commentryLayoutStreams.length"
+        [streamIndex]="i"
+        [viewState]="viewState"
+        [primaryMedia]="true"
+        [ngStyle]="getPrimaryMediaStyle(i)"
+        [renderPos]="renderPos"
+      ></app-play-media>
+    </ng-container>
+  </div>
+</div>

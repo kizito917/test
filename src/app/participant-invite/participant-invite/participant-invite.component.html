@@ -1,0 +1,87 @@
+<div class="col-12">
+  <div class="container">
+    <div class="block_top_logo">
+      <img src="/assets/image/billions-text-logo.svg" alt="billions logo">
+    </div>
+  </div>
+</div>
+<section class="user-login-section">
+  <div class="container">
+    <div class="row justify-content-center align-items-center h-100" *ngIf="!page_loader">
+      <div class="col-md-4">
+        <div class="text-center mb-5 mb-md-0">
+          <!--<img *ngIf="!fanspaceData" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">-->
+          <div *ngIf="fanspaceData">
+            <div class="block_im">
+              <img *ngIf="fanspaceData && fanspaceData.logo" [src]="fanspaceData?.logo" class="img-fluid" alt="fanspace-logo">
+              <div class="block_round" *ngIf="!(fanspaceData && fanspaceData.logo)">
+                <span>{{fanspaceData.fanspaceName | firstLetter}}</span>
+              </div>
+            </div>
+            <!-- <img *ngIf="fanspaceData && fanspaceData.logo" [src]="fanspaceData?.logo" class="img-fluid" alt="fanspace-logo">
+          <img *ngIf="!(fanspaceData && fanspaceData.logo)" src="/assets/image/event-logo.svg" class="img-fluid" alt="fanspace-logo"> -->
+            <h4 class="welcome-text">Join {{fanspaceData?.fanspaceName}} on Billions.</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+      <div class="col-md-5 d-flex align-items-end justify-content-center">
+        <div class="user-box-block" *ngIf="showEmailBox">
+          <div class="bb-header">
+            <h4 class="welcome-text">Join or Log In</h4>
+          </div>
+          <div class="user-input">
+            <form [formGroup]="participantJoinFanspaceFB" (ngSubmit)="submitParticipantJoinFanspaceForm(participantJoinFanspaceFB.valid, participantJoinFanspaceFB.value)" novalidate>
+
+              <app-control-container label="Email Address" isRequired="true">
+                <input type="email" formControlName="email" id="inputEmail" class="input-field" tabindex="2" placeholder="Enter your Email address" maxlength="150">
+              </app-control-container>
+
+              <div>
+                <button type="submit" class="btn btn-prime w-100 mt-4" [disabled]="loading">
+                  Continue
+                  <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                </button>
+              </div>
+
+            </form>
+          </div>
+          <div class="modal-msg text-center pb-4">
+            <span>
+              By continuing you're agreeing to our Terms of Service, Privacy Policy and Cookie Policy.
+            </span>
+          </div>
+        </div>
+        <div class="user-box-block" *ngIf="showPasscodeBox">
+          <div class="bb-header">
+            <h4 class="welcome-text">Check your email for a code</h4>
+          </div>
+          <div class="user-input">
+            <div class="enter-code">
+              <p class="pt-2 pb-4">
+                We have sent a 6-digit code to <a href="javascript:;">{{email}}</a>.
+              </p>
+              <div class="block_post_code">
+                <ng-otp-input class="block_opt_enter" #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config">
+                </ng-otp-input>
+              </div>
+
+              <button type="button" class="btn btn-prime w-100 mt-4" [disabled]="inValidPasscode" (click)="submitOTP()">
+                Continue
+                <img *ngIf=" loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader" />
+              </button>
+            </div>
+          </div>
+          <div class="modal-msg text-center pb-4">
+            <span>
+              Can't find your code? Check your spam folder!
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="center" *ngIf="page_loader" loadinga></div>
+
+  </div>
+</section>

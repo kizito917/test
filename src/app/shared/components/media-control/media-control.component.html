@@ -1,0 +1,35 @@
+<a class="link_cusor active" *ngIf="mediaType === 'video'">
+  <img
+    src="/assets/image/icon/{{
+      agoraRTCStreamHandler.isCameraMuted ? 'ic_video_off' : 'ic_video_on'
+    }}.svg"
+    alt="Video"
+    *ngIf="!agoraRTCStreamHandler.isVideoStreamInProgress"
+    (click)="handleMediaClick()"
+  />
+
+  <img
+    *ngIf="agoraRTCStreamHandler.isVideoStreamInProgress"
+    style="height: 20px; width: 20px; margin-left: 5px; margin-top: 5px"
+    src="/assets/image/button_loader.svg"
+    alt="Loader"
+  />
+</a>
+
+<a class="link_cusor active" *ngIf="mediaType === 'audio'">
+  <img
+    src="/assets/image/icon/{{
+      agoraRTCStreamHandler.isMicMuted ? 'ic_mic_off' : 'ic_mic_on'
+    }}.svg"
+    alt="Audio"
+    *ngIf="!agoraRTCStreamHandler.isAudioStreamInProgress"
+    (click)="handleMediaClick()"
+  />
+
+  <img
+    *ngIf="agoraRTCStreamHandler.isAudioStreamInProgress"
+    style="height: 20px; width: 20px; margin-left: 5px; margin-top: 5px"
+    src="/assets/image/button_loader.svg"
+    alt="Loader"
+  />
+</a>

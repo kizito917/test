@@ -1,0 +1,43 @@
+@import "../../styles/scss/_variable.scss";
+
+.block_error_page {
+  background: radial-gradient(
+      closest-side at 50% 0%,
+      color(secondary-color) 0%,
+      color(primary-bg) 100%
+    )
+    0% 0% no-repeat;
+}
+.access-denied-section {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+
+  .access-denied_im {
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .access-denied-content {
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+
+    h4 {
+      color: color(white-text);
+      font-size: 24px;
+    }
+
+    p {
+      font-size: 12px;
+      color: color(icon-color);
+    }
+
+    @include mobile-view {
+      width: 250px;
+    }
+  }
+}

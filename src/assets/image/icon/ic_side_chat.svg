@@ -1,0 +1,11 @@
+<svg id="side_chat_inactive" data-name="side chat inactive" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <circle id="Ellipse_67" data-name="Ellipse 67" cx="18" cy="18" r="18" fill="#5e6287"/>
+  <g id="chat_active" data-name="chat active" transform="translate(-158 -4210)">
+    <g id="Rectangle_84" data-name="Rectangle 84" transform="translate(164 4216)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="Path_1232" data-name="Path 1232" d="M21.75,8.684v7.131c0,1.855,0,2.782-.579,3.358s-1.51.576-3.372.576H5.7c-1.862,0-2.794,0-3.372-.576s-.579-1.5-.579-3.358V8.684c0-1.855,0-2.782.579-3.358S3.838,4.75,5.7,4.75H17.8c1.862,0,2.793,0,3.372.576S21.75,6.83,21.75,8.684Z" transform="translate(164.25 4215.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" opacity="0.4"/>
+    <path id="Path_1233" data-name="Path 1233" d="M9.75,8.684v7.131c0,1.855,0,2.782-.579,3.358s-1.51.576-3.372.576H5.7c-1.862,0-2.794,0-3.372-.576s-.579-1.5-.579-3.358V8.684c0-1.855,0-2.782.579-3.358S3.838,4.75,5.7,4.75h.1c1.862,0,2.793,0,3.372.576S9.75,6.83,9.75,8.684Z" transform="translate(164.25 4215.75)" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  </g>
+</svg>

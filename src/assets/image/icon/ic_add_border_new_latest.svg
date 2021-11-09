@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <g id="add" transform="translate(-691.006 -289.506)">
+    <g id="Ellipse_60" data-name="Ellipse 60" transform="translate(691.006 289.506)" fill="rgba(43,47,78,0)" stroke="#3d4168" stroke-width="1" stroke-dasharray="4">
+      <circle cx="50" cy="50" r="50" stroke="none"/>
+      <circle cx="50" cy="50" r="49.5" fill="none"/>
+    </g>
+    <path id="bx-plus" d="M40.645,20.276H25.369V5H20.276V20.276H5v5.091H20.276V40.645h5.091V25.369H40.645Z" transform="translate(718.174 316.684)" fill="#3d4168"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<!--<fieldset class="form-group">
+  <label>{{label}}<sup *ngIf="isRequired">*</sup></label>
+  <ng-content></ng-content>
+  <span *ngFor="let errorMessage of errorMessages; let i = index">
+    <span *ngIf="i==0"> {{errorMessage}} </span>
+  </span>
+</fieldset>-->
+
+<div class="form-group">
+  <label class="block_label">{{label}}<sup *ngIf="isRequired">*</sup></label>
+  <ng-content></ng-content>
+  <div *ngFor="let errorMessage of errorMessages; let i = index">
+    <div style="color:red"> {{errorMessage}} </div>
+  </div>
+</div>
+

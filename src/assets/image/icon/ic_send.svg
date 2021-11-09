@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="send" transform="translate(-344 -720)">
+    <circle id="Ellipse_71" data-name="Ellipse 71" cx="16" cy="16" r="16" transform="translate(344 720)" fill="#5b55ff"/>
+    <g id="send-2" data-name="send" transform="translate(-1471 -3788)">
+      <g id="Rectangle_99" data-name="Rectangle 99" transform="translate(1819 4512)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+        <rect width="24" height="24" stroke="none"/>
+        <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+      </g>
+      <path id="bxs-send" d="M15.607,8.4,3.976,3.063a.7.7,0,0,0-.726.089.656.656,0,0,0-.229.676L3.85,7.061,9.158,9,3.85,10.939,3.02,14.172a.656.656,0,0,0,.229.677.7.7,0,0,0,.726.088L15.607,9.6a.66.66,0,0,0,0-1.207Z" transform="translate(1822 4515)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

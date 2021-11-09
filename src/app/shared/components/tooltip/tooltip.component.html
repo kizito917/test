@@ -1,0 +1,5 @@
+<div class="tooltiptext {{type}} {{pos}}" >
+    <span>{{heading}}</span> 
+    <span *ngIf = "cross" class="close" (click)=onCloseTooltip()>&times;</span> 
+    <span  *ngIf = "subHeading">{{subHeading}}</span>
+  </div>

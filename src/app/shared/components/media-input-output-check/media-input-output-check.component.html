@@ -1,0 +1,134 @@
+<div
+  class="block_event_field"
+  id="mediaInputSetting"
+  (click)="$event.stopPropagation()"
+>
+  <div class="block_event_control">
+    <div class="block_volume">
+      <div class="block_volume_top">
+        <span [ngStyle]="{ height: audioVolume + '%' }"></span>
+      </div>
+      <div class="block_volume_btm">
+        <ul>
+          <li>
+            <app-media-control
+              mediaType="audio"
+              (onMediaControlClick)="toggleMic()"
+              [isMuted]="isMicMuted"
+            ></app-media-control>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="block_event_thumb">
+      <div
+        class="block_thumb"
+        [ngClass]="{
+          'camera-muted': isCameraMuted
+        }"
+      >
+        <div
+          id="test-video"
+          [ngStyle]="{
+            height: !isCameraMuted ? '100%' : '0',
+            width: '100%'
+          }"
+        ></div>
+        <div class="profile_img" [hidden]="!isCameraMuted">
+          <img [src]="getUserProfileImage()" alt="" />
+        </div>
+      </div>
+      <div class="block_event_action">
+        <div class="block_action_left">
+          <ul>
+            <li>Mic <span class="on"></span></li>
+            <li>Camera <span class="off"></span></li>
+          </ul>
+        </div>
+        <div class="block_action_right">
+          <ul>
+            <li>
+              <app-media-control
+                mediaType="video"
+                (onMediaControlClick)="toggleCamera()"
+                [isMuted]="isCameraMuted"
+              ></app-media-control>
+            </li>
+            <li (click)="toggleDeviceSettingForm()">
+              <a class="link_cusor">
+                <img
+                  src="/assets/image/icon/ic_event_setting.svg"
+                  alt="Setting"
+                  *ngIf="!showDeviceSettingForm"
+                />
+                <img
+                  src="/assets/image/icon/ic_event_setting_active.svg"
+                  alt="Setting"
+                  *ngIf="showDeviceSettingForm"
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="event_device_setting"
+    [hidden]="!showDeviceSettingForm"
+    *ngIf="cameraDevices.length"
+  >
+    <form [formGroup]="mediaInputOutputSettingFG">
+      <div>
+        <app-control-container label="">
+          <ng-select
+            class="custom_selectbox"
+            [selectOnTab]="true"
+            [items]="cameraDevices"
+            [clearable]="false"
+            bindLabel="label"
+            bindValue="deviceId"
+            placeholder="Select Camera Device"
+            [(ngModel)]="selectedCameraDevice"
+            formControlName="video"
+            (change)="onChangeMediaDevice($event)"
+          >
+          </ng-select>
+        </app-control-container>
+      </div>
+      <div>
+        <app-control-container label="">
+          <ng-select
+            class="custom_selectbox"
+            [selectOnTab]="true"
+            [items]="micDevices"
+            [clearable]="false"
+            bindLabel="label"
+            bindValue="deviceId"
+            placeholder="Select Microphone Device"
+            [(ngModel)]="selectedMicDevice"
+            formControlName="audio"
+            (change)="onChangeMediaDevice($event)"
+          >
+          </ng-select>
+        </app-control-container>
+      </div>
+    </form>
+  </div>
+  <div class="block_btn_event">
+    <button
+      type="button"
+      (click)="proceedToEvent($event)"
+      class="link_cusor btn btn-prime"
+      [disabled]="loading"
+    >
+      {{ submitText }}
+      <img
+        *ngIf="loading"
+        style="height: 20px; width: 20px; margin-left: 3px"
+        src="/assets/image/button_loader.svg"
+        alt="Loader"
+      />
+    </button>
+  </div>
+</div>

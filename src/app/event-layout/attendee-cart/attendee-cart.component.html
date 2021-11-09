@@ -1,0 +1,29 @@
+<div class="block_event"
+  [ngClass]="{ 'cart_detail_hide': view_state===views.NONE || view_state===views.CHAT_ONLY, 'block_active': participant_user_id==selected_participant_user_id && !is_fake, 'block_disabled': is_fake}"
+  (click)="attendeeCartSelected(participant_user_id)">
+  <div class="block_event_im">
+    <img *ngIf="!profile_card_banner" src="/assets/image/back_profile_image.png" alt="Card Banner">
+    <img *ngIf="profile_card_banner" [src]="profile_card_banner" alt="Card Banner">
+
+    <div class="block_attendee_im"
+      [ngClass]="{'onAirOutline': agoraRTCStreamHandler.checkParticipantOnAir(participant_user_id) && participant_id}">
+      <div class="pulse_animation" loading="lazy" *ngIf="participant_id && loadPulseAnimation"
+        [ngClass]="{onLine: !sidechat_call && is_available_for_sidechat, 'onAir': agoraRTCStreamHandler.checkParticipantOnAir(participant_user_id), 'onCall': sidechat_call}">
+      </div>
+      <div class="profile_img">
+        <img *ngIf="attendee_Profile_picture" [src]="attendee_Profile_picture" alt="Attendee" (load)="loadAnimation()">
+        <img *ngIf="!attendee_Profile_picture  && !is_fake" src="/assets/image/user.svg" alt="Attendee"
+          (load)="loadAnimation()">
+      </div>
+    </div>
+
+    <div class="block_calling_status" *ngIf="view_state===views.ALL">
+      <span *ngIf="is_available_for_sidechat" [ngClass]="{'online': !sidechat_call, 'oncall': sidechat_call}"></span>
+    </div>
+  </div>
+  <div class="block_event_cnt" *ngIf="!(view_state===views.NONE || view_state===views.CHAT_ONLY)">
+    <!--<h6>{{attendee_name}} | <span *ngIf="is_moderator">Moderator</span></h6>-->
+    <h6>{{attendee_name | limit: nameLimit}}</h6>
+    <p>{{attendee_tagline | limit: tagLimit}}</p>
+  </div>
+</div>

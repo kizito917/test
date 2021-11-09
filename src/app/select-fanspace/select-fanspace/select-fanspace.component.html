@@ -1,0 +1,56 @@
+<div class="col-12">
+    <div class="container">
+        <div class="block_top_logo">
+            <img src="/assets/image/billions-text-logo.svg" alt="billions logo">
+        </div>
+    </div>
+</div>
+
+<section class="signup-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="brand_logo_login text-center mb-5 mb-md-0">
+          <img src="/assets/image/logo-white.png" class="img-fluid" alt="white-logo">
+        </div>
+      </div>
+      <div class="col-md-6 d-flex align-items-center justify-content-center">
+        <div class="signup-right text-center">
+          <div class="signup-form d-flex flex-column align-items-center justify-content-center text-left pb-0">
+            <h4 class="box_title mb-0">
+              <!--<a><i class="fas fa-arrow-left"></i></a>-->
+              Your fanspaces
+              <a (click)="createNewFanspace()" class="link_cusor creat_fanspaces">Create new fanspace</a>
+            </h4>
+            <div class="block_fanspaces">
+              <p>Select the one you would like to open.</p>
+              <div *ngIf="!fanspaces || fanspaces.length < 1" loadinga class="block_loading"></div>
+              <ul *ngIf="fanspaces && fanspaces.length > 0"  class="list">
+                <li class="list-item" *ngFor="let fanspace of fanspaces">
+                  <div class="block_list" (click)="setSelectedFanspace(fanspace.fanspaceId,fanspace.roleId,fanspace.fanspaceName,fanspace.logo)">
+                    <div class="item_im">
+                      <img *ngIf="fanspace.logo" src={{fanspace.logo}} class="list-item-image" alt="Logo">
+                      <div class="block_round" *ngIf="!fanspace.logo">
+                        <span>{{fanspace.fanspaceName | firstLetter}}</span>
+                      </div>
+                    </div>
+                    <div class="list-item-content">
+                      <p>
+                        <span>{{fanspace.fanspaceName}}</span>
+                        <!--bvb.billions.live-->
+                      </p>
+                      <div class="block_role_user" *ngIf="fanspace.roleId == roles.MODERATOR">
+                        <span>Owner</span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

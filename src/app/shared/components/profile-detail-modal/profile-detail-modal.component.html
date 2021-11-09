@@ -1,0 +1,71 @@
+<!-- Start profile details model-->
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLongTitle">Edit Profile</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="d-content" *ngIf="!pageLoader">
+      <div class="avatar-upload">
+          <div class="avatar-preview link_cusor" (click)="openProfileImgModal()">
+              <img  class="profile-user-img img-responsive img-circle" *ngIf="profilePicture" [src]="profilePicture" alt="Profile picture">
+              <img class="profile-user-img img-responsive img-circle" *ngIf="!profilePicture" src="../../../assets/image/user.svg" alt="User profile picture">
+          </div>
+      </div>
+      <form [formGroup]="profileFG">
+        <div class="row">
+          <div class="col-md-6">
+            <app-control-container label="Full Name" isRequired="true">
+              <input formControlName="fullName" class="input-field" placeholder="Enter Your Full Name" type="text" tabindex="1" maxlength="100">
+            </app-control-container>
+          </div>
+
+          <div class="col-md-6">
+            <app-control-container label="Display Name" isRequired="true">
+              <input formControlName="displayName" class="input-field" placeholder="Enter Your Display Name" type="text" tabindex="2" maxlength="100">
+            </app-control-container>
+          </div>
+
+          <div class="col-md-6">
+            <app-control-container label="Country">
+              <ng-select class="custom_selectbox" [selectOnTab]="true" [items]="countries" [clearable]="false" bindLabel="countries_name" bindValue="countries_country_id"  placeholder="Select Country" [(ngModel)]="selectedCountry" formControlName="country">
+              </ng-select>
+            </app-control-container>
+          </div>
+
+          <div class="col-md-6">
+            <app-control-container label="City">
+              <input formControlName="city" class="input-field" placeholder="City" type="text" tabindex="3" maxlength="100">
+            </app-control-container>
+          </div>
+
+          <div class="col-12">
+            <app-control-container label="Tagline">
+              <app-tagline-input formControlName="tagLine"></app-tagline-input>
+            </app-control-container>
+          </div>
+
+          <div class="col-12">
+            <app-control-container label="About">
+              <textarea formControlName="biography" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+            </app-control-container>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+              <button type="button" class="btn btn-main w-100 mt-4" (click)="activeModal.close()">Cancel</button>
+          </div>
+          <div class="col-6">
+              <button type="submit" class="btn btn-prime w-100 mt-4" (click)="submitProfileForm(profileFG.valid, profileFG.value)" [disabled]="loading">Save
+              <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+              </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="center" *ngIf="pageLoader" loadinga></div>
+  </div>
+<!-- End Profile detail model -->

@@ -1,0 +1,155 @@
+@import "../../../../styles/scss/_variable.scss";
+.clickable{
+  cursor:pointer;
+}
+.alignment{
+  display: flex;
+  align-items: center;
+}
+.bubble {
+  display: none;
+}
+.progress_bar:hover + .bubble {
+  display: block;
+  background: color(icon-color);
+  color: white;
+  padding: 4px 7px;
+  position: absolute;
+  border-radius: 4px;
+  transform: translateX(-50%);
+  top: 90%;
+  left:186px;
+}
+.progress_bar:hover + .bubble::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: color(icon-color);
+  left: 50%;
+  top: -1px;
+}
+
+.block_progress {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 24px;
+  position: relative;
+
+  div {
+    font-size: 12px;
+    line-height: 14px;
+    color: color(white-text);
+    font-family: $font-Medium;
+    img {
+      width: 30px;
+      height: 25px;
+    }
+  }
+
+  ::ng-deep {
+    .tooltiptext {
+      top: -50%;
+      right: 110%;
+      left: auto;
+    }
+  }
+}
+
+.block_progress input[type="range"] {
+  width: 100%;
+  // margin: 0 0.5rem;
+  background-color: transparent;
+  -webkit-appearance: none;
+  &:focus {
+    outline: none;
+  }
+  // For Chrome
+  &::-webkit-slider-runnable-track {
+    background: color(input-color);
+    border: 0;
+    width: 100%;
+    height: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &::-webkit-slider-thumb {
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+    margin-top: -0.4rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: color(input-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    -webkit-appearance: none;
+  }
+  &:focus::-webkit-slider-runnable-track {
+    outline: none;
+  }
+
+  &::-webkit-progress-value {
+    background: color(bg_unpublish);
+    height: 5px;
+  }
+  // For FireFox
+
+  &::-moz-range-track {
+    background: color(secondary-color);
+    border: 0;
+    width: 100%;
+    height: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: color(input-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  &::-moz-range-progress {
+    background: color(input-color);
+    height: 5px;
+  }
+  // for Microsoft Edge
+  &::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    border-width: 1rem 0;
+    color: transparent;
+    width: 100%;
+    height: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &::-ms-fill-lower {
+    background: color(input-color);
+    border: 0;
+  }
+  &::-ms-fill-upper {
+    background: color(secondary-color);
+    border: 0;
+  }
+  &::-ms-thumb {
+    box-sizing: border-box;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: color(input-color);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: 0px;
+  }
+  &:focus::-ms-fill-lower {
+    outline: none;
+  }
+  &:focus::-ms-fill-upper {
+    outline: none;
+  }
+}

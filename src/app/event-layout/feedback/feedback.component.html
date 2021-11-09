@@ -1,0 +1,42 @@
+<div class="block_main h-100">
+    <div class="block_top">
+        <img src="../../../assets/image/logo-white.png" class="img-fluid" alt="white-logo">
+        <!-- <span>Larger Than Live</span> -->
+    </div>
+    <div class="block_btm">
+        <h2>Thank you! See you again soon.</h2>
+    
+        <div class="block_btm_inn">
+            <div class="block_field">
+                <form [formGroup]="subscriptionFG" novalidate>
+                    <div class="input-group">
+                        <input type="text" formControlName="email" placeholder="Sign up for updates & early access" autocomplete="off" maxlength="150">
+                        
+                        <button type="button" class="block_icon link_cusor" [disabled]="loading"  (click)="submitSubscription()">
+                            <img *ngIf="!loading" src="../../../assets/image/icon/ic_send.svg" alt="Send">
+                            
+                            <img *ngIf="loading" style="height:20px;width:20px; margin-left: 3px;" src="/assets/image/button_loader.svg" alt="Loader">
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="block_btn">
+                <button (click)="redirectToBillionsLive('contact')" type="button" class="btn btn-prime w-100"> Get in Touch </button>
+            </div>
+        </div> 
+        
+        <!-- show validation error message -->
+        <div class="error_div">
+            <div class="form-text text-danger" *ngIf="subscriptionFG.get('email').hasError('required') && formSubmitAttempt">Email is required<br/></div>
+            <div class="form-text text-danger" *ngIf="subscriptionFG.get('email').hasError('email') && formSubmitAttempt">Invalid email address<br/></div>
+        </div>
+    </div>
+</div>
+
+<footer class="footermain">
+    <div class="row">
+      <div class="container">
+        <div class="footer_text"><a class="link_cusor content-color-secondary" (click)="redirectToBillionsLive('terms')">Legal</a> <div class="text_block">| Copyright 2021 Billions Live</div></div>
+      </div>
+    </div>
+</footer>

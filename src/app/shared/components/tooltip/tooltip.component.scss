@@ -1,0 +1,81 @@
+@import "../../../../styles/scss/_variable.scss";
+.tooltiptext {
+  width: 370px;
+  color: color(white-text);
+  /* text-align: center; */
+  border-radius: 6px;
+  padding: 15px;
+  position: absolute;
+  z-index: 2;
+  top: -5px;
+  left: 200%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  span:first-child {
+    font-family: $font-bold;
+    font-size: 17px;
+  }
+  .close {
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 0px;
+    font-size: 25px;
+    color: white;
+    padding: 12px 16px;
+    transform: translate(0%, -50%);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    // margin-top: -35px;
+    /* border-width: 10px; */
+    border-style: solid;
+    border-top-width: 10px;
+    border-right-width: 20px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+  }
+  &.right::after {
+    left: -8%;
+  }
+  &.left::after {
+    right: -8%;
+  }
+
+  &.alert {
+    background-color: color(bg_unpublish);
+    &.right::after {
+      border-color: transparent color(bg_unpublish) transparent transparent;
+    }
+    &.left::after {
+      border-color: transparent transparent transparent color(bg_unpublish);
+    }
+  }
+
+  &.info {
+    background-color: color(primary-bg);
+    &.right::after {
+      border-color: transparent color(primary-bg) transparent transparent;
+    }
+    &.left::after {
+      border-color: transparent transparent transparent color(primary-bg);
+    }
+  }
+
+  &.ready {
+    background-color: #5b55ff;
+    position: relative;
+    top: -45px;
+    &.right::after {
+      border-color: transparent #5b55ff transparent transparent;
+    }
+    &.left::after {
+      border-color: transparent transparent transparent #5b55ff;
+    }
+  }
+}
